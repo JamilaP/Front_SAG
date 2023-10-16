@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+/**/
+.custom-navbar{
+  background-color: #175C75;
+}
+.custom-navbar-text{
+    color: #FFFFFF !important; /* Reemplaza #FFFFFF con el color deseado */
+}
+.custom-navbar-link {
+  color: #FFFFFF !important; ; /* Color predeterminado para todos los enlaces */
+}
+
