@@ -1,10 +1,10 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import React from 'react';
-import logo from './logo.svg';
+import logonav from '../../../V2/Front_SAG/src/imagenes/logo-nav.png';
+import perfil from '../../../V2/Front_SAG/src/imagenes/perfil.png';
 import './App.css'; // Asegúrate de que el nombre del archivo CSS sea correcto
 import 'bootstrap/dist/css/bootstrap.min.css'; // Importa los estilos de Bootstrap
-import { Navbar, Nav, Container, Table, Button } from 'react-bootstrap'; // Importa los componentes de react-bootstrap que deseas usar
-
+import { Navbar, Nav, Container, Image  } from 'react-bootstrap'; // Importa los componentes de react-bootstrap que deseas usar
 import Flota from './pantallas/Administrador/Flota'
 import GestionDeUsuarios from './pantallas/Administrador/GestionDeUsuarios'
 import Infraestructura from './pantallas/Administrador/Infraestructura'
@@ -17,9 +17,15 @@ function App() {
 
     return (
         <div className="App">
+
             <Navbar expand="lg" className="custom-navbar">
                 <Container>
-                    <Navbar.Brand href="#home"  className="custom-navbar-text">SAG</Navbar.Brand>
+                    <Navbar.Brand href="#home" className="custom-navbar-text-log">
+                        <div>
+                            <Image src={logonav} roundedCircle width={30} height={30} className="mr-2" />
+                            <span>SAG</span>
+                        </div>
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
@@ -31,18 +37,27 @@ function App() {
                             <Nav.Link as={Link} to="/administrador/infraestructura" className="custom-navbar-link">Infraestructura</Nav.Link>
                             <Nav.Link as={Link} to="/administrador/reportes" className="custom-navbar-link">Reporte</Nav.Link>
                         </Nav>
+                        <div className="d-flex align-items-center ms-auto">
+                            <Image src={perfil} roundedCircle width={40} height={40} className="mr-2" />
+                            <div>
+                                <span className="custom-navbar-text">Joaquin Ruiz</span>
+                                <span className="custom-subtext">Administrador</span>
+                            </div>
+                        </div>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+
             <Routes>
-                        <Route path="/administrador/operaciones-diarias" element={<OperacionesDiarioas />} />
-                        <Route path="/administrador/simulacion" element={<Simulacion />} />
-                        <Route path="/administrador/flota" element={<Flota />} />
-                        <Route path="/administrador/gestion-de-usuarios" element={<GestionDeUsuarios />} />
-                        <Route path="/administrador/infraestructura" element={<Infraestructura />} />
-                        <Route path="/administrador/reportes" element={<Reporte />} />
-                        <Route path="/administrador/pedidos" element={<Pedidos />} />
+                <Route path="/administrador/operaciones-diarias" element={<OperacionesDiarioas />} />
+                <Route path="/administrador/simulacion" element={<Simulacion />} />
+                <Route path="/administrador/flota" element={<Flota />} />
+                <Route path="/administrador/gestion-de-usuarios" element={<GestionDeUsuarios />} />
+                <Route path="/administrador/infraestructura" element={<Infraestructura />} />
+                <Route path="/administrador/reportes" element={<Reporte />} />
+                <Route path="/administrador/pedidos" element={<Pedidos />} />
             </Routes>
+
         </div>
     );
 }

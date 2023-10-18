@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Table} from "react-bootstrap";
+import "./Camiones.css";
 
 const camiones = [
     {
@@ -33,9 +34,12 @@ const camiones = [
         pedidosAsociados: 5
     }
 ];
+
 function Camiones() {
     return (
         <div>
+            <h1 className="titulo">Detalle de flota</h1>
+
             <Table striped bordered hover>
                 <thead>
                 <tr>
@@ -50,7 +54,7 @@ function Camiones() {
                     <th>Acción</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody data-bs-search-live="true">
                 {camiones.map((camion) => (
                     <tr key={camion.id}>
                         <td>{camion.id}</td>
@@ -66,7 +70,6 @@ function Camiones() {
                         </td>
                     </tr>
                 ))}
-                {/* Agrega más filas de datos aquí */}
                 </tbody>
             </Table>
         </div>

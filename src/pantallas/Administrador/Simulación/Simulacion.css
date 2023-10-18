@@ -1,3 +1,6 @@
 .nav-tabs .nav-link {
     color: black; /* Cambia el color del texto de las pestañas a negro */
 }
+.table-responsive{
+    background-color: #DEE2E6;
+}

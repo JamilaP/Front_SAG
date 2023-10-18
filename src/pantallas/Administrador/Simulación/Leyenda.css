@@ -1,0 +1,42 @@
+.custom-card {
+    width: 400px; /* Personaliza el ancho según tu diseño */
+    margin: 20px; /* Agrega margen según sea necesario */
+    /* Agrega más estilos según tus preferencias */
+}
+.mr-3 {
+    margin: 5px;
+    height: 32px;
+    width: 32px;
+}
+.geo-icon {
+    color: #7D8AFF; /* Color para el ícono de Pedidos */
+}
+
+.truck-icon {
+    color: black; /* Color para el ícono de Camión */
+}
+
+.database-icon {
+    color: black; /* Color para el ícono de Cisterna */
+}
+.buildings-icon {
+    color: black; /* Color para el ícono de Pedidos */
+}
+
+.rise-icon {
+    color: #FF5733; /* Color para el ícono de Camión */
+}
+
+.route-icon {
+    color: #33FF57; /* Color para el ícono de Cisterna */
+}
+.titulo {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: left;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 30px;
+}
