@@ -1,6 +1,39 @@
 .nav-tabs .nav-link {
-    color: black; /* Cambia el color del texto de las pestañas a negro */
+    color: black;
 }
 .table-responsive{
     background-color: #DEE2E6;
+}
+.custom-button {
+    align-items: center;
+    border: none;
+    border-radius: 5px;
+    color: #FFFFFF;
+    background-color: #CED4DA;
+}
+.custom-button:hover, .custom-button:active {
+    background-color: #175C75 !important;
+}
+.custom-button.active {
+    background-color: #175C75;
+    color: white;
+}
+.custom-button.success {
+    color: black;
+}
+
+.custom-button.danger {
+    color: #dc3545;
+}
+.custom-button.warning {
+    color: black;
+}
+.controles{
+    align-items: center;
+    margin: 5px;
+    height: 10px;
+    width: 10px;
+}
+.botones{
+    margin: 15px;
 }
