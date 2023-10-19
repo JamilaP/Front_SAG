@@ -8,8 +8,8 @@ import { Navbar, Nav, Container, Image  } from 'react-bootstrap'; // Importa los
 import Flota from './pantallas/Administrador/Flota'
 import GestionDeUsuarios from './pantallas/Administrador/GestionDeUsuarios'
 import Infraestructura from './pantallas/Administrador/Infraestructura'
-import OperacionesDiarioas from './pantallas/Administrador/OperacionesDiarioas'
-import Pedidos from './pantallas/Administrador/Pedidos'
+import OperacionesDiarioas from './pantallas/Administrador/OperacionesDiarias/OperacionesDiarioas'
+import Pedidos from './pantallas/Administrador/Pedidos/Pedidos'
 import Reporte from './pantallas/Administrador/Reporte'
 import Simulacion from './pantallas/Administrador/Simulación/Simulacion'
 

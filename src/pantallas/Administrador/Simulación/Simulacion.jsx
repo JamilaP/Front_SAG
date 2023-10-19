@@ -9,6 +9,7 @@ import CargaDeDatos from "./CargaDeDatos";
 import ReporteSimulacion from "./ReporteSimulacion";
 import { FaPlay,FaStop } from 'react-icons/fa';
 
+
 function Simulacion() {
     const [key, setKey] = useState('pestana1');
 

@@ -1,0 +1,20 @@
+.titulo{
+    text-align: left;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+}
+.boton-registrar{
+    background-color: #175C75 ;
+    border: none;
+    margin-left: auto;
+    margin-top: 15px;
+}
+.label-left{
+    text-align: left;
+    margin-left: 35px;
+}
