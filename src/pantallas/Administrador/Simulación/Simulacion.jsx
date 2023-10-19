@@ -8,7 +8,7 @@ import Camiones from "./Camiones";
 import CargaDeDatos from "./CargaDeDatos";
 import ReporteSimulacion from "./ReporteSimulacion";
 import { FaPlay,FaStop } from 'react-icons/fa';
-
+import MapaSimu from './MapaSimu';
 
 function Simulacion() {
     const [key, setKey] = useState('pestana1');
@@ -28,8 +28,11 @@ function Simulacion() {
 
     return (
         <div  className="Simulacion">
-            <Image src={mapa} width={1000} height={400} className="mr-2" />
+            <div className="contenedorCanvas">
+                <MapaSimu/>
+            </div>
 
+            <div className="elemento">
             {/* Botones de colapso/semanal */}
             <div className="control-buttons">
                 Tipo de visualización:
@@ -78,6 +81,7 @@ function Simulacion() {
                     <Tab eventKey="pestana5" title="Reporte Simulación"><ReporteSimulacion/></Tab>
                 </Tabs>
             </Container>
+        </div>
         </div>
     );
 }

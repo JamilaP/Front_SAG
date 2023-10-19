@@ -2,9 +2,21 @@
 
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
 .Imagen{
     margin: 20px ;
 }
 
+.contenedorCanvas{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.elemento{
+    position: relative;
+    top: 65vh;
+    left: 0;
+}

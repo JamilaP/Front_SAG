@@ -1,6 +1,20 @@
 .nav-tabs .nav-link {
     color: black;
 }
+.Simulacion{
+    position: relative;
+}
+.contenedorCanvas{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.elemento{
+    position: relative;
+    top: 65vh;
+    left: 0;
+}
 .table-responsive{
     background-color: #DEE2E6;
 }
