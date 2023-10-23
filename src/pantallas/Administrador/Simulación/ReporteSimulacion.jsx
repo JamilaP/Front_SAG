@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import './ReporteSimulacion.css';
+import {AiFillClockCircle} from 'react-icons/ai';
+import {BiSolidTruck,BiSolidCalendarCheck} from 'react-icons/bi';
+import {PiNotebookFill} from 'react-icons/pi';
+import {TbNotebookOff} from 'react-icons/tb';
 
 function ReporteSimulacion() {
     const [fechaSimulacion, setFechaSimulacion] = useState(new Date());
@@ -35,12 +40,12 @@ function ReporteSimulacion() {
     return (
         <div>
             <h1 className="titulo">Reporte de simulación</h1>
-            <div>
-                <p>Fecha de simulación: {fechaSimulacion.toLocaleString()}</p>
-                <p>Días transcurridos: {diasTranscurridos}</p>
-                <p>Porcentaje de flota ocupada: {flotaOcupada.toFixed(2)}%</p>
-                <p>Pedidos atendidos: {pedidosAtendidos}</p>
-                <p>Pedidos pendientes: {pedidosPendientes}</p>
+            <div className="contenedor-2">
+                <div className="grupo"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck><p>Fecha de simulación: {fechaSimulacion.toLocaleString()}</p></div>
+                <div className="grupo"><AiFillClockCircle className="icono"> </AiFillClockCircle> <p>Días transcurridos: {diasTranscurridos}</p></div>
+                <div className="grupo"><BiSolidTruck className="icono"></BiSolidTruck><p>Porcentaje de flota ocupada: {flotaOcupada.toFixed(2)}%</p></div>
+                <div className="grupo"><PiNotebookFill className="icono"></PiNotebookFill><p>Pedidos atendidos: {pedidosAtendidos}</p></div>
+                <div className="grupo"><TbNotebookOff className="icono"></TbNotebookOff><p>Pedidos pendientes: {pedidosPendientes}</p></div>
             </div>
         </div>
     );

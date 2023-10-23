@@ -24,6 +24,7 @@
     border-radius: 5px;
     color: #FFFFFF;
     background-color: #CED4DA;
+
 }
 .custom-button:hover, .custom-button:active {
     background-color: #175C75 !important;
@@ -50,4 +51,7 @@
 }
 .botones{
     margin: 15px;
+}
+.control-buttons{
+    margin-right: 100px;
 }

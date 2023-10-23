@@ -1,0 +1,24 @@
+.titulo-pagina{
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: start;
+    margin-left: 130px;
+}
+.grupo-label-control-general{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-left: 100px;
+}
+.label-inf{
+    margin-right: 80px;
+    margin-left: 30px;
+    width: 30px;
+}
+.control{
+    margin-left: 30px;
+}

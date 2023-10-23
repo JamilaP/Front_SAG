@@ -1,11 +1,21 @@
 .custom-card {
-    width: 400px;
+    width: 800px;
     margin: 20px;
+
+}
+.list-unstyled{
+    display: flex;
+    flex-direction: row;
 }
 .mr-3 {
     margin: 5px;
-    height: 32px;
-    width: 32px;
+    font-size: 25px;
+}
+.d-flex{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 30px;
 }
 .geo-icon {
     color: #7D8AFF;

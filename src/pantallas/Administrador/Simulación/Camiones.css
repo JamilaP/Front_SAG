@@ -7,3 +7,45 @@
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.barra-busqueda {
+    display: flex;
+    /* Centrar horizontamente los elementos */
+    justify-content: normal;
+    margin-left: 20px;
+}
+
+/* Opcional: Agregar margen entre el input y el menú desplegable */
+.barra-busqueda .input-group {
+    margin-right: 20px;
+    margin-left: 15px;
+}
+
+.barra-busqueda .mb-3 {
+    width: 50%;
+}
+
+.texto-busqueda {
+    margin: 6px;
+    font-size: 16px;
+
+}
+.dropdown-busqueda .dropdown-menu {
+    background-color: white; /* Cambia el color según tus preferencias */
+}
+
+.dropdown-busqueda .btn{
+    background-color: #175C75;
+    color: white;
+    border: none;
+
+}
+
+.dropdown-busqueda .btn:active,
+.dropdown-busqueda .btn:focus,
+.dropdown-busqueda .btn:checked {
+    background-color: #175C75;
+    color: white;
+}
+
+

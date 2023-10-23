@@ -6,22 +6,40 @@ function CargaDeDatos() {
 
     return (
         <div>
-            <h1 className="titulo">Carga de datos</h1>
+            <h1 className="titulo">Carga de Pedidos</h1>
+            {/*<div className="grupo-label-control">
+                <div className="label">
+                    <Form.Label className="titulos-archivos">Bloqueos</Form.Label>
+                </div>
+                <div className="control">
+                    <Form.Control type="file" size="sm" />
+                </div>
+            </div>
+            */}
 
-            <Form.Group controlId="formFileSm" className="mb-3">
-                <Form.Label className="titulos-archivos">Bloqueos</Form.Label>
-                <Form.Control type="file" size="sm" />
-            </Form.Group>
-            <Form.Group controlId="formFileSm" className="mb-3">
-                <Form.Label className="titulos-archivos">Pedidos</Form.Label>
-                <Form.Control type="file" size="sm" />
-            </Form.Group>
-            <Form.Group controlId="formFileSm" className="mb-3">
-                <Form.Label className="titulos-archivos">Flota</Form.Label>
-                <Form.Control type="file" size="sm" />
-            </Form.Group>
+            <div className="grupo-label-control">
+                <div className="label">
+                    <Form.Label className="titulos-archivos">Pedidos</Form.Label>
+                </div>
+                <div className="control">
+                    <Form.Control type="file" size="sm" />
+                </div>
+            </div>
+
+            {/*
+            <div className="grupo-label-control">
+                <div className="label">
+                    <Form.Label className="titulos-archivos">Flota</Form.Label>
+                </div>
+                <div className="control">
+                    <Form.Control type="file" size="sm" />
+                </div>
+            </div>
+            */}
         </div>
     );
+
+
 }
 
 export default CargaDeDatos;
