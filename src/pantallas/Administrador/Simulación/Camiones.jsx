@@ -19,10 +19,15 @@ function Camiones() {
     }, []);
 */
     const handleWebSocketMessage = (mensaje) => {
-        setMensajesWebSocket((prevMensajes) => [...prevMensajes, mensaje]);
-        setCamiones(mensaje.camiones);
+        try {
+            const camionesData = JSON.parse(mensaje);
+            console.log('Mensaje recibido en camiones:', camionesData);
+            // Ahora camionesData es un arreglo de objetos, puedes usarlo para actualizar el estado
+            setCamiones(camionesData);
+        } catch (error) {
+            console.error('Error al analizar el mensaje WebSocket:', error);
+        }
     };
-
 
     const handleSimulacionData = (data) => {
         // Actualiza el estado de camiones con los datos recibidos

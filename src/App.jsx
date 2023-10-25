@@ -1,7 +1,7 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import React from 'react';
-import logonav from '../../../V2/Front_SAG/src/imagenes/logo-nav.png';
-import perfil from '../../../V2/Front_SAG/src/imagenes/perfil.png';
+import logonav from './imagenes/logo-nav.png';
+import perfil from './imagenes/perfil.png';
 import './App.css'; // Asegúrate de que el nombre del archivo CSS sea correcto
 import 'bootstrap/dist/css/bootstrap.min.css'; // Importa los estilos de Bootstrap
 import { Navbar, Nav, Container, Image  } from 'react-bootstrap'; // Importa los componentes de react-bootstrap que deseas usar

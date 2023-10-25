@@ -10,6 +10,10 @@ function WebSocketComponent({ onSimulacionData }) {
     const onConnectSocket = () => {
         stompClient.subscribe('/topic/simulation-progress', (mensaje) => {
             mostrarMensaje(mensaje.body);
+            // Llamar a onSimulacionData con los datos recibidos
+            if (onSimulacionData) {
+                onSimulacionData(mensaje.body);
+            }
         });
         stompClient.onStompError = (frame) => {
             console.log('Stomp Error : ', frame);
@@ -17,7 +21,7 @@ function WebSocketComponent({ onSimulacionData }) {
     };
 
     const onWebSocketClose = () => {
-        console.log('WebSocket connection closed');
+        console.log('WebSocket connection close');
         if (stompClient !== null) {
             stompClient.deactivate();
         }
@@ -44,12 +48,13 @@ function WebSocketComponent({ onSimulacionData }) {
             });
             console.log('Mensaje enviado');
         } else {
-            console.log("No se pudo enviar el mensaje");
+            console.log("No se pudo envir el mensaje");
         }
     };
 
     const mostrarMensaje = (mensaje) => {
-        console.log('Mensaje recibido:',mensaje);
+        //console.log('Mensaje recibido:',mensaje);
+        console.log('Mensaje recibid:');
         // Implementa cómo deseas mostrar los mensajes en tu componente React
         // Puedes utilizar el estado para actualizar la interfaz de usuario.
     };
