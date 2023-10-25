@@ -1,0 +1,9 @@
+.barra-busqueda-pedidos{
+    display: flex;
+    flex-direction: row;
+    justify-content: normal;
+}
+.barra-busqueda-pedidos .input-group {
+    margin-right: 20px;
+    margin-left: 15px;
+}

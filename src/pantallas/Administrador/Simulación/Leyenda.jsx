@@ -2,9 +2,10 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import "./Leyenda.css";
 import { BsFillGeoAltFill } from "react-icons/bs";
-import { BiSolidTruck, BiBuildings } from 'react-icons/bi';
+import { BiBuildings } from 'react-icons/bi';
 import { FiDatabase } from 'react-icons/fi';
 import { AiOutlineRise } from 'react-icons/ai';
+import {PiNavigationArrowFill} from "react-icons/pi";
 
 function Leyenda() {
     return (
@@ -19,7 +20,7 @@ function Leyenda() {
                             Pedidos
                         </li>
                         <li className="d-flex align-items-center">
-                            <BiSolidTruck className="mr-3 truck-icon"/>
+                            <PiNavigationArrowFill className="mr-3 truck-icon"/>
                             Camión
                         </li>
                         <li className="d-flex align-items-center">

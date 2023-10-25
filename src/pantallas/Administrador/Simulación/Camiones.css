@@ -28,7 +28,9 @@
 .texto-busqueda {
     margin: 6px;
     font-size: 16px;
-
+}
+.dropdown-busqueda{
+    width:200px;
 }
 .dropdown-busqueda .dropdown-menu {
     background-color: white; /* Cambia el color según tus preferencias */
@@ -38,6 +40,7 @@
     background-color: #175C75;
     color: white;
     border: none;
+    width:180px;
 
 }
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Table } from "react-bootstrap";
+import React, {useState} from 'react';
+import {Button, Dropdown, DropdownButton, FormControl, InputGroup, Table} from "react-bootstrap";
 
 const pedidos = [
     {
@@ -32,6 +32,19 @@ const pedidos = [
 ];
 
 function PedidosSimulacion() {
+    const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
+    const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
+    const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
+
+    // Función para filtrar los pedidos según los filtros aplicados
+    const pedidosFiltrados = pedidos.filter(pedido => {
+        const coincideIDPedido = pedido.idPedido.toString().includes(filtroIDPedido);
+        const coincideIDCliente = pedido.idCliente.toString().includes(filtroIDCliente);
+        const coincideOpcion = (filtroOpcion === 'Todos' || pedido.estado === filtroOpcion);
+
+        return coincideIDPedido && coincideIDCliente && coincideOpcion;
+    });
+
     return (
         <div>
             <h1 className="titulo">Detalle de pedidos</h1>
@@ -50,7 +63,7 @@ function PedidosSimulacion() {
                 </tr>
                 </thead>
                 <tbody>
-                {pedidos.map((pedido) => (
+                {pedidosFiltrados.map((pedido) => (
                     <tr key={pedido.idPedido}>
                         <td>{pedido.idPedido}</td>
                         <td>{pedido.idCliente}</td>

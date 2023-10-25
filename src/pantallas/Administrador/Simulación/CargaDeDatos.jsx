@@ -24,6 +24,9 @@ function CargaDeDatos() {
                 <div className="control">
                     <Form.Control type="file" size="sm" />
                 </div>
+                <Button className="boton-guardar" variant="success">
+                    Guardar
+                </Button>
             </div>
 
             {/*
@@ -36,6 +39,8 @@ function CargaDeDatos() {
                 </div>
             </div>
             */}
+
+
         </div>
     );
 

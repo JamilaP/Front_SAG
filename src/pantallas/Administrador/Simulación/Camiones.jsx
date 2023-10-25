@@ -1,19 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import {Button, DropdownButton, Table, Dropdown, InputGroup, FormControl} from "react-bootstrap";
 import "./Camiones.css";
-
+import WebSocketComponent from "../../../Componentes/WebSocketComponent";
 
 function Camiones() {
     const [camiones, setCamiones] = useState([]);
     const [filtroTexto, setFiltroTexto] = useState(''); // Estado para el filtro de texto
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro de opciones
 
+    const [mensajesWebSocket, setMensajesWebSocket] = useState([]);
+
+    /*
     useEffect(() => {
         fetch('http://localhost:8090/sag-genetico/api/camiones/initial')
             .then((response) => response.json())
             .then((data) => setCamiones(data))
             .catch((error) => console.error('Error al obtener datos de camiones:', error));
     }, []);
+*/
+    const handleWebSocketMessage = (mensaje) => {
+        setMensajesWebSocket((prevMensajes) => [...prevMensajes, mensaje]);
+        setCamiones(mensaje.camiones);
+    };
+
+
+    const handleSimulacionData = (data) => {
+        // Actualiza el estado de camiones con los datos recibidos
+
+    };
 
     // Función para filtrar los camiones según el texto y la opción seleccionada
     const camionesFiltrados = camiones.filter(camion => {
@@ -26,6 +40,7 @@ function Camiones() {
 
     return (
         <div>
+            <WebSocketComponent onSimulacionData={handleWebSocketMessage}/>
             <h1 className="titulo">Detalle de flota</h1>
 
             <div className="barra-busqueda">
@@ -44,7 +59,8 @@ function Camiones() {
                 <DropdownButton className="dropdown-busqueda" id="dropdown-basic-button" title={filtroOpcion}>
                     <Dropdown.Item onClick={() => setFiltroOpcion('Todos')}>Todos</Dropdown.Item>
                     <Dropdown.Item onClick={() => setFiltroOpcion('En mantenimiento')}>En mantenimiento</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('Otro estado')}>Otro estado</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setFiltroOpcion('En uso')}>En uso</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setFiltroOpcion('Libre')}>Libre</Dropdown.Item>
                 </DropdownButton>
 
             </div>
