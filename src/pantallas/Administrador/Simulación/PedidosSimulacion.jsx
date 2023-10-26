@@ -31,19 +31,44 @@ const pedidos = [
     }
 ];
 
-function PedidosSimulacion() {
+function PedidosSimulacion(props) {
+    const { data } = props; // Destructura la propiedad data
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
     const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
 
+    const nuevoArreglo = data.map(camion => {
+        const arrPedidos = camion.pedidos.map(pedido => ({
+            fechaRegistro: pedido.first.fechaRegistro.second,
+            idCliente: pedido.first.idCliente,
+            cantidadGLP: pedido.first.cantidadGLP,
+            horasLimite: pedido.first.horasLimite,
+            ubicacion:`(${pedido.first.ubicacion.x},${pedido.first.ubicacion.y})`,//pedido.first.ubicacion,
+            //entrega: pedido.second
+        }));
+
+        return {
+            id: camion.idCamion,
+            cargaActual: camion.cargaActual,
+            cargaMaxima: camion.cargaMaxima,
+            pedidos: arrPedidos.length,
+            estado: camion.estado,
+            galonesDisponibles: camion.galonesDisponibles,
+            consumoTotal: camion.consumoTotal,
+            pedidoActual: arrPedidos.length > 0 ? arrPedidos[0].idCliente : null,
+            //quiero un arreglo de pedidos
+            arrPedidos: arrPedidos,
+
+        };
+    });
     // Función para filtrar los pedidos según los filtros aplicados
-    const pedidosFiltrados = pedidos.filter(pedido => {
+   /* const pedidosFiltrados = pedidos.filter(pedido => {
         const coincideIDPedido = pedido.idPedido.toString().includes(filtroIDPedido);
         const coincideIDCliente = pedido.idCliente.toString().includes(filtroIDCliente);
         const coincideOpcion = (filtroOpcion === 'Todos' || pedido.estado === filtroOpcion);
 
         return coincideIDPedido && coincideIDCliente && coincideOpcion;
-    });
+    });*/
 
     return (
         <div>
@@ -59,19 +84,17 @@ function PedidosSimulacion() {
                     <th>Plazo (horas)</th>
                     <th>Cantidad de GLP solicitado (m3)</th>
                     <th>Camiones</th>
-                    <th>Acción</th>
                 </tr>
                 </thead>
                 <tbody>
-                {pedidosFiltrados.map((pedido) => (
-                    <tr key={pedido.idPedido}>
-                        <td>{pedido.idPedido}</td>
-                        <td>{pedido.idCliente}</td>
-                        <td>{pedido.ubicacion}</td>
-                        <td>{pedido.fechaHoraSolicitada}</td>
-                        <td>{pedido.plazoHoras}</td>
-                        <td>{pedido.cantidadGLPSolicitado}</td>
-                        <td>{pedido.camiones}</td>
+                {nuevoArreglo.map((camion,index) => (
+                    <tr key={index}>
+                        <td>{index+1}</td>
+                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].idCliente : '-'}</td>
+                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].ubicacion : '-'}</td>
+                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].fechaRegistro : '-'}</td>
+                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].horasLimite : '-'}</td>
+                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].cantidadGLP : '-'}</td>
                         <td>
                             <Button variant="primary">Ver</Button>
                         </td>

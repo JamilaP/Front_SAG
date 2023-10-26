@@ -23,7 +23,7 @@ function Simulacion() {
         conexion.subscribe('/topic/simulation-progress', (mensaje) => {
             const data = JSON.parse(mensaje.body);
             setDataSocket(data);
-            console.log('Mensaje recibido:',dataSocket);
+            //console.log('Mensaje recibido:',dataSocket);
             // mostrarMensaje(mensaje.body);
             // Llamar a onSimulacionData con los datos recibidos
             // if (onSimulacionData) {
@@ -142,8 +142,8 @@ function Simulacion() {
                     <Tabs id="miPestanas" activeKey={key} onSelect={(k) => setKey(k)}>
                         <Tab eventKey="pestana1" title="Leyenda"><Leyenda/></Tab>
                         <Tab eventKey="pestana4" title="Cargar pedidos"><CargaDeDatos/></Tab>
-                        <Tab eventKey="pestana2" title="Camiones"><Camiones/></Tab>
-                        <Tab eventKey="pestana3" title="Pedidos"><PedidosSimulacion/></Tab>
+                        <Tab eventKey="pestana2" title="Camiones"><Camiones data={dataSocket}/></Tab>
+                        <Tab eventKey="pestana3" title="Pedidos"><PedidosSimulacion data={dataSocket}/></Tab>
                         <Tab eventKey="pestana5" title="Reporte Simulación"><ReporteSimulacion/></Tab>
                     </Tabs>
                 </Container>

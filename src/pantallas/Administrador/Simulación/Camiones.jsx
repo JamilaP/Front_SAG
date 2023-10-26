@@ -4,14 +4,41 @@ import "./Camiones.css";
 import WebSocketComponent from "../../../Componentes/WebSocketComponent";
 import PruebaWs from '../../../Componentes/PruebaWS';
 
-function Camiones() {
-    const [camiones, setCamiones] = useState([]);
+function Camiones(props) {
+    const { data } = props; // Destructura la propiedad data
     const [filtroTexto, setFiltroTexto] = useState(''); // Estado para el filtro de texto
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro de opciones
 
-    const [mensajesWebSocket, setMensajesWebSocket] = useState([]);
+    const nuevoArreglo = data.map(camion => {
+        const arrPedidos = camion.pedidos.map(pedido => ({
+            fechaRegistro: pedido.first.fechaRegistro,
+            idCliente: pedido.first.idCliente,
+            cantidadGLP: pedido.first.cantidadGLP,
+            horasLimite: pedido.first.horasLimite,
+            ubicacion: pedido.first.ubicacion,
+            entrega: pedido.second
+        }));
 
-    /*
+        return {
+            id: camion.idCamion,
+            cargaActual: camion.cargaActual,
+            cargaMaxima: camion.cargaMaxima,
+            pedidos: arrPedidos.length,
+            estado: camion.estado,
+            galonesDisponibles: camion.galonesDisponibles,
+            consumoTotal: camion.consumoTotal,
+            pedidoActual: arrPedidos.length > 0 ? arrPedidos[0].idCliente : '-',
+            //quiero un arreglo de pedidos
+            arrPedidos: arrPedidos,
+
+        };
+    });
+
+   useEffect(() => {
+       console.log('data: ', data);
+       //console.log('arreglo de pedidos',nuevoArreglo);
+    }, [data]);
+/*
     useEffect(() => {
         fetch('http://localhost:8090/sag-genetico/api/camiones/initial')
             .then((response) => response.json())
@@ -19,22 +46,9 @@ function Camiones() {
             .catch((error) => console.error('Error al obtener datos de camiones:', error));
     }, []);
 */
-    const handleWebSocketMessage = (mensaje) => {
-        try {
-            const camionesData = JSON.parse(mensaje);
-            console.log('Mensaje recibido en camiones:', camionesData);
-            // Ahora camionesData es un arreglo de objetos, puedes usarlo para actualizar el estado
-            setCamiones(camionesData);
-        } catch (error) {
-            console.error('Error al analizar el mensaje WebSocket:', error);
-        }
-    };
 
-    const handleSimulacionData = (data) => {
-        // Actualiza el estado de camiones con los datos recibidos
 
-    };
-
+/*
     // Función para filtrar los camiones según el texto y la opción seleccionada
     const camionesFiltrados = camiones.filter(camion => {
         // Filtrar por texto
@@ -43,7 +57,7 @@ function Camiones() {
         const opcionCoincide = (filtroOpcion === 'Todos' || camion.estado === filtroOpcion);
         return textoCoincide && opcionCoincide;
     });
-
+*/
     return (
         <div>
             {/* <PruebaWs/> */}
@@ -83,20 +97,18 @@ function Camiones() {
                     <th>Combustible usado (galón)</th>
                     <th>Pedidos Actual</th>
                     <th>Pedidos Asociados</th>
-                    <th>Acción</th>
                 </tr>
                 </thead>
                 <tbody data-bs-search-live="true">
-                {camionesFiltrados.map((camion) => (
+                {nuevoArreglo && nuevoArreglo.map((camion) => (
                     <tr key={camion.id}>
-                        <td>{camion.idCamion}</td>
-                        <td>{camion.cargaActual}/{camion.cargaMaxima}</td>
+                        <td>{camion.id}</td>
+                         <td>{camion.cargaActual}/{camion.cargaMaxima}</td>
                         <td>{camion.pedidos}</td>
                         <td>{camion.estado}</td>
                         <td>{camion.galonesDisponibles}</td>
                         <td>{camion.consumoTotal}</td>
-                        <td>{camion.consumoTotal}</td>
-                        <td>{camion.consumoTotal}</td>
+                        <td>{camion.pedidoActual}</td>
                         <td>
                             <Button variant="primary">Ver</Button>
                         </td>
