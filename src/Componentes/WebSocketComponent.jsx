@@ -4,42 +4,48 @@ import { Client } from '@stomp/stompjs';
 function WebSocketComponent({ onSimulacionData }) {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
-    const stompClient = new Client();
+    const [sClient, setSClient] = useState();
     const [actualizar, setActualizar] = useState(false);
 
     const onConnectSocket = () => {
-        stompClient.subscribe('/topic/simulation-progress', (mensaje) => {
-            mostrarMensaje(mensaje.body);
+        sClient.subscribe('/topic/simulation-progress', (mensaje) => {
+            console.log('Mensaje recibido:',mensaje);
+            // mostrarMensaje(mensaje.body);
             // Llamar a onSimulacionData con los datos recibidos
-            if (onSimulacionData) {
-                onSimulacionData(mensaje.body);
-            }
+            // if (onSimulacionData) {
+            //     onSimulacionData(mensaje.body);
+            // }
         });
-        stompClient.onStompError = (frame) => {
+        sClient.onStompError = (frame) => {
             console.log('Stomp Error : ', frame);
         };
     };
 
     const onWebSocketClose = () => {
         console.log('WebSocket connection close');
-        if (stompClient !== null) {
-            stompClient.deactivate();
+        if (sClient !== null) {
+            sClient.deactivate();
         }
     };
+
     const conectarWS = () => {
+        const stompClient = new Client();
+        setSClient(stompClient);
         //onWebSocketClose();
         console.log('Connecting to WebSocket...');
         stompClient.configure({
             webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
         });
         stompClient.onConnect = onConnectSocket;
-        //stompClient.onWebSocketClose = onWebSocketClose;
+        stompClient.onWebSocketClose = onWebSocketClose;
         stompClient.activate();
+        // console.log(sClient);
     };
 
     const enviarMensaje = () => {
-        if (stompClient) {
-            stompClient.publish({
+        console.log(sClient);
+        if (sClient.connected) {
+            sClient.publish({
                 destination: '/app/simulacion-semanal',
                 body: JSON.stringify({
                     nombre: inputMessage,
@@ -48,20 +54,21 @@ function WebSocketComponent({ onSimulacionData }) {
             });
             console.log('Mensaje enviado');
         } else {
-            console.log("No se pudo envir el mensaje");
+            console.log("No se pudo enviar el mensaje");
         }
     };
 
     const mostrarMensaje = (mensaje) => {
-        //console.log('Mensaje recibido:',mensaje);
-        console.log('Mensaje recibid:');
+        // console.log('Mensaje recibido:',mensaje);
+        console.log('Mensaje recibido:');
         // Implementa cómo deseas mostrar los mensajes en tu componente React
         // Puedes utilizar el estado para actualizar la interfaz de usuario.
     };
 
     useEffect(() => {
         conectarWS();
-    }, [actualizar]);
+        if(sClient.connected) console.log('Conectado');
+    }, []);
 
     return (
         <div>

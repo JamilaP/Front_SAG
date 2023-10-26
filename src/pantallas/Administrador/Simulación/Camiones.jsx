@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Button, DropdownButton, Table, Dropdown, InputGroup, FormControl} from "react-bootstrap";
 import "./Camiones.css";
 import WebSocketComponent from "../../../Componentes/WebSocketComponent";
+import PruebaWs from '../../../Componentes/PruebaWS';
 
 function Camiones() {
     const [camiones, setCamiones] = useState([]);
@@ -45,7 +46,8 @@ function Camiones() {
 
     return (
         <div>
-            <WebSocketComponent onSimulacionData={handleWebSocketMessage}/>
+            {/* <PruebaWs/> */}
+            {/* <WebSocketComponent onSimulacionData={handleWebSocketMessage}/> */}
             <h1 className="titulo">Detalle de flota</h1>
 
             <div className="barra-busqueda">
