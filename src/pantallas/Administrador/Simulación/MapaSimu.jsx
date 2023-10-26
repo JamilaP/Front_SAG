@@ -91,7 +91,7 @@ const MapaSimu = ({dataMapa}) => {
             <svg
   x={dataMapa[0].nodoActual.x * 14 + 7}
   y={dataMapa[0].nodoActual.y * 14 + 7}
-  fill="#000000"
+  fill="#7D8AFF"
   version="1.1"
   id="Capa_1"
   xmlns="http://www.w3.org/2000/svg"
@@ -114,26 +114,23 @@ const MapaSimu = ({dataMapa}) => {
           ) : (console.log('No hay ahora'))
           ) : (console.log('Sin primer elemento'))
       }
-      {
+      {/* { // Prueba del primer camion
         dataMapa && dataMapa.length > 0 && dataMapa[0] ? (
           dataMapa[0].ruta && dataMapa[0].ruta.nodos ? (<RutaCamion rutaCamion={dataMapa[0].ruta.nodos}/>) 
           : (console.log('Sin nodos'))
         ) : (console.log('Sin primer elemento'))
-      } 
-      {/* {
+      }  */}
+      { // Prueba todos los camiones
         dataMapa && dataMapa.length > 0 && dataMapa.map(element => (
           element.ruta && element.ruta.nodos ? (
             <RutaCamion rutaCamion={element.ruta.nodos}/>
           ): (
-            // Puedes agregar un mensaje de error o manejo específico para elementos sin ruta/nodos
-            // <div key={element.idCamion}>Elemento sin ruta o nodos</div>
             console.log('Sin nodos')
-          )
-                   
+          )                   
           // console.log('Camion', element.idCamion)          
           // console.log('Ruta', element.ruta.nodos)
         ))        
-      } */}
+      }
       {/* {dataMapa && dataMapa.length > 0 && dataMapa.map(element => (
         element.pedidos && element.pedidos.first ? (
           console.log('X: ', element.pedidos.first.ubicacion.x)
