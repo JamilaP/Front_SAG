@@ -1,16 +1,17 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import RutaCamion from './RutaCamion';
 
-const MapaSimu = ({dataMapa}) => {
+const MapaSimu = (props) => {
+  // const [dataU, setDataU] = useState(dataMapa[0]); {dataMapa}
 
-  const nuevoArreglo = dataMapa.map(camion => {
-    return {
-      id: camion.idCamion,
-      tipo: camion.tipoCamion,
-    };
-  });
+  // const nuevoArreglo = dataMapa.map(camion => {
+  //   return {
+  //     id: camion.idCamion,
+  //     tipo: camion.tipoCamion,
+  //   };
+  // });
 
-  const rutaDatos = dataMapa[0];
+  // const rutaDatos = dataMapa[0];
   let rutaConvertida;
   const ruta = [[7, 7], [7, 21], [21, 21], [21, 161]];
   const ruta2 = [[35, 21], [161, 21], [161, 161], [21, 161]];
@@ -52,6 +53,16 @@ const MapaSimu = ({dataMapa}) => {
   }
 
   return (
+    // <div>
+    //     {
+    //       console.log(dataU)
+    //       // dataU && dataU.length > 0 && dataU[0] && dataU[0].nodoActual
+    //       // ? ( <h2> {'X: ' + dataMapa[0].nodoActual.x + ' ' + 
+    //       // 'Y: ' + dataMapa[0].nodoActual.y } </h2>  ) : (
+    //       //   console.log('No hay dato')
+    //       // )
+    //     }
+    // </div>
     <svg
       className='Mapa'
       width={gridWidth + offsetX}
@@ -73,6 +84,8 @@ const MapaSimu = ({dataMapa}) => {
           />
         ))
       ))}
+
+      {console.log('Escena a mover ', props.dataMapa, 'Nro ', props.index)}
       
       {/* <RutaCamion ruta={ruta}/>
       <RutaCamion ruta={ruta2}/>
@@ -81,55 +94,99 @@ const MapaSimu = ({dataMapa}) => {
       {/* <div> 
         {console.log('Primer dato:', rutaDatos)}
       </div> */}
-      {
+      {/* {
         dataMapa && dataMapa.length > 0 && dataMapa[0] && dataMapa[0].nodoActual && dataMapa[0].idCamion ? ((console.log('Nodo actual', dataMapa[0].nodoActual, ' Id camion', dataMapa[0].idCamion ))
         ) : (console.log('Sin primer elemento'))
-      }
+      } */}
       {
-        dataMapa && dataMapa.length > 0 && dataMapa[0] && dataMapa[0].nodoActual && dataMapa[0].idCamion ? (
-          dataMapa[0].nodoActual.x && dataMapa[0].nodoActual.y ? (
-            <svg
-  x={dataMapa[0].nodoActual.x * 14 + 7}
-  y={dataMapa[0].nodoActual.y * 14 + 7}
-  fill="#7D8AFF"
-  version="1.1"
-  id="Capa_1"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlnsXlink="http://www.w3.org/1999/xlink"
-  width="64px"
-  height="64px"
-  viewBox="-395.71 -395.71 1187.13 1187.13"
-  xmlSpace="preserve"
-  stroke="#000000"
-  strokeWidth="0.0039571"
->
-  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-  <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" stroke="#CCCCCC" strokeWidth="0.79142"></g>
-  <g id="SVGRepo_iconCarrier">
-    <g>
-      <path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738 c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388 C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191 c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"></path>
-    </g>
-  </g>
-</svg>
+        props.dataMapa && props.dataMapa.length > 0 && props.dataMapa.map(element => (
+          element.nodoActual && element.nodoActual.x && element.nodoActual.y ? (
+            <circle cx={element.nodoActual.x * 14 + 7}
+             cy= {element.nodoActual.y * 14 + 7}
+             r="5" fill="blue" />
+          ): (            
+            console.log('No hay datos', element)
+            // , props.setIndex()
+            // props.moverEscena
+          )                   
+          // console.log('Camion', element.idCamion)          
+          // console.log('Ruta', element.ruta.nodos)
+        ))
+      }
+
+      {/* {
+        props.dataMapa && props.dataMapa.length > 0 && props.dataMapa[0] && props.dataMapa[0].nodoActual && props.dataMapa[0].idCamion ? (
+          props.dataMapa[0].nodoActual.x && props.dataMapa[0].nodoActual.y ? (
+            <circle cx={props.dataMapa[0].nodoActual.x * 14 + 7}
+             cy= {props.dataMapa[0].nodoActual.y * 14 + 7}
+             r="5" fill="blue" />
+//             <svg
+//   x={dataMapa[0].nodoActual.x * 14 + 7}
+//   y={dataMapa[0].nodoActual.y * 14 + 7}
+//   fill="#7D8AFF"
+//   version="1.1"
+//   id="Capa_1"
+//   xmlns="http://www.w3.org/2000/svg"
+//   xmlnsXlink="http://www.w3.org/1999/xlink"
+//   width="64px"
+//   height="64px"
+//   viewBox="-395.71 -395.71 1187.13 1187.13"
+//   xmlSpace="preserve"
+//   stroke="#000000"
+//   strokeWidth="0.0039571"
+// >
+//   <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+//   <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" stroke="#CCCCCC" strokeWidth="0.79142"></g>
+//   <g id="SVGRepo_iconCarrier">
+//     <g>
+//       <path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738 c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388 C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191 c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"></path>
+//     </g>
+//   </g>
+// </svg>
           ) : (console.log('No hay ahora'))
           ) : (console.log('Sin primer elemento'))
-      }
+      } */}
+
       {/* { // Prueba del primer camion
-        dataMapa && dataMapa.length > 0 && dataMapa[0] ? (
-          dataMapa[0].ruta && dataMapa[0].ruta.nodos ? (<RutaCamion rutaCamion={dataMapa[0].ruta.nodos}/>) 
-          : (console.log('Sin nodos'))
+        props.dataMapa && props.dataMapa.length > 0 && props.dataMapa[0] ? (
+          props.dataMapa[0].ruta && props.dataMapa[0].ruta.nodos ? 
+          (<RutaCamion rutaCamion={props.dataMapa[0].ruta.nodos}/>)
+          : (console.log('Sin nodos', props.dataMapa))
         ) : (console.log('Sin primer elemento'))
       }  */}
-      { // Prueba todos los camiones
-        dataMapa && dataMapa.length > 0 && dataMapa.map(element => (
+      { // Prueba todos los camiones 
+        props.dataMapa && props.dataMapa.length > 0 && props.dataMapa.map(element => (
           element.ruta && element.ruta.nodos ? (
             <RutaCamion rutaCamion={element.ruta.nodos}/>
-          ): (
-            console.log('Sin nodos')
+          ): (            
+            console.log('No hay datos', element)
+            // , props.setIndex()
+            // props.moverEscena
           )                   
           // console.log('Camion', element.idCamion)          
           // console.log('Ruta', element.ruta.nodos)
         ))        
+      }
+
+      {
+        props.dataMapa && props.dataMapa.length > 0 && props.dataMapa.map(element => (
+          element.pedidos && element.pedidos.map( ped => (
+              ped.first && ped.first.ubicacion && ped.first.ubicacion.x && ped.first.ubicacion.y ? 
+              (<circle cx={ped.first.ubicacion.x * 14 + 7}
+                cy= {ped.first.ubicacion.y * 14 + 7}
+                r="5" fill="red" />)
+              :
+              (console.log('No hay pedidos')) 
+            )
+          )
+        ))
+      }
+
+
+      { props.dataMapa && props.dataMapa.length > 0 ?
+        (props.setIndex()) 
+        : 
+        (console.log('No se puede mover'))        
       }
       {/* {dataMapa && dataMapa.length > 0 && dataMapa.map(element => (
         element.pedidos && element.pedidos.first ? (

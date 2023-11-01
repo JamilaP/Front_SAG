@@ -12,6 +12,9 @@ import { Client } from '@stomp/stompjs';
 
 function Simulacion() {
     const [dataSocket, setDataSocket] = useState([]);
+    const [indexData, setIndexData] = useState(0);
+    const [renderizarMapa, setRenderizarMapa] = useState(false);
+    const [listoParaSiguientePaquete, setListoParaSiguientePaquete] = useState(true);
 
     //Conexion websocket
     let conexion = null;
@@ -19,10 +22,27 @@ function Simulacion() {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
 
+    //worker
+    const [dataWorker, setDataWorker] = useState(null);
+
     const onConnectSocket = () => {
         conexion.subscribe('/topic/simulation-progress', (mensaje) => {
+            console.log('Data conseguida');
             const data = JSON.parse(mensaje.body);
-            setDataSocket(data);
+            // Renderizacion
+
+            // if (listoParaSiguientePaquete) {
+            //     console.log('Mensaje recibido');
+            //     setDataSocket(data);
+            //     setRenderizarMapa(true);
+            // }
+            // else {
+            //     console.log('Esperando...');
+            // }
+            
+            setDataSocket(prevDataSocket => [...prevDataSocket, data]);
+            
+            
             //console.log('Mensaje recibido:',dataSocket);
             // mostrarMensaje(mensaje.body);
             // Llamar a onSimulacionData con los datos recibidos
@@ -48,17 +68,24 @@ function Simulacion() {
         // setSClient(conexion);
         //onWebSocketClose();
         console.log('Connecting to WebSocket...');
-        conexion.configure({
-            webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
-        });
+        try {
+            conexion.configure({
+                webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
+            });
+            console.log('Conectado');
+        } catch (error) {
+            console.log('No se pudo conectar', error);
+        }
+        
         conexion.onConnect = onConnectSocket;
         conexion.onWebSocketClose = onWebSocketClose;
         conexion.activate();
-        // console.log(sClient);
+        // console.log(conexion);
     };
 
     const enviarMensaje = () => {
-        console.log(conexion);
+        // conectarWS();
+        // console.log(conexion);
         if (conexion) {
             if(conexion.connected){
                 conexion.publish({
@@ -89,17 +116,54 @@ function Simulacion() {
         setActiveButtonControles(buttonName);
     };
 
+    const moverEscena = () => {
+        if( indexData < dataSocket.length){
+            console.log("Esperando...");
+  
+            // Esperar 1000 milisegundos (1 segundo) antes de actualizar el estado
+            setTimeout(() => {
+                setIndexData(indexData + 1);
+                console.log("Escena movida después de esperar", indexData);
+            }, 1000);
+        }else console.log("Se alcanzo el limite");
+    }
+
     useEffect(() => {
         conectarWS();
-        if(conexion.connected) console.log('Conectado');
+        if (conexion) {
+            console.log('Se ha conectado');
+            console.log(conexion);
+        } else {
+            console.log('Fallo effect');
+        }
     }, []);
+
+    // useEffect(() => {
+    //     if(dataSocket.length > 0 && indexData < dataSocket.length ){
+    //         // setIndexData(indexData + 1);
+    //         console.log('Renderizando', indexData);
+    //     }
+    //     // console.log('Cantidad: ', dataSocket.length);
+    //   }, [indexData]);
 
 
     return (
         <div className="Simulacion">
-                <MapaSimu dataMapa = {dataSocket}/>
+            {/* {workerInstance.postMessage('Hola')} */}
+            <h1> Escena {indexData}</h1>
+            {
+                dataSocket && dataSocket[indexData] ? (
+                    <MapaSimu dataMapa = { dataSocket[indexData] } 
+                    index = {indexData}
+                    setIndex = {moverEscena}/>
+                ):(
+                    console.log('No hay datos para procesar')
+                )
+            }
+                {/* <MapaSimu dataMapa = { dataSocket[0] }/> */}
 
                 {/* Botones de colapso/semanal */}
+
                 <div className="control-buttons">
                     Tipo de visualización:
                     <ButtonGroup aria-label="Semana/Colapso" className="botones">
@@ -121,7 +185,7 @@ function Simulacion() {
                     <ButtonGroup aria-label="Barra de control" className="controles">
                         <Button
                             className={`custom-button success ${activeButtonControles === 'Play' ? 'active' : ''}`}
-                            onClick={() => { enviarMensaje();handleButtonClickControles('Play')}}>
+                            onClick={() => { enviarMensaje(); handleButtonClickControles('Play')}}>
                             <FaPlay className="controles play"/>
                         </Button>
                         <Button
@@ -138,7 +202,7 @@ function Simulacion() {
                 </div>
 
 
-                <Container className="table-responsive">
+                {/* <Container className="table-responsive">
                     <Tabs id="miPestanas" activeKey={key} onSelect={(k) => setKey(k)}>
                         <Tab eventKey="pestana1" title="Leyenda"><Leyenda/></Tab>
                         <Tab eventKey="pestana4" title="Cargar pedidos"><CargaDeDatos/></Tab>
@@ -146,7 +210,7 @@ function Simulacion() {
                         <Tab eventKey="pestana3" title="Pedidos"><PedidosSimulacion data={dataSocket}/></Tab>
                         <Tab eventKey="pestana5" title="Reporte Simulación"><ReporteSimulacion/></Tab>
                     </Tabs>
-                </Container>
+                </Container> */}
             </div>
     );
 }
