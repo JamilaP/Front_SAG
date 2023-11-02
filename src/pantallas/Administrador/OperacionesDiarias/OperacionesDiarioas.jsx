@@ -11,23 +11,19 @@ function OperacionesDiarioas() {
 
     return (
         <div className="OperacionesDiarias">
-            <div className="contenedorCanvas">
-                <MapaSimu/>
-            </div>
+            <MapaSimu/>
 
-            <div className="elemento">
-                <div className="espacio"> </div>
-                    <div className="tabla-container">
-                        <Container className="table-responsive">
-                            <Tabs id="miPestanas" activeKey={key} onSelect={(k) => setKey(k)}>
-                                <Tab eventKey="pestana1" title="Leyenda"><Leyenda/></Tab>
-                                <Tab eventKey="pestana2" title="Camiones"><CamionesOD/></Tab>
-                                <Tab eventKey="pestana3" title="Pedidos"><PedidosOD/></Tab>
-                                {/*<Tab eventKey="pestana4" title="Cargar datos"><CargaDeDatos/></Tab>*/}
-                            </Tabs>
-                        </Container>
-                    </div>
-            </div>
+            <div className="espacio"> </div>
+                <div className="tabla-container">
+                    <Container className="table-responsive">
+                        <Tabs id="miPestanas" activeKey={key} onSelect={(k) => setKey(k)}>
+                            <Tab eventKey="pestana1" title="Leyenda"><Leyenda/></Tab>
+                            <Tab eventKey="pestana2" title="Camiones"><CamionesOD/></Tab>
+                            <Tab eventKey="pestana3" title="Pedidos"><PedidosOD/></Tab>
+                            {/*<Tab eventKey="pestana4" title="Cargar datos"><CargaDeDatos/></Tab>*/}
+                        </Tabs>
+                    </Container>
+                </div>
         </div>
     );
 }

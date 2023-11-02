@@ -148,14 +148,14 @@ function Simulacion() {
     return (
         <div className="Simulacion">
             {/* {workerInstance.postMessage('Hola')} */}
-            <h1> Escena {indexData}</h1>
+            <h1> Segundo {indexData}</h1>
             {
                 dataSocket && dataSocket[indexData] && dataSocket[indexData].camiones ? (
                     <MapaSimu dataMapa = { dataSocket[indexData].camiones }
                     index = {indexData}
                     setIndex = {moverEscena}/>
                 ):(
-                    console.log('No hay datos para procesar')
+                    <MapaSimu/>
                 )
             }
                 {/* <MapaSimu dataMapa = { dataSocket[0] }/> */}
