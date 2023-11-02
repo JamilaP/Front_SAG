@@ -1,32 +1,61 @@
-import React from 'react';
-import {Table, Form} from "react-bootstrap";
+import React, {useEffect, useState} from 'react';
+import {Button , Form} from "react-bootstrap";
 import "./Infraestructura.css";
+import axios from 'axios';
+import { useFileContext } from '../../../Componentes/FileContext';
 
-const infraestructuras = [
-    {
-        idInfraestructura: 1,
-        tipo: "Planta",
-        ubicacion: "(1,70)",
-        estado: "Activo",
-        capacidad: 200,
-
-    },
-    {
-        idInfraestructura: 2,
-        tipo: "Cisterna Intermedia",
-        ubicacion: "(50,60)",
-        estado: "Activo",
-        capacidad: 100,
-    },
-    {
-        idInfraestructura: 1,
-        tipo: "Cisterna Intermedia",
-        ubicacion: "(40,30)",
-        estado: "Inactivo",
-        capacidad: 80,
-    }
-];
 function Infraestructura() {
+    const [files, setFiles] = useState({
+        infraestructura: null,
+        flota: null,
+        bloqueos: null,
+        mantenimiento: null
+    });
+
+    const { selectedFiles, setFile } = useFileContext();
+
+    /*
+    const handleFileChange = (e, fieldName) => {
+        // Manejar cambios en el input de archivo y guardar el archivo seleccionado en el estado
+        const selectedFile = e.target.files[0];
+        setFiles({
+            ...files,
+            [fieldName]: selectedFile
+        });
+    };*/
+
+    const handleFileChange = (e, fieldName) => {
+        const selectedFile = e.target.files[0];
+        setFile(fieldName, selectedFile);
+
+    };
+
+    const handleUpload = (fieldName) => {
+        //const file = files[fieldName];
+        const file = selectedFiles[fieldName];
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            axios.post(`http://localhost:8090/sag-genetico/api/media/upload-${fieldName}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(response => {
+                    // Manejar la respuesta del servidor si es necesario
+                    console.log(`Archivo ${fieldName} subido con éxito`, response);
+                })
+                .catch(error => {
+                    // Manejar errores si la carga falla
+                    console.error(`Error al subir el archivo ${fieldName}`, error);
+                });
+        } else {
+            // Manejar el caso en el que no se haya seleccionado ningún archivo
+            console.error(`No se ha seleccionado ningún archivo para ${fieldName}`);
+        }
+    };
+
     return (
         <div>
             <h1 className="titulo-pagina">Configuración general</h1>
@@ -37,40 +66,29 @@ function Infraestructura() {
                         <Form.Label className="titulos-archivos">Infraestructura</Form.Label>
                     </div>
                     <div className="control">
-                        <Form.Control type="file" size="sm" />
+                        <Form.Control type="file" size="sm"
+                                      onChange={(e) => handleFileChange(e, 'infraestructura')}
+                        />
+                        <span>
+  {selectedFiles.infraestructura ? selectedFiles.infraestructura.name : 'Selecciona un archivo...'}
+</span>
                     </div>
+                    <Button className="boton-guardar" variant="success" onClick={() => handleUpload('infraestructura')}>
+                        Guardar
+                    </Button>
                 </div>
-                {/* <Table striped bordered hover>
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Tipo</th>
-                    <th>Ubicación</th>
-                    <th>Estado</th>
-                    <th>Capacidad(m3)</th>
-                </tr>
-                </thead>
-                <tbody data-bs-search-live="true">
-                {infraestructuras.map((inf) => (
-                    <tr key={inf.idInfraestructura}>
-                        <td>{inf.idInfraestructura}</td>
-                        <td>{inf.tipo}</td>
-                        <td>{inf.ubicacion}</td>
-                        <td>{inf.estado}</td>
-                        <td>{inf.capacidad}</td>
-                    </tr>
-                ))}
-                </tbody>
-                </Table>
-                */}
 
                 <div className="grupo-label-control-general">
                     <div className="label-inf">
                         <Form.Label className="titulos-archivos">Flota</Form.Label>
                     </div>
                     <div className="control">
-                        <Form.Control type="file" size="sm" />
+                        <Form.Control type="file" size="sm" onChange={(e) => handleFileChange(e, 'flota')}/>
                     </div>
+                    <Button className="boton-guardar" variant="success" onClick={() => handleUpload('flota')}>
+                        Guardar
+                    </Button>
+
                 </div>
 
                 <div className="grupo-label-control-general">
@@ -78,8 +96,11 @@ function Infraestructura() {
                         <Form.Label className="titulos-archivos">Bloqueos</Form.Label>
                     </div>
                     <div className="control">
-                        <Form.Control type="file" size="sm" />
+                        <Form.Control type="file" size="sm" onChange={(e) => handleFileChange(e, 'bloqueos')}/>
                     </div>
+                    <Button className="boton-guardar" variant="success" onClick={() => handleUpload('bloqueos')}>
+                        Guardar
+                    </Button>
                 </div>
 
                 <div className="grupo-label-control-general">
@@ -87,8 +108,11 @@ function Infraestructura() {
                         <Form.Label className="titulos-archivos">Mantenimiento</Form.Label>
                     </div>
                     <div className="control">
-                        <Form.Control type="file" size="sm" />
+                        <Form.Control type="file" size="sm" onChange={(e) => handleFileChange(e, 'mantenimiento')}/>
                     </div>
+                    <Button className="boton-guardar" variant="success" onClick={() => handleUpload('mantenimiento')}>
+                        Guardar
+                    </Button>
                 </div>
 
             </div>

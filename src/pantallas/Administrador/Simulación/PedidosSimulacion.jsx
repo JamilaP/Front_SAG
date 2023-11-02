@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Dropdown, DropdownButton, FormControl, InputGroup, Table} from "react-bootstrap";
 
 const pedidos = [
@@ -32,32 +32,29 @@ const pedidos = [
 ];
 
 function PedidosSimulacion(props) {
-    const { data } = props; // Destructura la propiedad data
+    const { data } = props.data; // Destructura la propiedad data
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
     const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
 
-    const nuevoArreglo = data.map(camion => {
-        const arrPedidos = camion.pedidos.map(pedido => ({
-            fechaRegistro: pedido.first.fechaRegistro.second,
-            idCliente: pedido.first.idCliente,
-            cantidadGLP: pedido.first.cantidadGLP,
-            horasLimite: pedido.first.horasLimite,
-            ubicacion:`(${pedido.first.ubicacion.x},${pedido.first.ubicacion.y})`,//pedido.first.ubicacion,
-            //entrega: pedido.second
-        }));
+    useEffect(() => {
+        console.log('data pedidos: ', data);
+        //console.log('arreglo de pedidos',nuevoArreglo);
+    }, [data]);
 
+    // Verifica si data es un arreglo válido antes de mapearlo
+    if (!data || data.length === 0) {
+        console.log('No hay datos para procesar');
+        return;
+    }
+
+    const nuevoArreglo = data.map(pedido => {
         return {
-            id: camion.idCamion,
-            cargaActual: camion.cargaActual,
-            cargaMaxima: camion.cargaMaxima,
-            pedidos: arrPedidos.length,
-            estado: camion.estado,
-            galonesDisponibles: camion.galonesDisponibles,
-            consumoTotal: camion.consumoTotal,
-            pedidoActual: arrPedidos.length > 0 ? arrPedidos[0].idCliente : null,
-            //quiero un arreglo de pedidos
-            arrPedidos: arrPedidos,
+            fechaRegistro: pedido.fechaRegistro.second,
+            idCliente: pedido.idCliente,
+            cantidadGLP: pedido.cantidadGLP,
+            horasLimite: pedido.horasLimite,
+            ubicacion:`(${pedido.ubicacion.x},${pedido.ubicacion.y})`,
 
         };
     });
@@ -72,6 +69,12 @@ function PedidosSimulacion(props) {
 
     return (
         <div>
+            {console.log('Escena de pedidos mover ', props.data, 'Nro ', props.index)}
+            { props.data && props.data.length > 0 ?
+                (props.setIndex())
+                :
+                (console.log('No se puede mover pedidos'))
+            }
             <h1 className="titulo">Detalle de pedidos</h1>
 
             <Table striped bordered hover>

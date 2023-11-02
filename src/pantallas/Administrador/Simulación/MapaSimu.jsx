@@ -156,10 +156,10 @@ const MapaSimu = (props) => {
       }  */}
       { // Prueba todos los camiones 
         props.dataMapa && props.dataMapa.length > 0 && props.dataMapa.map(element => (
-          element.ruta && element.ruta.nodos ? (
-            <RutaCamion rutaCamion={element.ruta.nodos}/>
+              element.ruta && element.ruta.nodos && element.nodoActual ? (
+              <RutaCamion rutaCamion={element.ruta.nodos } inicio = {element.nodoActual}/>
           ): (            
-            console.log('No hay datos', element)
+            console.log('No hay datos')
             // , props.setIndex()
             // props.moverEscena
           )                   

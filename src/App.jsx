@@ -12,7 +12,7 @@ import OperacionesDiarioas from './pantallas/Administrador/OperacionesDiarias/Op
 import Pedidos from './pantallas/Administrador/Pedidos/Pedidos'
 import Reporte from './pantallas/Administrador/Reporte'
 import Simulacion from './pantallas/Administrador/Simulación/Simulacion'
-
+import { FileProvider } from './Componentes/FileContext';
 function App() {
 
     return (
@@ -48,15 +48,17 @@ function App() {
                 </Container>
             </Navbar>
 
-            <Routes>
-                <Route path="/administrador/operaciones-diarias" element={<OperacionesDiarioas />} />
-                <Route path="/administrador/simulacion" element={<Simulacion />} />
-                <Route path="/administrador/flota" element={<Flota />} />
-                <Route path="/administrador/gestion-de-usuarios" element={<GestionDeUsuarios />} />
-                <Route path="/administrador/infraestructura" element={<Infraestructura />} />
-                <Route path="/administrador/reportes" element={<Reporte />} />
-                <Route path="/administrador/pedidos" element={<Pedidos />} />
-            </Routes>
+            <FileProvider>
+                <Routes>
+                    <Route path="/administrador/operaciones-diarias" element={<OperacionesDiarioas />} />
+                    <Route path="/administrador/simulacion" element={<Simulacion />} />
+                    <Route path="/administrador/flota" element={<Flota />} />
+                    <Route path="/administrador/gestion-de-usuarios" element={<GestionDeUsuarios />} />
+                    <Route path="/administrador/infraestructura" element={<Infraestructura />} />
+                    <Route path="/administrador/reportes" element={<Reporte />} />
+                    <Route path="/administrador/pedidos" element={<Pedidos />} />
+                </Routes>
+            </FileProvider>
 
         </div>
     );

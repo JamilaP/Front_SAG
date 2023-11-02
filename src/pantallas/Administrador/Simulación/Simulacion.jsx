@@ -12,9 +12,13 @@ import { Client } from '@stomp/stompjs';
 
 function Simulacion() {
     const [dataSocket, setDataSocket] = useState([]);
+    const [dataSocketPedidos, setDataSocketPedidos] = useState([]);
+    const [dataSocketBloqueos, setDataSocketBloqueos] = useState([]);
     const [indexData, setIndexData] = useState(0);
+    const [indexDataPedidos, setIndexDataPedidos] = useState(0);
     const [renderizarMapa, setRenderizarMapa] = useState(false);
     const [listoParaSiguientePaquete, setListoParaSiguientePaquete] = useState(true);
+    //const [renderizarSeccionPosterior, setRenderizarSeccionPosterior] = useState(true);
 
     //Conexion websocket
     let conexion = null;
@@ -30,26 +34,16 @@ function Simulacion() {
             console.log('Data conseguida');
             const data = JSON.parse(mensaje.body);
             // Renderizacion
-
-            // if (listoParaSiguientePaquete) {
-            //     console.log('Mensaje recibido');
-            //     setDataSocket(data);
-            //     setRenderizarMapa(true);
-            // }
-            // else {
-            //     console.log('Esperando...');
-            // }
-            
             setDataSocket(prevDataSocket => [...prevDataSocket, data]);
-            
-            
-            //console.log('Mensaje recibido:',dataSocket);
-            // mostrarMensaje(mensaje.body);
-            // Llamar a onSimulacionData con los datos recibidos
-            // if (onSimulacionData) {
-            //     onSimulacionData(mensaje.body);
-            // }
         });
+        /*conexion.subscribe('/topic/simulation-pedidos', (mensaje) => {
+            console.log('Data conseguida pedidos');
+            const data = JSON.parse(mensaje.body);
+            console.log(data);
+
+            // Renderizacion
+            setDataSocketPedidos(prevDataSocket => [...prevDataSocket, data]);
+        });*/
         conexion.onStompError = (frame) => {
             console.log('Stomp Error : ', frame);
         };
@@ -90,10 +84,9 @@ function Simulacion() {
             if(conexion.connected){
                 conexion.publish({
                     destination: '/app/simulacion-semanal',
-                    body: JSON.stringify({
-                        nombre: inputMessage,
-                        contenido: inputMessage
-                    })
+                    headers: {
+                        'file-name': "ventas202303.txt"
+                    }
                 });
             }            
             console.log('Mensaje enviado');
@@ -119,11 +112,24 @@ function Simulacion() {
     const moverEscena = () => {
         if( indexData < dataSocket.length){
             console.log("Esperando...");
-  
+
+            //setRenderizarSeccionPosterior(true);
             // Esperar 1000 milisegundos (1 segundo) antes de actualizar el estado
             setTimeout(() => {
                 setIndexData(indexData + 1);
                 console.log("Escena movida después de esperar", indexData);
+            }, 208);
+
+
+        }else console.log("Se alcanzo el limite");
+    }
+    const moverPedido = () => {
+        if( indexDataPedidos < dataSocketPedidos.length){
+            console.log("Esperando...");
+            // Esperar 1000 milisegundos (1 segundo) antes de actualizar el estado
+            setTimeout(() => {
+                setIndexDataPedidos(indexDataPedidos + 1);
+                console.log("Pedido movido después de esperar", indexDataPedidos);
             }, 1000);
         }else console.log("Se alcanzo el limite");
     }
@@ -152,8 +158,8 @@ function Simulacion() {
             {/* {workerInstance.postMessage('Hola')} */}
             <h1> Escena {indexData}</h1>
             {
-                dataSocket && dataSocket[indexData] ? (
-                    <MapaSimu dataMapa = { dataSocket[indexData] } 
+                dataSocket && dataSocket[indexData] && dataSocket[indexData].camiones ? (
+                    <MapaSimu dataMapa = { dataSocket[indexData].camiones }
                     index = {indexData}
                     setIndex = {moverEscena}/>
                 ):(
@@ -202,15 +208,33 @@ function Simulacion() {
                 </div>
 
 
-                {/* <Container className="table-responsive">
+                 <Container className="table-responsive">
                     <Tabs id="miPestanas" activeKey={key} onSelect={(k) => setKey(k)}>
                         <Tab eventKey="pestana1" title="Leyenda"><Leyenda/></Tab>
                         <Tab eventKey="pestana4" title="Cargar pedidos"><CargaDeDatos/></Tab>
-                        <Tab eventKey="pestana2" title="Camiones"><Camiones data={dataSocket}/></Tab>
-                        <Tab eventKey="pestana3" title="Pedidos"><PedidosSimulacion data={dataSocket}/></Tab>
+                        <Tab eventKey="pestana2" title="Camiones">
+                            {dataSocket && dataSocket[indexData] && dataSocket[indexData].camiones ? (
+                                <Camiones data={dataSocket[indexData].camiones}/>
+                            ):(
+                                console.log('No hay datos para procesar')
+                                )
+                            }
+
+                        </Tab>
+                        {/*<Tab eventKey="pestana3" title="Pedidos">
+                            {dataSocket && dataSocket[indexData] && dataSocket[indexData].pedidos ? (
+                                console.log('Pedidos: ', dataSocket[indexData].pedidos),
+                                <PedidosSimulacion data={dataSocket[indexData].pedidos}/>
+                            ):(
+                                console.log('No hay datos para procesar en pedidos')
+                            )
+                            }
+
+                        </Tab>*/}
                         <Tab eventKey="pestana5" title="Reporte Simulación"><ReporteSimulacion/></Tab>
                     </Tabs>
-                </Container> */}
+                </Container>
+
             </div>
     );
 }

@@ -5,19 +5,34 @@ import WebSocketComponent from "../../../Componentes/WebSocketComponent";
 import PruebaWs from '../../../Componentes/PruebaWS';
 
 function Camiones(props) {
-    const { data } = props; // Destructura la propiedad data
+
+    const { data } = props || { data: null }; // Destructura la propiedad data
     const [filtroTexto, setFiltroTexto] = useState(''); // Estado para el filtro de texto
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro de opciones
 
+    useEffect(() => {
+        //console.log('data: ', data);
+        //console.log('arreglo de pedidos',nuevoArreglo);
+    }, [data]);
+
+    // Verifica si data es un arreglo válido antes de mapearlo
+    if (!data || data.length === 0) {
+        console.log('No hay datos para procesar');
+        return;
+    }
+
     const nuevoArreglo = data.map(camion => {
-        const arrPedidos = camion.pedidos.map(pedido => ({
-            fechaRegistro: pedido.first.fechaRegistro,
-            idCliente: pedido.first.idCliente,
-            cantidadGLP: pedido.first.cantidadGLP,
-            horasLimite: pedido.first.horasLimite,
-            ubicacion: pedido.first.ubicacion,
-            entrega: pedido.second
-        }));
+        let arrPedidos = [];
+        if (camion.pedidos && camion.pedidos.length > 0) {
+                arrPedidos = camion.pedidos.map(pedido => ({
+                fechaRegistro: pedido.first.fechaRegistro,
+                idCliente: pedido.first.idCliente,
+                cantidadGLP: pedido.first.cantidadGLP,
+                horasLimite: pedido.first.horasLimite,
+                ubicacion: pedido.first.ubicacion,
+                entrega: pedido.second
+            }));
+        }
 
         return {
             id: camion.idCamion,
@@ -32,12 +47,9 @@ function Camiones(props) {
             arrPedidos: arrPedidos,
 
         };
+
     });
 
-   useEffect(() => {
-       console.log('data: ', data);
-       //console.log('arreglo de pedidos',nuevoArreglo);
-    }, [data]);
 /*
     useEffect(() => {
         fetch('http://localhost:8090/sag-genetico/api/camiones/initial')
@@ -60,6 +72,7 @@ function Camiones(props) {
 */
     return (
         <div>
+
             {/* <PruebaWs/> */}
             {/* <WebSocketComponent onSimulacionData={handleWebSocketMessage}/> */}
             <h1 className="titulo">Detalle de flota</h1>
