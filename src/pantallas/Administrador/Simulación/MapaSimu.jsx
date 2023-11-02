@@ -85,7 +85,7 @@ const MapaSimu = (props) => {
         ))
       ))}
 
-      {console.log('Escena a mover ', props.dataMapa, 'Nro ', props.index)}
+      {/*{console.log('Escena a mover ', props.dataMapa, 'Nro ', props.index)}*/}
       
       {/* <RutaCamion ruta={ruta}/>
       <RutaCamion ruta={ruta2}/>

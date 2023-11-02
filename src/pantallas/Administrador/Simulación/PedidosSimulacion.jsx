@@ -1,50 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Dropdown, DropdownButton, FormControl, InputGroup, Table} from "react-bootstrap";
 
-const pedidos = [
-    {
-        idPedido: 1,
-        idCliente: 101,
-        ubicacion: "Lugar 1",
-        fechaHoraSolicitada: "2023-10-16 14:00",
-        plazoHoras: 24,
-        cantidadGLPSolicitado: 10,
-        camiones: 2
-    },
-    {
-        idPedido: 2,
-        idCliente: 102,
-        ubicacion: "Lugar 2",
-        fechaHoraSolicitada: "2023-10-17 10:30",
-        plazoHoras: 12,
-        cantidadGLPSolicitado: 12,
-        camiones: 1
-    },
-    {
-        idPedido: 3,
-        idCliente: 103,
-        ubicacion: "Lugar 3",
-        fechaHoraSolicitada: "2023-10-18 16:45",
-        plazoHoras: 36,
-        cantidadGLPSolicitado: 8,
-        camiones: 3
-    }
-];
-
 function PedidosSimulacion(props) {
-    const { data } = props.data; // Destructura la propiedad data
+    const { data } = props ; // Destructura la propiedad data
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
     const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
 
     useEffect(() => {
-        console.log('data pedidos: ', data);
+        //console.log('data pedidos: ', data);
         //console.log('arreglo de pedidos',nuevoArreglo);
     }, [data]);
 
     // Verifica si data es un arreglo válido antes de mapearlo
     if (!data || data.length === 0) {
-        console.log('No hay datos para procesar');
+        console.log('No hay datos para procesar en pedidos');
         return;
     }
 
@@ -55,7 +25,6 @@ function PedidosSimulacion(props) {
             cantidadGLP: pedido.cantidadGLP,
             horasLimite: pedido.horasLimite,
             ubicacion:`(${pedido.ubicacion.x},${pedido.ubicacion.y})`,
-
         };
     });
     // Función para filtrar los pedidos según los filtros aplicados
@@ -69,12 +38,6 @@ function PedidosSimulacion(props) {
 
     return (
         <div>
-            {console.log('Escena de pedidos mover ', props.data, 'Nro ', props.index)}
-            { props.data && props.data.length > 0 ?
-                (props.setIndex())
-                :
-                (console.log('No se puede mover pedidos'))
-            }
             <h1 className="titulo">Detalle de pedidos</h1>
 
             <Table striped bordered hover>
@@ -90,20 +53,19 @@ function PedidosSimulacion(props) {
                 </tr>
                 </thead>
                 <tbody>
-                {nuevoArreglo.map((camion,index) => (
+                {nuevoArreglo.map((pedido,index) => (
                     <tr key={index}>
                         <td>{index+1}</td>
-                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].idCliente : '-'}</td>
-                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].ubicacion : '-'}</td>
-                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].fechaRegistro : '-'}</td>
-                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].horasLimite : '-'}</td>
-                        <td>{camion.arrPedidos.length > 0 ? camion.arrPedidos[0].cantidadGLP : '-'}</td>
+                        <td>{pedido.idCliente}</td>
+                        <td>{pedido.ubicacion}</td>
+                        <td>{pedido.fechaRegistro}</td>
+                        <td>{pedido.horasLimite}</td>
+                        <td>{pedido.cantidadGLP}</td>
                         <td>
                             <Button variant="primary">Ver</Button>
                         </td>
                     </tr>
                 ))}
-                {/* Agrega más filas de datos aquí */}
                 </tbody>
             </Table>
         </div>

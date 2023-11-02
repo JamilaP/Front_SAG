@@ -221,16 +221,15 @@ function Simulacion() {
                             }
 
                         </Tab>
-                        {/*<Tab eventKey="pestana3" title="Pedidos">
+                        <Tab eventKey="pestana3" title="Pedidos">
                             {dataSocket && dataSocket[indexData] && dataSocket[indexData].pedidos ? (
                                 console.log('Pedidos: ', dataSocket[indexData].pedidos),
+                                    console.log('Index pedidos: ', indexData),
                                 <PedidosSimulacion data={dataSocket[indexData].pedidos}/>
                             ):(
-                                console.log('No hay datos para procesar en pedidos')
-                            )
-                            }
-
-                        </Tab>*/}
+                                console.log('No hay datos para procesar en pedidos 1')
+                            )}
+                        </Tab>
                         <Tab eventKey="pestana5" title="Reporte Simulación"><ReporteSimulacion/></Tab>
                     </Tabs>
                 </Container>
