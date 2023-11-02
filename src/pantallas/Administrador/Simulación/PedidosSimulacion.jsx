@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Dropdown, DropdownButton, FormControl, InputGroup, Table} from "react-bootstrap";
-
+import './PedidosSimulacion.css'
 function PedidosSimulacion(props) {
     const { data } = props ; // Destructura la propiedad data
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido

@@ -36,14 +36,6 @@ function Simulacion() {
             // Renderizacion
             setDataSocket(prevDataSocket => [...prevDataSocket, data]);
         });
-        /*conexion.subscribe('/topic/simulation-pedidos', (mensaje) => {
-            console.log('Data conseguida pedidos');
-            const data = JSON.parse(mensaje.body);
-            console.log(data);
-
-            // Renderizacion
-            setDataSocketPedidos(prevDataSocket => [...prevDataSocket, data]);
-        });*/
         conexion.onStompError = (frame) => {
             console.log('Stomp Error : ', frame);
         };

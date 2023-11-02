@@ -34,13 +34,13 @@ const pedidos = [
 
 function Pedidos() {
     return (
-        <div>
+        <div className="Contenedor-grande">
             <h1 className="titulo">Registrar Pedido</h1>
             <Form>
                 <Form.Group as={Row}>
                     <Form.Label column sm={2} className="label-left">Coordenada del Pedido</Form.Label>
                     <Col sm={4}>
-                        <Form.Control type="text" placeholder="Ingrese la coordenada" />
+                        <Form.Control type="text" placeholder="Ingrese la coordenada (X;Y)" />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row}>

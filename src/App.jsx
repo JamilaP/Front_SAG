@@ -29,9 +29,9 @@ function App() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
-                            {/*<Nav.Link as={Link} to="/administrador/operaciones-diarias" className="custom-navbar-link">Operaciones Diarias</Nav.Link>*/}
+                            <Nav.Link as={Link} to="/administrador/operaciones-diarias" className="custom-navbar-link">Operaciones Diarias</Nav.Link>
                             <Nav.Link as={Link} to="/administrador/simulacion" className="custom-navbar-link">Simulación</Nav.Link>
-                            {/*<Nav.Link as={Link} to="/administrador/pedidos" className="custom-navbar-link">Pedidos</Nav.Link>*/}
+                            <Nav.Link as={Link} to="/administrador/pedidos" className="custom-navbar-link">Pedidos</Nav.Link>
                             {/*<Nav.Link as={Link} to="/administrador/flota" className="custom-navbar-link">Flota</Nav.Link>*/}
                             {/*<Nav.Link as={Link} to="/administrador/gestion-de-usuarios" className="custom-navbar-link">Gestión De Usuarios</Nav.Link>*/}
                             <Nav.Link as={Link} to="/administrador/infraestructura" className="custom-navbar-link">Configuración General</Nav.Link>

@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import {Image, Container, Tab, Tabs } from 'react-bootstrap';
-import mapa from "../../../imagenes/mapa.png";
+import {Container, Tab, Tabs } from 'react-bootstrap';
 import Leyenda from "../Simulación/Leyenda";
-import Camiones from "../Simulación/Camiones";
+import CamionesOD from "./CamionesOD";
 import CargaDeDatos from "../Simulación/CargaDeDatos";
-import PedidosSimulacion from "../Simulación/PedidosSimulacion";
+import PedidosOD from "./PedidosOD";
 import "./OperacionesDiarias.css";
 import MapaSimu from "../Simulación/MapaSimu";
 function OperacionesDiarioas() {
@@ -22,9 +21,9 @@ function OperacionesDiarioas() {
                         <Container className="table-responsive">
                             <Tabs id="miPestanas" activeKey={key} onSelect={(k) => setKey(k)}>
                                 <Tab eventKey="pestana1" title="Leyenda"><Leyenda/></Tab>
-                                <Tab eventKey="pestana2" title="Camiones"><Camiones/></Tab>
-                                <Tab eventKey="pestana3" title="Pedidos"><PedidosSimulacion/></Tab>
-                                <Tab eventKey="pestana4" title="Cargar datos"><CargaDeDatos/></Tab>
+                                <Tab eventKey="pestana2" title="Camiones"><CamionesOD/></Tab>
+                                <Tab eventKey="pestana3" title="Pedidos"><PedidosOD/></Tab>
+                                {/*<Tab eventKey="pestana4" title="Cargar datos"><CargaDeDatos/></Tab>*/}
                             </Tabs>
                         </Container>
                     </div>
