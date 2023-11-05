@@ -1,23 +1,41 @@
-.grupo-label-control{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.contenido{
+    margin-left: 20px;
     margin-bottom: 10px;
 }
-.label{
-    margin-right: 5px; /*20px*/
-    margin-left: 30px;
-    width: 40px;
+/*top, right, bottom y left*/
+.fila{
+    width: 100%;
+    margin: 10px auto;
 }
-.control{
-    margin-left: 30px;
+.form-grupo{
+    width: 100%;
+}
+.columna-1{
+    display: flex;
+    align-items: flex-start;
+    flex: 0 0 20%;
+}
+.columna-2{
+    flex: 0 0 40%;
+}
+.label-right{
+    margin-top: 5px;
+}
+.titulo{
+    font-size: 24px;
+}
+/*Botones*/
+.seccion-boton{
+    width: 60%;
+    display: flex;
+    justify-content: flex-end;/*izquierda*/
 }
 .boton-guardar{
-    margin-left: 20px;
+    display: flex;
+    align-items: flex-end;
+    margin-right: 10px;
     background-color: #175C75;
 }
 .boton-guardar:hover, .boton-guardar:active {
     background-color: #175C75  !important;
 }
-
-

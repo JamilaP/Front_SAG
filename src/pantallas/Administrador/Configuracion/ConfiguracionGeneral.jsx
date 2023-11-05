@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Button , Form} from "react-bootstrap";
-import "./Infraestructura.css";
+import "./ConfiguracionGeneral.css";
 import axios from 'axios';
 import { useFileContext } from '../../../Componentes/FileContext';
 
-function Infraestructura() {
+function ConfiguracionGeneral() {
     const [files, setFiles] = useState({
         infraestructura: null,
         flota: null,
@@ -123,4 +123,4 @@ function Infraestructura() {
     );
 }
 
-export default Infraestructura;
+export default ConfiguracionGeneral;

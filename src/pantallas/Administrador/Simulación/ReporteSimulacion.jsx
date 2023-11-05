@@ -5,12 +5,15 @@ import {BiSolidTruck,BiSolidCalendarCheck} from 'react-icons/bi';
 import {PiNotebookFill} from 'react-icons/pi';
 import {TbNotebookOff} from 'react-icons/tb';
 
-function ReporteSimulacion() {
+function ReporteSimulacion(props) {
+    let { data } = props || { data: null };
     const [fechaSimulacion, setFechaSimulacion] = useState(new Date());
     const [diasTranscurridos, setDiasTranscurridos] = useState(0);
     const [flotaOcupada, setFlotaOcupada] = useState(0);
     const [pedidosAtendidos, setPedidosAtendidos] = useState(0);
     const [pedidosPendientes, setPedidosPendientes] = useState(0);
+
+    const fechaInicial = new Date(); // Fecha de inicio
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -35,13 +38,19 @@ function ReporteSimulacion() {
         };
     }, []);
 
-    const fechaInicial = new Date(); // Fecha de inicio
+    // Verifica si data es un arreglo válido antes de mapearlo
+    if (!data) {
+        console.log('No hay datos para procesar');
+    }
+    else{
+        data=fechaSimulacion.toLocaleString();
+    }
 
     return (
         <div>
             <h1 className="titulo">Reporte de simulación</h1>
             <div className="contenedor-2">
-                <div className="grupo"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck><p>Fecha de simulación: {fechaSimulacion.toLocaleString()}</p></div>
+                <div className="grupo"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck><p>Fecha de simulación: {data}</p></div>
                 <div className="grupo"><AiFillClockCircle className="icono"> </AiFillClockCircle> <p>Días transcurridos: {diasTranscurridos}</p></div>
                 <div className="grupo"><BiSolidTruck className="icono"></BiSolidTruck><p>Porcentaje de flota ocupada: {flotaOcupada.toFixed(2)}%</p></div>
                 <div className="grupo"><PiNotebookFill className="icono"></PiNotebookFill><p>Pedidos atendidos: {pedidosAtendidos}</p></div>

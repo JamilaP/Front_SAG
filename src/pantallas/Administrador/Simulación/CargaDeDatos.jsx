@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Form, Button } from 'react-bootstrap';
+import {Form, Button, Row, Col} from 'react-bootstrap';
 import "./CargaDeDatos.css";
 import axios from 'axios';
 
@@ -43,20 +43,23 @@ function CargaDeDatos() {
         <div>
             <h1 className="titulo">Carga de Pedidos</h1>
 
-            <div className="grupo-label-control">
-                <div className="label">
-                    <Form.Label className="titulos-archivos">Pedidos</Form.Label>
-                </div>
-                <div className="control">
-                    <Form.Control type="file" size="sm" onChange={handleFileChange}/>
-                </div>
-                <Button className="boton-guardar" variant="success" onClick={handleUpload}>
-                    Guardar
-                </Button>
+            <div className="contenido">
+                <Form className="form-grupo">
+                    <Form.Group as={Row} className="fila">
+                        <Col className="columna-1"><Form.Label className="label-right">Fecha de inicio de la simulación:</Form.Label></Col>
+                        <Col className="columna-2"><Form.Control type="date"/></Col>
+                    </Form.Group>
+                    <Form.Group as={Row} className="fila">
+                        <Col className="columna-1"><Form.Label className="label-right">Pedidos:</Form.Label></Col>
+                        <Col className="columna-2"><Form.Control type="file" onChange={handleFileChange}/></Col>
+                    </Form.Group>
+                    <div className="seccion-boton">
+                        <Button className="boton-guardar" variant="success" onClick={handleUpload}>Guardar</Button>
+                    </div>
+                </Form>
             </div>
-
         </div>
-    );
+);
 
 
 }

@@ -3,73 +3,68 @@ import {Button, DropdownButton, Table, Dropdown, InputGroup, FormControl} from "
 import "./Camiones.css";
 import WebSocketComponent from "../../../Componentes/WebSocketComponent";
 import PruebaWs from '../../../Componentes/PruebaWS';
+import ModalCamionPedidos from "../../../Componentes/ModalCamionPedidos";
 
 function Camiones(props) {
 
-    const { data } = props || { data: null }; // Destructura la propiedad data
+    const {data} = props || {data: null}; // Destructura la propiedad data
     const [filtroTexto, setFiltroTexto] = useState(''); // Estado para el filtro de texto
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro de opciones
 
+    const [mostrandoCamionesPedidos, setMostrandoCamionesPedidos] = useState(null);
+    const [idCamion, setIdCamion] = useState(null);
+    let nuevoArreglo;
+
     useEffect(() => {
-        //console.log('data: ', data);
+        console.log('data: ', data);
         //console.log('arreglo de pedidos',nuevoArreglo);
     }, [data]);
+
 
     // Verifica si data es un arreglo válido antes de mapearlo
     if (!data || data.length === 0) {
         console.log('No hay datos para procesar');
-        return;
+        nuevoArreglo = [];
+    } else {
+        nuevoArreglo = data.map(camion => {
+                let arrPedidos = [];
+                if (camion.pedidos && camion.pedidos.length > 0) {
+                    arrPedidos = camion.pedidos.map(pedido => ({
+                        idPedido: 100,
+                        fechaRegistro: pedido.first.fechaRegistro.second,
+                        idCliente: pedido.first.idCliente,
+                        estado: 'Estado',
+                        fechaLlegada: pedido.first.horasLimite,
+                        ubicacion: `(${pedido.first.ubicacion.x},${pedido.first.ubicacion.y})`,
+                    }));
+                }
+
+                return {
+                    id: camion.idCamion,
+                    cargaActual: camion.cargaActual,
+                    cargaMaxima: camion.cargaMaxima,
+                    pedidos: arrPedidos.length,
+                    estado: camion.estado,
+                    galonesDisponibles: camion.galonesDisponibles,
+                    consumoTotal: camion.consumoTotal,
+                    pedidoActual: arrPedidos.length > 0 ? arrPedidos[0].idCliente : '-',
+                    //quiero un arreglo de pedidos
+                    arrPedidos: arrPedidos,
+
+                };
+            }
+        );
     }
 
-    const nuevoArreglo = data.map(camion => {
-        let arrPedidos = [];
-        if (camion.pedidos && camion.pedidos.length > 0) {
-                arrPedidos = camion.pedidos.map(pedido => ({
-                fechaRegistro: pedido.first.fechaRegistro,
-                idCliente: pedido.first.idCliente,
-                cantidadGLP: pedido.first.cantidadGLP,
-                horasLimite: pedido.first.horasLimite,
-                ubicacion: pedido.first.ubicacion,
-                entrega: pedido.second
-            }));
-        }
+        // Función para filtrar los camiones según el texto y la opción seleccionada
+        const camionesFiltrados = nuevoArreglo.filter(camion => {
+            // Filtrar por texto
+            const textoCoincide = camion.id.toString().includes(filtroTexto);
+            // Filtrar por opción
+            const opcionCoincide = (filtroOpcion === 'Todos' || camion.estado === filtroOpcion);
+            return textoCoincide && opcionCoincide;
+        });
 
-        return {
-            id: camion.idCamion,
-            cargaActual: camion.cargaActual,
-            cargaMaxima: camion.cargaMaxima,
-            pedidos: arrPedidos.length,
-            estado: camion.estado,
-            galonesDisponibles: camion.galonesDisponibles,
-            consumoTotal: camion.consumoTotal,
-            pedidoActual: arrPedidos.length > 0 ? arrPedidos[0].idCliente : '-',
-            //quiero un arreglo de pedidos
-            arrPedidos: arrPedidos,
-
-        };
-
-    });
-
-/*
-    useEffect(() => {
-        fetch('http://localhost:8090/sag-genetico/api/camiones/initial')
-            .then((response) => response.json())
-            .then((data) => setCamiones(data))
-            .catch((error) => console.error('Error al obtener datos de camiones:', error));
-    }, []);
-*/
-
-
-/*
-    // Función para filtrar los camiones según el texto y la opción seleccionada
-    const camionesFiltrados = camiones.filter(camion => {
-        // Filtrar por texto
-        const textoCoincide = camion.idCamion.toString().includes(filtroTexto);
-        // Filtrar por opción
-        const opcionCoincide = (filtroOpcion === 'Todos' || camion.estado === filtroOpcion);
-        return textoCoincide && opcionCoincide;
-    });
-*/
     return (
         <div>
 
@@ -92,11 +87,9 @@ function Camiones(props) {
                 <div className="texto-busqueda"> Filtrado por estado:</div>
                 <DropdownButton className="dropdown-busqueda" id="dropdown-basic-button" title={filtroOpcion}>
                     <Dropdown.Item onClick={() => setFiltroOpcion('Todos')}>Todos</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('En mantenimiento')}>En mantenimiento</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('En uso')}>En uso</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('Libre')}>Libre</Dropdown.Item>
+                        <Dropdown.Item onClick={() => setFiltroOpcion('DISPONIBLE')}>DISPONIBLE</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setFiltroOpcion('MANTENIMIENTO')}>MANTENIMIENTO</Dropdown.Item>
                 </DropdownButton>
-
             </div>
 
             <Table striped bordered hover>
@@ -113,22 +106,41 @@ function Camiones(props) {
                 </tr>
                 </thead>
                 <tbody data-bs-search-live="true">
-                {nuevoArreglo && nuevoArreglo.map((camion) => (
-                    <tr key={camion.id}>
-                        <td>{camion.id}</td>
-                         <td>{camion.cargaActual}/{camion.cargaMaxima}</td>
-                        <td>{camion.pedidos}</td>
-                        <td>{camion.estado}</td>
-                        <td>{camion.galonesDisponibles}</td>
-                        <td>{camion.consumoTotal}</td>
-                        <td>{camion.pedidoActual}</td>
-                        <td>
-                            <Button variant="primary">Ver</Button>
-                        </td>
+                {camionesFiltrados && camionesFiltrados.length > 0 ? (
+                    camionesFiltrados.map((camion) => (
+                        <tr key={camion.id}>
+                            <td>{camion.id}</td>
+                            <td>{camion.cargaActual}/{camion.cargaMaxima}</td>
+                            <td>{camion.pedidos}</td>
+                            <td>{camion.estado}</td>
+                            <td>{camion.galonesDisponibles}</td>
+                            <td>{camion.consumoTotal}</td>
+                            <td>{camion.pedidoActual}</td>
+                            <td>
+                                <Button variant="primary" disabled={camion.arrPedidos.length === 0}
+                                        onClick={() => {
+                                            setMostrandoCamionesPedidos(camion.arrPedidos);
+                                            setIdCamion(camion.id)
+                                        }}
+                                >Ver</Button>
+                                <ModalCamionPedidos
+                                    isOpen={mostrandoCamionesPedidos !== null}
+                                    closeModal={() => setMostrandoCamionesPedidos(null)}
+                                    camion={idCamion}
+                                    data={mostrandoCamionesPedidos}
+                                />
+                            </td>
+                        </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan="8">No hay camiones.</td>
                     </tr>
-                ))}
+                )}
                 </tbody>
             </Table>
+
+
         </div>
     );
 }

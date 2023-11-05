@@ -10,6 +10,77 @@ import {FaPlay, FaStop} from 'react-icons/fa';
 import MapaSimu from './MapaSimu';
 import { Client } from '@stomp/stompjs';
 
+
+const camionesAux = [
+    {
+        id: 1,
+        cargaActual: 110,
+        cargaMaxima: 120,
+        pedidos: 3,
+        estado: "En ruta",
+        galonesDisponibles: 10,
+        consumoTotal: 50,
+        pedidoActual: "c-38",
+        arrPedidos: [
+            {
+                idPedido: 1,
+                idCliente: "c-38",
+                ubicacion: "(8,9)",
+                fechaRegistro: "2023-11-02 00:26:00",
+                fechaLlegada: "2023-11-02 05:26:00",
+                estado: "En camino",
+            },
+            {
+                idPedido: 2,
+                idCliente: "c-48",
+                ubicacion: "(8,9)",
+                fechaRegistro: "2023-11-03 00:26:00",
+                fechaLlegada: "2023-11-03 05:26:00",
+                estado: "En camino",
+            },
+        ],
+    },
+    {
+        id: 2,
+        cargaActual: 120,
+        cargaMaxima: 130,
+        pedidos: 2,
+        estado: "En espera",
+        galonesDisponibles: 30,
+        consumoTotal: 60,
+        pedidoActual: "c-38",
+        arrPedidos: [
+            {
+                idPedido: 5,
+                idCliente: "c-38",
+                ubicacion: "(8,9)",
+                fechaRegistro: "2023-11-02 00:46:00",
+                fechaLlegada: "2023-11-02 05:56:00",
+                estado: "En camino",
+            },
+            {
+                idPedido: 7,
+                idCliente: "c-48",
+                ubicacion: "(8,9)",
+                fechaRegistro: "2023-12-03 00:26:00",
+                fechaLlegada: "2023-12-03 05:26:00",
+                estado: "En camino",
+            },
+        ],
+    },
+    {
+        id: 3,
+        cargaActual: 100,
+        cargaMaxima: 140,
+        pedidos: 1,
+        estado: "En ruta",
+        galonesDisponibles: 40,
+        consumoTotal: 30,
+        pedidoActual: "c-48",
+        arrPedidos: [],
+    },
+];
+
 function Simulacion() {
     const [dataSocket, setDataSocket] = useState([]);
     const [dataSocketPedidos, setDataSocketPedidos] = useState([]);
@@ -98,6 +169,9 @@ function Simulacion() {
     // Botones de controles
     const [activeButtonControles, setActiveButtonControles] = useState(null);
     const handleButtonClickControles = (buttonName) => {
+        setTimeout(() => {
+            console.log("Espera 2 segundos");
+        }, 2000);
         setActiveButtonControles(buttonName);
     };
 
@@ -167,14 +241,12 @@ function Simulacion() {
                     <ButtonGroup aria-label="Semana/Colapso" className="botones">
                         <Button
                             className={`custom-button ${activeButtonColapsoSemanal === 'Semana' ? 'active' : ''}`}
-                            onClick={() => handleButtonClickColapsoSemanal('Semana')}
-                        >
+                            onClick={() => handleButtonClickColapsoSemanal('Semana')}>
                             Semana
                         </Button>
                         <Button
                             className={`custom-button ${activeButtonColapsoSemanal === 'Colapso' ? 'active' : ''}`}
-                            onClick={() => handleButtonClickColapsoSemanal('Colapso')}
-                        >
+                            onClick={() => handleButtonClickColapsoSemanal('Colapso')}>
                             Colapso
                         </Button>
                     </ButtonGroup>
@@ -208,9 +280,10 @@ function Simulacion() {
                             {dataSocket && dataSocket[indexData] && dataSocket[indexData].camiones ? (
                                 <Camiones data={dataSocket[indexData].camiones}/>
                             ):(
-                                console.log('No hay datos para procesar')
+                                <Camiones data={null}/>
                                 )
                             }
+                            {/* <Camiones data={camionesAux}/>*/}
 
                         </Tab>
                         <Tab eventKey="pestana3" title="Pedidos">
@@ -219,10 +292,16 @@ function Simulacion() {
                                     console.log('Index pedidos: ', indexData),
                                 <PedidosSimulacion data={dataSocket[indexData].pedidos}/>
                             ):(
-                                console.log('No hay datos para procesar en pedidos 1')
+                                <PedidosSimulacion data={null}/>
                             )}
                         </Tab>
-                        <Tab eventKey="pestana5" title="Reporte Simulación"><ReporteSimulacion/></Tab>
+                        <Tab eventKey="pestana5" title="Reporte Simulación">
+                           {dataSocket && dataSocket[indexData] && dataSocket[indexData].hora ? (
+                                    <ReporteSimulacion data={dataSocket[indexData].hora}/>
+                            ):(
+                               <ReporteSimulacion data={null}/>
+                            )}
+                        </Tab>
                     </Tabs>
                 </Container>
 
