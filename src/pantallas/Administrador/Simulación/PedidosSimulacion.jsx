@@ -112,7 +112,7 @@ function PedidosSimulacion(props) {
                                 id={idPedido}
                                 data={mostrandoPedidoCamiones}
                             />*/}
-                            <Button variant="primary">Ver</Button>
+                            <Button className="my-boton">Ver</Button>
                         </td>
                     </tr>
                 ))

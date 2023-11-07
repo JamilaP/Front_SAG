@@ -50,5 +50,21 @@
     background-color: #175C75;
     color: white;
 }
+.my-boton,
+.my-boton:focus,
+.my-boton:active,
+.my-boton:hover,
+.my-boton:visited {
+    background-color: #175C75;
+    color: white;
+    border: none;
+}
+
+.btn-primary:active {
+    --bs-btn-active-bg: #175c7594;
+}
+.dropdown-menu a:active {
+    --bs-dropdown-link-active-bg: #175c7594;
+}
 
 

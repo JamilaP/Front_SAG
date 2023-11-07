@@ -117,7 +117,7 @@ function Camiones(props) {
                             <td>{camion.consumoTotal}</td>
                             <td>{camion.pedidoActual}</td>
                             <td>
-                                <Button variant="primary" disabled={camion.arrPedidos.length === 0}
+                                <Button className="my-boton" disabled={camion.arrPedidos.length === 0}
                                         onClick={() => {
                                             setMostrandoCamionesPedidos(camion.arrPedidos);
                                             setIdCamion(camion.id)

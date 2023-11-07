@@ -144,7 +144,7 @@ function PedidosOD() {
                         <td>{pedido.cantidadGLP}</td>
                         <td>{pedido.estado}</td>
                         <td>
-                            <Button variant="primary" disabled={pedido.arrCamiones.length === 0}
+                            <Button className="my-boton" disabled={pedido.arrCamiones.length === 0}
                                     onClick={() => {setMostrandoPedidoCamiones(pedido.arrCamiones);setIdPedido(pedido.idPedido)}}
                             >Ver</Button>
                             <ModalPedidosCamiones

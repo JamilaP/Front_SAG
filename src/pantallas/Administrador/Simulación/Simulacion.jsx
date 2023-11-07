@@ -148,7 +148,7 @@ function Simulacion() {
                 conexion.publish({
                     destination: '/app/simulacion-semanal',
                     headers: {
-                        'file-name': "ventas202303.txt"
+                        'start_date': "2023-04-20" //cambiar por el input
                     }
                 });
             }            

@@ -7,3 +7,23 @@
     margin-right: 20px;
     margin-left: 15px;
 }
+.my-boton,
+.my-boton:focus,
+.my-boton:active,
+.my-boton:hover,
+.my-boton:visited {
+    background-color: #175C75;
+    color: white;
+    border: none;
+}
+
+
+.btn-primary:active {
+    --bs-btn-active-bg: #175c7594;
+}
+.btn-primary:disabled {
+    --bs-btn-disabled-bg: #175C75 !important;
+}
+.dropdown-menu a:active {
+    --bs-dropdown-link-active-bg: #175c7594;
+}

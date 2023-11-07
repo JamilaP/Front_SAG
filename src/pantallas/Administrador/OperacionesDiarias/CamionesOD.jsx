@@ -95,7 +95,7 @@ function CamionesOD() {
                         <td>{camion.consumoTotal}</td>
                         <td>{camion.pedidoActual}</td>
                         <td>
-                            <Button variant="primary">Ver</Button>
+                            <Button className="my-boton">Ver</Button>
                         </td>
                     </tr>
                 ))}
