@@ -3,9 +3,16 @@ import {Form, Button, Row, Col} from 'react-bootstrap';
 import "./CargaDeDatos.css";
 import axios from 'axios';
 
-function CargaDeDatos() {
+function CargaDeDatos(props) {
 
     const [file, setFile] = useState(null);
+    const [startDate, setStartDate] = useState("2023-04-20"); // Valor inicial
+
+    const handleDateChange = (e) => {
+        const newStartDate = e.target.value;
+        setStartDate(newStartDate);
+        props.onStartDateChange(newStartDate); // Llamar a la función en Simulacion para actualizar la fecha
+    };
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -47,7 +54,7 @@ function CargaDeDatos() {
                 <Form className="form-grupo">
                     <Form.Group as={Row} className="fila">
                         <Col className="columna-1"><Form.Label className="label-right">Fecha de inicio de la simulación:</Form.Label></Col>
-                        <Col className="columna-2"><Form.Control type="date"/></Col>
+                        <Col className="columna-2"><Form.Control type="date" value={startDate} onChange={handleDateChange} /></Col>
                     </Form.Group>
                     <Form.Group as={Row} className="fila">
                         <Col className="columna-1"><Form.Label className="label-right">Pedidos:</Form.Label></Col>

@@ -24,14 +24,24 @@ function PedidosSimulacion(props) {
         nuevoArreglo = [];
     }else{
         nuevoArreglo = data.map(pedido => {
+            let arrCamiones = [];
+            if (pedido.truckAssignments && pedido.truckAssignments.length > 0) {
+                arrCamiones = pedido.truckAssignments.map(camion => ({
+                    idCamion: camion.first.truckId,
+                    GLPentregar: camion.first.registrationDateTime,//¿?
+                    estado: camion.first.isAttended,//¿?
+
+                }));
+            }
             //falta el arreglo de camiones por pedido
             return {
-                idPedido: 1,
-                fechaRegistro: pedido.fechaRegistro.second,
-                idCliente: pedido.idCliente,
-                cantidadGLP: pedido.cantidadGLP,
-                horasLimite: pedido.horasLimite,
-                ubicacion:`(${pedido.ubicacion.x},${pedido.ubicacion.y})`,
+                idPedido: pedido.orderId,
+                fechaRegistro: pedido.registrationDateTime,
+                idCliente: pedido.customerId,
+                cantidadGLP: pedido.requestedGLP,
+                horasLimite: pedido.deadlineHours,
+                ubicacion:`(${pedido.location.x},${pedido.location.y})`,
+                arrCamiones: arrCamiones,
             };
         });
     }

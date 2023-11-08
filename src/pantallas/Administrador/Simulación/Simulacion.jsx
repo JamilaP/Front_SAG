@@ -100,6 +100,8 @@ function Simulacion() {
     //worker
     const [dataWorker, setDataWorker] = useState(null);
 
+    const [startDate, setStartDate] = useState("2023-04-20"); // Valor inicial
+
     const onConnectSocket = () => {
         conexion.subscribe('/topic/simulation-progress', (mensaje) => {
             console.log('Data conseguida');
@@ -146,9 +148,9 @@ function Simulacion() {
         if (conexion) {
             if(conexion.connected){
                 conexion.publish({
-                    destination: '/app/simulacion-semanal',
+                    destination: '/app/weekly-simulation',
                     headers: {
-                        'start_date': "2023-04-20" //cambiar por el input
+                        'start_date': startDate,
                     }
                 });
             }            
@@ -221,7 +223,7 @@ function Simulacion() {
 
     return (
         <div className="Simulacion">
-            {/* {workerInstance.postMessage('Hola')} */}
+
             <h1> Segundo {indexData}</h1>
             {
                 dataSocket && dataSocket[indexData] && dataSocket[indexData].camiones ? (
@@ -232,10 +234,8 @@ function Simulacion() {
                     <MapaSimu/>
                 )
             }
-                {/* <MapaSimu dataMapa = { dataSocket[0] }/> */}
 
                 {/* Botones de colapso/semanal */}
-
                 <div className="control-buttons">
                     Tipo de visualización:
                     <ButtonGroup aria-label="Semana/Colapso" className="botones">
@@ -275,7 +275,7 @@ function Simulacion() {
                  <Container className="table-responsive">
                     <Tabs id="miPestanas" activeKey={key} onSelect={(k) => setKey(k)}>
                         <Tab eventKey="pestana1" title="Leyenda"><Leyenda/></Tab>
-                        <Tab eventKey="pestana4" title="Cargar pedidos"><CargaDeDatos/></Tab>
+                        <Tab eventKey="pestana4" title="Cargar pedidos" ><CargaDeDatos onStartDateChange={setStartDate}/></Tab>
                         <Tab eventKey="pestana2" title="Camiones">
                             {dataSocket && dataSocket[indexData] && dataSocket[indexData].camiones ? (
                                 <Camiones data={dataSocket[indexData].camiones}/>
@@ -283,8 +283,6 @@ function Simulacion() {
                                 <Camiones data={null}/>
                                 )
                             }
-                            {/* <Camiones data={camionesAux}/>*/}
-
                         </Tab>
                         <Tab eventKey="pestana3" title="Pedidos">
                             {dataSocket && dataSocket[indexData] && dataSocket[indexData].pedidos ? (

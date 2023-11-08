@@ -28,26 +28,26 @@ function Camiones(props) {
     } else {
         nuevoArreglo = data.map(camion => {
                 let arrPedidos = [];
-                if (camion.pedidos && camion.pedidos.length > 0) {
+                if (camion.orders && camion.orders.length > 0) {
                     arrPedidos = camion.pedidos.map(pedido => ({
-                        idPedido: 100,
-                        fechaRegistro: pedido.first.fechaRegistro.second,
-                        idCliente: pedido.first.idCliente,
-                        estado: 'Estado',
-                        fechaLlegada: pedido.first.horasLimite,
-                        ubicacion: `(${pedido.first.ubicacion.x},${pedido.first.ubicacion.y})`,
+                        idPedido: pedido.first.orderId,
+                        fechaRegistro: pedido.first.registrationDateTime,
+                        idCliente: pedido.first.customerId,
+                        estado: pedido, //¿?
+                        fechaLlegada: pedido.first.deadlineHours,
+                        ubicacion: `(${pedido.first.location.x},${pedido.first.location.y})`,
                     }));
                 }
 
                 return {
-                    id: camion.idCamion,
-                    cargaActual: camion.cargaActual,
-                    cargaMaxima: camion.cargaMaxima,
+                    id: camion.truckId,
+                    cargaActual: camion.currentLoadWeight,
+                    cargaMaxima: camion.maximumLoadWeight,
                     pedidos: arrPedidos.length,
-                    estado: camion.estado,
-                    galonesDisponibles: camion.galonesDisponibles,
-                    consumoTotal: camion.consumoTotal,
-                    pedidoActual: arrPedidos.length > 0 ? arrPedidos[0].idCliente : '-',
+                    estado: camion.status,
+                    galonesDisponibles: camion.tankAvailability,
+                    consumoTotal: camion.totalConsumption,
+                    pedidoActual: arrPedidos.length > 0 ? arrPedidos[0].idCliente : '-', //¿?
                     //quiero un arreglo de pedidos
                     arrPedidos: arrPedidos,
 
