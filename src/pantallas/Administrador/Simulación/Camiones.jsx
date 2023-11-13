@@ -27,33 +27,41 @@ function Camiones(props) {
         nuevoArreglo = [];
     } else {
         nuevoArreglo = data.map(camion => {
-                let arrPedidos = [];
-                if (camion.orders && camion.orders.length > 0) {
-                    arrPedidos = camion.pedidos.map(pedido => ({
-                        idPedido: pedido.first.orderId,
-                        fechaRegistro: pedido.first.registrationDateTime,
-                        idCliente: pedido.first.customerId,
-                        estado: pedido, //¿?
-                        fechaLlegada: pedido.first.deadlineHours,
-                        ubicacion: `(${pedido.first.location.x},${pedido.first.location.y})`,
-                    }));
-                }
-
-                return {
-                    id: camion.truckId,
-                    cargaActual: camion.currentLoadWeight,
-                    cargaMaxima: camion.maximumLoadWeight,
-                    pedidos: arrPedidos.length,
-                    estado: camion.status,
-                    galonesDisponibles: camion.tankAvailability,
-                    consumoTotal: camion.totalConsumption,
-                    pedidoActual: arrPedidos.length > 0 ? arrPedidos[0].idCliente : '-', //¿?
-                    //quiero un arreglo de pedidos
-                    arrPedidos: arrPedidos,
-
-                };
+            let arrPedidos = [];
+            if (camion.orders && camion.orders.length > 0) {
+                arrPedidos = camion.orders.map(pedido => {
+                    const fechaRegistro = new Date(pedido.order.registrationDateTime);
+                    return {
+                        idPedido: pedido.order.orderId,
+                        fechaRegistro: fechaRegistro.toLocaleString("es-ES", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit"
+                        }),
+                        idCliente: pedido.order.customerId,
+                        GPLaEntregar: pedido.order.allocatedAmount,
+                        ubicacion: `(${pedido.order.location.x},${pedido.order.location.y})`,
+                        GLPSolicitado: pedido.order.requestedGLP,
+                    };
+                });
             }
-        );
+
+            return {
+                id: camion.truckId,
+                cargaActual: camion.currentLoadWeight,
+                cargaMaxima: camion.maximumLoad,
+                pedidos: arrPedidos.length,
+                estado: camion.status,
+                galonesDisponibles: camion.tankAvailability,
+                consumoTotal: camion.totalConsumption,
+                pedidoActual: arrPedidos.length > 0 ? arrPedidos[0].idCliente : '-',
+                arrPedidos: arrPedidos,
+            };
+        });
+
     }
 
         // Función para filtrar los camiones según el texto y la opción seleccionada

@@ -27,7 +27,7 @@ function ConfiguracionGeneral() {
 
             const apiUrl = `http://localhost:8090/sag-genetico/api/${fileRoutes[fieldName]}`;
 
-            axios.put(apiUrl, formData, {
+            axios.post(apiUrl, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

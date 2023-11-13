@@ -40,7 +40,7 @@ function ReporteSimulacion(props) {
 
     // Verifica si data es un arreglo válido antes de mapearlo
     if (!data) {
-        console.log('No hay datos para procesar');
+        //console.log('No hay datos para procesar');
     }
     else{
         data=fechaSimulacion.toLocaleString();

@@ -2,10 +2,21 @@ import { useEffect, useRef } from "react";
 import anime from "animejs";
 
 function RutaCamion(props) {
-  let inicioRuta = [[props.inicio.x*14 + 7 , props.inicio.y *14 + 7]];
-  let rutaconvertida = props.rutaCamion.map(({ x, y }) => [x*14 + 7, y*14 + 7]);
+  let nodoPedido =[props.ped.x *14 + 7,(50 - props.ped.y)*14 + 7];
+  // [props.rutaCamion[ props.rutaCamion.length - 1 ].x *14 + 7, (50 - props.rutaCamion[props.rutaCamion.length - 1 ].y *14 + 7)]
+  let inicioRuta = [[props.inicio.x*14 + 7 , (50 - props.inicio.y) *14 + 7]];
+  let rutaconvertida = props.rutaCamion.map(({ x, y }) => [ x*14 + 7, (50 - y)*14 + 7]);
   // let rutaTotal = inicioRuta.concat([rutaconvertida[0]]);
   let rutaTotal = inicioRuta.concat(rutaconvertida);
+
+  let indiceCorte = rutaTotal.findIndex(punto => punto[0] === nodoPedido[0] && punto[1] === nodoPedido[1]);
+  let rutaCorte = indiceCorte !== -1 ? rutaTotal.slice(0, indiceCorte + 1) : rutaTotal;
+
+  let vectorX = (props.rutaCamion[0].x - props.inicio.x) === 0 ? (0): ((props.rutaCamion[0].x - props.inicio.x)/ Math.abs((props.rutaCamion[0].x - props.inicio.x)));
+  let vectorY = (props.rutaCamion[0].y - props.inicio.y) === 0 ? (0): ((props.rutaCamion[0].y - props.inicio.y)/ Math.abs((props.rutaCamion[0].y - props.inicio.y)));
+
+  let rutaAnimacion = [[props.inicio.x *14 + 7, (50 - props.inicio.y)*14 + 7], [ (props.inicio.x + vectorX) *14 + 7, (50 - (props.inicio.y + vectorY)) *14 + 7]];
+  const pathAnimacion = rutaAnimacion ? `M${rutaAnimacion.join(' L')}` : '';
 
   function calcularDistanciaTotal(puntos) {
     let distanciaTotal = 0;
@@ -33,53 +44,53 @@ function RutaCamion(props) {
       + (inicioX - 10) + ',' + (inicioY-5);
 
 
-  const pathData = rutaTotal ? `M${rutaTotal.join(' L')}` : '';
+  const pathData = rutaCorte ? `M${rutaCorte.join(' L')}` : '';
 
   const camionRef = useRef(null);
   const caminoRef = useRef(null);
 
-  const animateCircle = () => {
-    // Get the DOM element to animate
-    const tiempo = (calcularDistanciaTotal(rutaTotal)/14 + 1)*1000 ;
-    const camion = camionRef.current;
-    const camino = caminoRef.current;
-    //console.log("Distancia:  "+ tiempo);
+  const tiempo = (calcularDistanciaTotal(rutaCorte)/14 + 1)* props.duracionE ;
+  const camion = camionRef.current;
+  const camino = caminoRef.current;
+  let path = anime.path(camino);
 
-    // Use AnimeJS to create the animation
-    if (camino) {
-      let path = anime.path(camino);
-      //console.log("Path: " + camino);
-      anime({
-        targets: camion,
-        translateX: path('x'),
-        translateY: path('y'),
-        rotate: path('angle'),
-        duration: tiempo, // Animation duration in milliseconds
-        easing: "linear", // Easing function for smooth animation
-      });
-    } else {
-      console.log("No hay camino");
-    }
-
-  };
 
   useEffect(() => {
-    animateCircle();
-  }, []);
+    if (props.pausar){
+      var animacion = anime({
+        targets: camion,
+        translateX: inicioRuta[0][0] ,
+        translateY: inicioRuta[0][1] ,
+        rotate: 0 ,
+        duration: 10, // Animation duration in milliseconds
+        easing: "linear", // Easing function for smooth animation
+        autoplay: true
+      });
+      console.log('Pausa');
+    }else{
+      var animacion = anime({
+        targets: camion,
+        translateX: camino ? (path('x')) : (0) ,
+        translateY: camino ? (path('y')) : (0) ,
+        rotate: camino ? (path('angle')) : (0) ,
+        duration: props.duracionE*0.70, // Animation duration in milliseconds
+        easing: "linear", // Easing function for smooth animation
+        autoplay: false
+      });
+      animacion.play();
+    }
+
+    return () => {
+
+    };
+  }, [pathData, props.pausar]);
 
   return (
-      // <>
-      // {
-      //   console.log(pathData)
-      // }
-      // </>
       <svg>
-        <path ref={caminoRef} d={pathData} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="2" />
-        {/* <polygon ref={camionRef} points={flechaStr} fill="#000000" />         */}
-        {/* {console.log(rutaCamion)} */}
-        {/*{console.log('Ejecutando ruta camion', pathData)}
-        {console.log('Ruta convertida', rutaTotal)}*/}
-        {/* <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 395.71 395.71" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738 c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388 C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191 c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"></path> </g> </g></svg>                       */}
+        <path ref={caminoRef} d={pathAnimacion} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
+        <path d={pathData} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
+        <polygon ref={camionRef} points={flechaStr} fill="#000000" />
+        {console.log( 'Ruta: ', pathData)}
       </svg>
 
   );

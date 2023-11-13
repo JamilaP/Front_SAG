@@ -20,6 +20,10 @@ const ModalPedidosCamiones = ({ isOpen = false, closeModal, id,data }) => {
         };
     }, [closeModal]);
 
+    useEffect(() => {
+        console.log('data glp: ', data);
+    }, [data]);
+
     // Verifica si data es un arreglo válido antes de mapearlo
     if (!data || data.length === 0) {
         console.log('No hay datos para procesar');
@@ -52,7 +56,6 @@ const ModalPedidosCamiones = ({ isOpen = false, closeModal, id,data }) => {
                         <tr>
                             <th>Camión</th>
                             <th>GLP a entregar</th>
-                            <th>Ruta</th>
                             <th>Estado</th>
                         </tr>
                         </thead>
@@ -60,8 +63,7 @@ const ModalPedidosCamiones = ({ isOpen = false, closeModal, id,data }) => {
                         {data.map((camion) => (
                             <tr key={camion.idCamion}>
                                 <td>{camion.idCamion}</td>
-                                <td>{camion.cantidadGLP}</td>
-                                <td>{camion.ruta}</td>
+                                <td>{camion.GLPentregar}</td>
                                 <td>{camion.estado}</td>
                             </tr>
                         ))}

@@ -53,8 +53,7 @@ const ModalCamioneedidos = ({ isOpen = false, closeModal, camion,data }) => {
                             <th>Id-cliente</th>
                             <th>Ubicación</th>
                             <th>Fecha y hora de llegada solicitada</th>
-                            <th>Plazo (horas)</th>
-                            <th>Cantidad de GLP solicitado (m3)</th>
+                            <th>GLP a entregar / GLP solicitado (m3)</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -64,8 +63,7 @@ const ModalCamioneedidos = ({ isOpen = false, closeModal, camion,data }) => {
                                 <td>{pedido.idCliente}</td>
                                 <td>{pedido.ubicacion}</td>
                                 <td>{pedido.fechaRegistro}</td>
-                                <td>{pedido.fechaLlegada}</td>
-                                <td>{pedido.estado}</td>
+                                <td>{pedido.GPLaEntregar}/{pedido.GLPSolicitado}</td>
                             </tr>
                         ))}
                         </tbody>

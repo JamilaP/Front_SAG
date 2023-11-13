@@ -24,23 +24,31 @@ function PedidosSimulacion(props) {
         nuevoArreglo = [];
     }else{
         nuevoArreglo = data.map(pedido => {
+            const fechaRegistro = new Date(pedido.order.registrationDateTime);
             let arrCamiones = [];
             if (pedido.truckAssignments && pedido.truckAssignments.length > 0) {
                 arrCamiones = pedido.truckAssignments.map(camion => ({
-                    idCamion: camion.first.truckId,
-                    GLPentregar: camion.first.registrationDateTime,//¿?
-                    estado: camion.first.isAttended,//¿?
+                    idCamion: camion.truck.truckId,
+                    GLPentregar: camion.truck.allocatedAmount,//VERIFICAR
+                    estado: camion.truck.isAttended ? "Atendido" : "En camino",//VERIFICAR
 
                 }));
             }
             //falta el arreglo de camiones por pedido
             return {
-                idPedido: pedido.orderId,
-                fechaRegistro: pedido.registrationDateTime,
-                idCliente: pedido.customerId,
-                cantidadGLP: pedido.requestedGLP,
-                horasLimite: pedido.deadlineHours,
-                ubicacion:`(${pedido.location.x},${pedido.location.y})`,
+                idPedido: pedido.order.orderId,
+                fechaRegistro: fechaRegistro.toLocaleString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                }),
+                idCliente: pedido.order.customerId,
+                cantidadGLP: pedido.order.requestedGLP,
+                horasLimite: pedido.order.deadlineHours,
+                ubicacion:`(${pedido.order.location.x},${pedido.order.location.y})`,
                 arrCamiones: arrCamiones,
             };
         });
@@ -113,7 +121,7 @@ function PedidosSimulacion(props) {
                         <td>{pedido.horasLimite}</td>
                         <td>{pedido.cantidadGLP}</td>
                         <td>
-                            {/*<Button variant="primary" disabled={pedido.arrCamiones.length === 0}
+                            <Button variant="primary" disabled={pedido.arrCamiones.length === 0}
                                     onClick={() => {setMostrandoPedidoCamiones(pedido.arrCamiones);setIdPedido(pedido.idPedido)}}
                             >Ver</Button>
                             <ModalPedidosCamiones
@@ -121,8 +129,8 @@ function PedidosSimulacion(props) {
                                 closeModal={() => setMostrandoPedidoCamiones(null)}
                                 id={idPedido}
                                 data={mostrandoPedidoCamiones}
-                            />*/}
-                            <Button className="my-boton">Ver</Button>
+                            />
+                            {/* <Button className="my-boton">Ver</Button>*/}
                         </td>
                     </tr>
                 ))
