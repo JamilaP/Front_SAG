@@ -267,7 +267,7 @@ function Simulacion() {
                     <Button
                         className={`custom-button warning ${activeButtonControles === '1.5x' ? 'active' : ''}`}
                         onClick={() => handleButtonClickControles('1.5x')}>
-                        <FiRefreshCcw className="controles refresh"/>
+                        <HiRefresh className="controles-refresh"/>
                     </Button>
                 </ButtonGroup>
             </div>
