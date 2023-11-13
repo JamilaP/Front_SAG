@@ -6,7 +6,9 @@ import Leyenda from "./Leyenda";
 import Camiones from "./Camiones";
 import CargaDeDatos from "./CargaDeDatos";
 import ReporteSimulacion from "./ReporteSimulacion";
-import {FaPlay, FaStop} from 'react-icons/fa';
+import {FaPlay, FaPause} from 'react-icons/fa';
+import {HiRefresh} from 'react-icons/hi';
+import {FiRefreshCcw} from 'react-icons/fi';
 import MapaSimu from './MapaSimu';
 import { Client } from '@stomp/stompjs';
 import ModalResultado from '../../../Componentes/ModalResultado';
@@ -260,12 +262,12 @@ function Simulacion() {
                     <Button
                         className={`custom-button danger ${activeButtonControles === 'Stop' ? 'active' : ''}`}
                         onClick={() => { pausarEscena(); handleButtonClickControles('Stop')}}>
-                        <FaStop className="controles stop"/>
+                        <FaPause className="controles stop"/>
                     </Button>
                     <Button
                         className={`custom-button warning ${activeButtonControles === '1.5x' ? 'active' : ''}`}
                         onClick={() => handleButtonClickControles('1.5x')}>
-                        1.5x
+                        <FiRefreshCcw className="controles refresh"/>
                     </Button>
                 </ButtonGroup>
             </div>
