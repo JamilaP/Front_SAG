@@ -51,7 +51,7 @@ function Camiones(props) {
 
             return {
                 id: camion.truckId,
-                cargaActual: camion.currentLoadWeight,
+                cargaActual: camion.currentLoad,
                 cargaMaxima: camion.maximumLoad,
                 pedidos: arrPedidos.length,
                 estado: camion.status,
