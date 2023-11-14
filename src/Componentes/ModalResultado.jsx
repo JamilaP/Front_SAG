@@ -28,19 +28,19 @@ const ModalResultado = ({ mensaje = "", isOpen = false, closeModal, exito = true
             <div className={`modal-container ${!isOpen ? "closing" : ""} `} >
                 <div className={`modal-custom-res ${!isOpen ? "closing" : ""}`} ref={modalRef}>
                     <div className="close-container">
-                        <IoClose className="close-icon"
+                        {/*<IoClose className="close-icon"
                                  onClick={() => closeModal()} fontSize={"40"}
                                  style={{ cursor: "pointer" }}>
-                        </IoClose>
+                        </IoClose>*/}
                     </div>
                     {exito ?
-                        (<BsCheckCircle color="#008768" style={{ marginLeft: "45px" }} fontSize={"80px"} />) :
-                        (<BsXCircle color="#E2284D" style={{ marginLeft: "45px" }} fontSize={"80px"} />)
+                        (<BsCheckCircle color="#008768"  fontSize={"60px"} />) :
+                        (<BsXCircle color="#E2284D" fontSize={"60px"} />)
                     }
                     <h2>{mensaje}</h2>
                     <hr></hr>
                     <div className="botones">
-                        <Button onclick={() => closeModal()}>Aceptar</Button>
+                        <Button className="boton-aceptar" onClick={() => closeModal()}>Aceptar</Button>
                     </div>
                 </div>
 

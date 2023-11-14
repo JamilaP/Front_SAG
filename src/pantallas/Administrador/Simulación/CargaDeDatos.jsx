@@ -79,14 +79,14 @@ function CargaDeDatos(props) {
                         <Col className="columna-2"><Form.Control type="date" value={startDate}
                                                                  onChange={handleDateChange}/></Col>
                     </Form.Group>
-                    <Form.Group as={Row} className="fila">
+                    {/*<Form.Group as={Row} className="fila">
                         <Col className="columna-1"><Form.Label className="label-right">Pedidos:</Form.Label></Col>
                         <Col className="columna-2"><Form.Control type="file" multiple onChange={handleFileChange}/></Col>
                         <p>{nombreArchivo}</p>
                     </Form.Group>
                     <div className="seccion-boton">
                         <Button className="boton-guardar" variant="success" onClick={handleUpload}>Guardar</Button>
-                    </div>
+                    </div>*/}
                 </Form>
             </div>
         </div>

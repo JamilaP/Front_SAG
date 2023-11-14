@@ -97,3 +97,17 @@
     opacity: 0;
     transition: opacity 100ms;
 }
+
+.boton-aceptar,
+.boton-aceptar:focus,
+.boton-aceptar:active,
+.boton-aceptar:hover,
+.boton-aceptar:visited {
+    background-color: #175C75;
+    color: white;
+    border: none;
+}
+
+.btn-primary:active {
+    --bs-btn-active-bg: #175c7594;
+}

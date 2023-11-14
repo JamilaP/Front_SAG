@@ -13,83 +13,16 @@ import MapaSimu from './MapaSimu';
 import { Client } from '@stomp/stompjs';
 import ModalResultado from '../../../Componentes/ModalResultado';
 
-const camionesAux = [
-    {
-        id: 1,
-        cargaActual: 110,
-        cargaMaxima: 120,
-        pedidos: 3,
-        estado: "En ruta",
-        galonesDisponibles: 10,
-        consumoTotal: 50,
-        pedidoActual: "c-38",
-        arrPedidos: [
-            {
-                idPedido: 1,
-                idCliente: "c-38",
-                ubicacion: "(8,9)",
-                fechaRegistro: "2023-11-02 00:26:00",
-                fechaLlegada: "2023-11-02 05:26:00",
-                estado: "En camino",
-            },
-            {
-                idPedido: 2,
-                idCliente: "c-48",
-                ubicacion: "(8,9)",
-                fechaRegistro: "2023-11-03 00:26:00",
-                fechaLlegada: "2023-11-03 05:26:00",
-                estado: "En camino",
-            },
-        ],
-    },
-    {
-        id: 2,
-        cargaActual: 120,
-        cargaMaxima: 130,
-        pedidos: 2,
-        estado: "En espera",
-        galonesDisponibles: 30,
-        consumoTotal: 60,
-        pedidoActual: "c-38",
-        arrPedidos: [
-            {
-                idPedido: 5,
-                idCliente: "c-38",
-                ubicacion: "(8,9)",
-                fechaRegistro: "2023-11-02 00:46:00",
-                fechaLlegada: "2023-11-02 05:56:00",
-                estado: "En camino",
-            },
-            {
-                idPedido: 7,
-                idCliente: "c-48",
-                ubicacion: "(8,9)",
-                fechaRegistro: "2023-12-03 00:26:00",
-                fechaLlegada: "2023-12-03 05:26:00",
-                estado: "En camino",
-            },
-        ],
-    },
-    {
-        id: 3,
-        cargaActual: 100,
-        cargaMaxima: 140,
-        pedidos: 1,
-        estado: "En ruta",
-        galonesDisponibles: 40,
-        consumoTotal: 30,
-        pedidoActual: "c-48",
-        arrPedidos: [],
-    },
-];
-
 function Simulacion() {
+    const [key, setKey] = useState('pestana1');
     const [dataSocket, setDataSocket] = useState([]);
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
     const [modal, setModal] = useState({ text: "", exito: true, open: false });
     const [duracionEscena, setDuracionEscena] = useState(250);
     const [pausar, setPausar] = useState(false);
+    const [activeButtonControles, setActiveButtonControles] = useState(null);
+    const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
 
     //Conexion websocket
     let conexion = null;
@@ -137,8 +70,8 @@ function Simulacion() {
 
     const enviarMensaje = () => {
         // conectarWS();
-         console.log("parametros",startDate,filePedidos);
-        if (conexion && startDate && filePedidos) {
+         console.log("parametros",startDate,filePedidos,activeButtonColapsoSemanal);
+        if (conexion && startDate && activeButtonColapsoSemanal) {
             console.log('CUMPLE CON TODO');
             if(conexion.connected ){
                 conexion.publish({
@@ -151,21 +84,14 @@ function Simulacion() {
             console.log('Mensaje enviado');
         } else {
             console.log("No se pudo enviar el mensaje");
-            if(!startDate || !filePedidos) setModal(e => ({ ...e, text: "Debe ingresar una fecha y un archivo", exito: false, open: true }));
-            if(!conexion) setModal(e => ({ ...e, text: "Debe guardar los cambios", exito: false, open: true }));
+            if(!startDate) setModal(e => ({ ...e, text: "Debe ingresar una fecha ", exito: false, open: true }));
+            if(!activeButtonColapsoSemanal) setModal(e => ({ ...e, text: "Debe seleccionar un tipo de visualización", exito: false, open: true }));
+            if(!conexion) setModal(e => ({ ...e, text: "Recuerde seleccionar el tipo de visualización", exito: false, open: true }));
         }
     };
 
-    const [key, setKey] = useState('pestana1');
-
-    // Botones de colapso/semanal
-    const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
-    const handleButtonClickColapsoSemanal = (buttonName) => {
-        setActiveButtonColapsoSemanal(buttonName);
-    };
-
     // Botones de controles
-    const [activeButtonControles, setActiveButtonControles] = useState(null);
+
     const handleButtonClickControles = (buttonName) => {
         setTimeout(() => {
             console.log("Espera 2 segundos");
@@ -201,14 +127,16 @@ function Simulacion() {
     }
 
     useEffect(() => {
-        //conectarWS();
+        if (activeButtonColapsoSemanal) {
+            conectarWS();
+        }
         if (conexion) {
             console.log('Se ha conectado');
             console.log(conexion);
         } else {
             console.log('Fallo effect');
         }
-    }, []);
+    }, [activeButtonColapsoSemanal]);
 
     useEffect(() => {
         console.log("fecha inicio",startDate);
@@ -217,7 +145,8 @@ function Simulacion() {
 
     return (
         <div className="Simulacion">
-            <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito} closeModal={() => setModal(e => ({ ...e, open: false }))} />
+            <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
+                            closeModal={() => setModal(e => ({ ...e, open: false }))} />
 
             <h1> { indexData == 0 ? ( 'Esperando al back...'): ( 'Segundo: ' + indexData ) } </h1>
             <>{ console.log('Datos de escena: ', indexData ,' ', dataSocket[indexData])}</>
@@ -242,12 +171,12 @@ function Simulacion() {
                 <ButtonGroup aria-label="Semana/Colapso" className="botones">
                     <Button
                         className={`custom-button ${activeButtonColapsoSemanal === 'Semana' ? 'active' : ''}`}
-                        onClick={() => handleButtonClickColapsoSemanal('Semana')}>
+                        onClick={() => setActiveButtonColapsoSemanal('Semana')}>
                         Semana
                     </Button>
                     <Button
                         className={`custom-button ${activeButtonColapsoSemanal === 'Colapso' ? 'active' : ''}`}
-                        onClick={() => handleButtonClickColapsoSemanal('Colapso')}>
+                        onClick={() =>setActiveButtonColapsoSemanal('Colapso')}>
                         Colapso
                     </Button>
                 </ButtonGroup>
