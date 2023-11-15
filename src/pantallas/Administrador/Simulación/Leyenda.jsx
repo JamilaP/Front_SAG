@@ -2,10 +2,10 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import "./Leyenda.css";
 import { BsFillGeoAltFill } from "react-icons/bs";
-import { BiBuildings } from 'react-icons/bi';
 import { FiDatabase } from 'react-icons/fi';
 import { AiOutlineRise } from 'react-icons/ai';
 import {PiNavigationArrowFill} from "react-icons/pi";
+import { LuWarehouse } from "react-icons/lu";
 
 function Leyenda() {
     return (
@@ -28,7 +28,7 @@ function Leyenda() {
                             Cisterna
                         </li>
                         <li className="d-flex align-items-center">
-                            <BiBuildings className="mr-3 buildings-icon"/>
+                            <LuWarehouse className="mr-3 buildings-icon"/>
                             Planta
                         </li>
                         <li className="d-flex align-items-center">
