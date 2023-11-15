@@ -88,7 +88,7 @@ function RutaCamion(props) {
   return (
       <svg>
         <path ref={caminoRef} d={pathAnimacion} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
-        <path d={pathData} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
+        <path d={pathData} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="2" />
         <polygon ref={camionRef} points={flechaStr} fill="#000000" />
         {console.log( 'Ruta: ', pathData)}
       </svg>

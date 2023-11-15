@@ -92,14 +92,14 @@ const MapaSimu = (props) => {
             ))
         }
 
-        {/* {
+        {
             props.dataBloqueos && props.dataBloqueos.length > 0 && props.dataBloqueos.map(element => (
-                    element.nodos ?
-                        (<RutaBloqueo rutaBloqueo = {element.nodos}/>) :
+                    element.vertices ?
+                        (<RutaBloqueo rutaBloqueo = {element.vertices}/>) :
                         (console.log('No hay bloqueos', element))
                 )
             )
-        } */}
+        }
 
         { // Prueba todos los camiones
             props.dataMapa && props.dataMapa.length > 0 && props.dataMapa.map(element => (
