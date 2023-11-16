@@ -21,7 +21,7 @@ const MapaSimu = (props) => {
   // 7+ X *
   const gridSizeX = 70;
   const gridSizeY = 50;
-  const cellSize = 14; // Tamaño de cada celda
+  const cellSize = 12; // Tamaño de cada celda
   const gridWidth = gridSizeX * cellSize;
   const gridHeight = gridSizeY * cellSize;
 
@@ -30,8 +30,8 @@ const MapaSimu = (props) => {
   const offsetY = (gridSizeY % 2 === 0 ? cellSize / 2 : 0);
 
   // Agregar márgenes superior e inferior
-  const marginTop = 15; // Ajusta según tus necesidades
-  const marginBottom = 15; // Ajusta según tus necesidades
+  const marginTop = 6; // Ajusta según tus necesidades
+  const marginBottom = 6; // Ajusta según tus necesidades
 
   const convertirRuta = (ruta) => {
     // let rutaConvertida;  // Declara la variable fuera del bloque if

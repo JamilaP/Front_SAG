@@ -1,22 +1,53 @@
 .OperacionesDiarias {
+    display: flex;
+}
+.contenedor-mapa-informacion {
+    flex: 60%;
+}
 
+.contenedor-informacion {
+    flex: 40%;
+    display: flex;
     flex-direction: column;
-    align-items: center;
-    position: relative;
+    width: 600px;
+
+}
+.contenedor-reporte{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+}
+.contenedor-mapa{
+
+}
+.contenedor-leyenda{
+    background-color: #DEE2E6;
+    border-radius: 15px;
+    margin: 10px;
+}
+.grupo-1{
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    margin-left: 15px;
+}
+.nombre{
+
+    display: flex;
+    align-items: start;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.icono-1{
+    font-size: 20px;
+}
+.tabla-container{
+    border-radius: 15px;
+    margin: 10px;
+    max-height: 450px;
+    overflow-y: auto;
+}
+.cuadro-pestanas{
+
 }
 
-.Imagen{
-    margin: 20px ;
-}
-
-.contenedorCanvas{
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.elemento{
-    position: relative;
-    top: 65vh;
-    left: 0;
-}

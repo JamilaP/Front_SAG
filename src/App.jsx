@@ -25,9 +25,9 @@ function App() {
         <div className="App">
 
             <Navbar expand="lg" className="custom-navbar">
-                <Container>
+
                     <Navbar.Brand href="#home" className="custom-navbar-text-log">
-                        <div>
+                        <div className="contenedor-logo">
                             <Image src={logonav} roundedCircle width={30} height={30} className="mr-2"/>
                             <span>SAG</span>
                         </div>
@@ -55,15 +55,15 @@ function App() {
                             >Configuración General</Nav.Link>
                             {/*<Nav.Link as={Link} to="/administrador/reportes" className="custom-navbar-link">Reporte</Nav.Link>*/}
                         </Nav>
-                        <div className="d-flex align-items-center ms-auto">
+                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto',marginRight: '25px' }}>
                             <Image src={perfil} roundedCircle width={40} height={40} className="mr-2"/>
-                            <div>
+                            <div className="perfil-persona">
                                 <span className="custom-navbar-text">Joaquin Ruiz</span>
                                 <span className="custom-subtext">Administrador</span>
                             </div>
                         </div>
                     </Navbar.Collapse>
-                </Container>
+
             </Navbar>
 
             <FileProvider>

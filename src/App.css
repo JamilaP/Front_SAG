@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  height: 100%;
 }
 
 .App-logo {
@@ -28,6 +29,7 @@
   color: #61dafb;
 }
 
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -39,6 +41,12 @@
 /**/
 .custom-navbar{
   background-color: #175C75;
+  display: flex;
+  flex-direction: row;
+}
+
+.contenedor-logo{
+  margin-left: 15px;
 }
 .custom-navbar-text{
   color: #FFFFFF !important;
@@ -58,12 +66,10 @@
 }
 
 .custom-subtext {
-  font-size: 12px;
   color: ghostwhite;
   display: block;
 }
 .custom-navbar-link.selected {
   font-weight: bold; /* Cambia el peso de la fuente a negrita */
-  color: #ff0000; /* Cambia el color de la fuente, si lo deseas */
 }
 

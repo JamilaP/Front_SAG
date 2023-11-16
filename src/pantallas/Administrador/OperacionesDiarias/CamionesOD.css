@@ -1,3 +1,6 @@
+.contenedor-camiones{
+    margin-top: 5px;
+}
 .titulo {
     font-size: 24px;
     font-style: normal;
@@ -10,9 +13,8 @@
 
 .barra-busqueda {
     display: flex;
-    /* Centrar horizontamente los elementos */
     justify-content: normal;
-    margin-left: 20px;
+    height: 45px;
 }
 
 /* Opcional: Agregar margen entre el input y el menú desplegable */
@@ -65,4 +67,10 @@
 }
 .dropdown-menu a:active {
     --bs-dropdown-link-active-bg: #175c7594;
+}
+.tabla{
+    font-size: 12px;
+}
+.my-boton{
+    font-size: 10px;
 }

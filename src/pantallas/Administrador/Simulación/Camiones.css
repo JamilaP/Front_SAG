@@ -1,11 +1,11 @@
+
 .titulo {
-    font-size: 24px;
+    font-size: 18px;
     font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-align: left;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    font-weight: bold;
+    background-color: red;
+    display: flex;
+    width: 150px;
 }
 
 .barra-busqueda {

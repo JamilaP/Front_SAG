@@ -1,6 +1,6 @@
 .contenedor-2 {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     margin-left: 30px;
     margin-bottom: 20px;
@@ -10,6 +10,8 @@
     flex-direction: row;
     align-items: baseline;
     text-align: center;
+    margin-left: 30px;
+    width: 1000px;
 }
 .icono{
     margin-right: 10px;

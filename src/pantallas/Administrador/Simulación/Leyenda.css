@@ -1,8 +1,62 @@
-.custom-card {
-    width: 800px;
-    margin: 20px;
+.contenedor-general{
+    display: flex;
+    flex-direction: column;
+}
+.card-leyenda {
+    width: 590px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 
 }
+.titulo-leyenda{
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 15px;
+}
+.list-unstyled{
+    display: flex;
+    flex-direction: row;
+    margin-left: 50px;
+    font-size: 15px;
+}
+.simulacion-componentes{
+    display: flex;
+    height: 40px;
+}
+.fecha{
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.label-right{
+    width: 260px;
+
+}
+.contenedor-fecha {
+    width: 250px;
+}
+/*Botones*/
+.control-buttons{
+    height: 50px;
+    width: 590px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 5px;
+}
+.label{
+    width: 160px;
+    display: flex;
+    flex-direction: flex-start;
+    margin-left: 15px;
+}
+.form-grupo-1{
+    margin-top: 5px;
+}
+
+
+
 .list-unstyled{
     display: flex;
     flex-direction: row;
@@ -13,7 +67,7 @@
 }
 .d-flex{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     margin-left: 30px;
 }
