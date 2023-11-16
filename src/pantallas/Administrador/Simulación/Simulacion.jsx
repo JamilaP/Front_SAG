@@ -12,6 +12,11 @@ import {FiRefreshCcw} from 'react-icons/fi';
 import MapaSimu from './MapaSimu';
 import { Client } from '@stomp/stompjs';
 import ModalResultado from '../../../Componentes/ModalResultado';
+import {BiSolidCalendarCheck, BiSolidTruck} from "react-icons/bi";
+import {AiFillClockCircle} from "react-icons/ai";
+import {PiNotebookFill} from "react-icons/pi";
+import CamionesOD from "../OperacionesDiarias/CamionesOD";
+import PedidosOD from "../OperacionesDiarias/PedidosOD";
 
 function Simulacion() {
     const [key, setKey] = useState('pestana1');
@@ -148,23 +153,61 @@ function Simulacion() {
             <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
                             closeModal={() => setModal(e => ({ ...e, open: false }))} />
 
-            <h1> { indexData == 0 ? ( 'Esperando al back...'): ( 'Segundo: ' + indexData ) } </h1>
-            <>{ console.log('Datos de escena: ', indexData ,' ', dataSocket[indexData])}</>
-            {
-                dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
-                    <MapaSimu dataMapa = { dataSocket[indexData].trucks }
-                              index = {indexData}
-                              setIndex = {moverEscena}
-                              dataBloqueos = {dataSocket[indexData].lockdowns}
-                              duracion = {duracionEscena}
-                              pausarR = {pausar}
-                              pedidos = {dataSocket[indexData].orders}/>
-                ):(
-                    <MapaSimu/>
-                )
-            }
+            <div className="contenedor-mapa-informacion">
+                <div className="contenedor-reporte">
+                    <div className="grupo-1">
+                        <BiSolidCalendarCheck className="icono-1"></BiSolidCalendarCheck>
+                        <div className="nombre">Fecha de simulación: 10/01/2023</div>
+                    </div>
+                    <div className="grupo-1"><AiFillClockCircle className="icono-1"></AiFillClockCircle>
+                        <div className="nombre">Días transcurridos: 03:04:12</div>
+                    </div>
+                    <div className="grupo-1"><BiSolidTruck className="icono-1"></BiSolidTruck>
+                        <div className="nombre">Porcentaje de flota ocupada: 30%</div>
+                    </div>
+                    <div className="grupo-1"><PiNotebookFill className="icono-1"></PiNotebookFill>
+                        <div className="nombre">Pedidos atendidos: 1200</div>
+                    </div>
+                </div>
+                <div className="contenedor-mapa">
+                    {/*<h6> { indexData == 0 ? ( 'Esperando al back...'): ( 'Segundo: ' + indexData ) } </h6>*/}
+                    <>{ console.log('Datos de escena: ', indexData ,' ', dataSocket[indexData])}</>
+                    {
+                        dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
+                            <MapaSimu dataMapa = { dataSocket[indexData].trucks }
+                                      index = {indexData}
+                                      setIndex = {moverEscena}
+                                      dataBloqueos = {dataSocket[indexData].lockdowns}
+                                      duracion = {duracionEscena}
+                                      pausarR = {pausar}
+                                      pedidos = {dataSocket[indexData].orders}/>
+                        ):(
+                            <MapaSimu/>
+                        )
+                    }
+                </div>
+            </div>
 
-            {/* Botones de colapso/semanal */}
+
+            <div className="contenedor-informacion">
+                <div className="contenedor-leyenda">
+                    <Leyenda conectarWS={conectarWS} seguirEscena={seguirEscena} pausarEscena={pausarEscena}
+                             conexion={conexion} setStartDate={setStartDate}
+                             setActiveButtonColapsoSemanal={setActiveButtonColapsoSemanal} activeButtonColapsoSemanal={activeButtonColapsoSemanal}
+                             setActiveButtonControles={setActiveButtonControles} activeButtonControles={activeButtonControles}/>
+                </div>
+                <div className="tabla-container">
+                    <Container className="table-responsive">
+                        <Tabs id="miPestanas" className="cuadro-pestanas" activeKey={key} onSelect={(k) => setKey(k)}>
+                            <Tab eventKey="pestana2" title="Camiones"><CamionesOD/></Tab>
+                            <Tab eventKey="pestana3" title="Pedidos"><PedidosOD/></Tab>
+                        </Tabs>
+                    </Container>
+                </div>
+            </div>
+
+
+            {/*Botones de colapso/semanal
 
             <div className="control-buttons">
                 Tipo de visualización:
@@ -181,7 +224,7 @@ function Simulacion() {
                     </Button>
                 </ButtonGroup>
 
-                {/* Botones de control */}
+
                 <ButtonGroup aria-label="Barra de control" className="controles">
                     <Button
                         className={`custom-button success ${activeButtonControles === 'Play' ? 'active' : ''}`}
@@ -232,7 +275,7 @@ function Simulacion() {
                             )}
                         </Tab>
                     </Tabs>
-                </Container>
+                </Container>*/}
 
             </div>
     );

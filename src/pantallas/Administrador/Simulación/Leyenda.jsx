@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, ButtonGroup, Card, Col, Form, Row} from 'react-bootstrap';
 import "./Leyenda.css";
 import { BsFillGeoAltFill } from "react-icons/bs";
@@ -9,18 +9,36 @@ import { LuWarehouse } from "react-icons/lu";
 import {FaPause, FaPlay} from "react-icons/fa";
 import {HiRefresh} from "react-icons/hi";
 
-function Leyenda() {
+function Leyenda(props) {
     let startDate = "2023-03-13";
-    const [activeButtonControles, setActiveButtonControles] = useState(null);
-    const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
+    //const [activeButtonControles, setActiveButtonControles] = useState(null);
+    //const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
 
     const handleButtonClickControles = (buttonName) => {
         setTimeout(() => {
             console.log("Espera 2 segundos");
         }, 2000);
-        setActiveButtonControles(buttonName);
+        props.setActiveButtonControles(buttonName);
     };
 
+    const handleDateChange = (e) => {
+        const newStartDate = e.target.value;
+        props.setStartDate(newStartDate);
+    };
+
+    {/*
+    useEffect(() => {
+        if (activeButtonColapsoSemanal) {
+            props.conectarWS();
+        }
+        if (props.conexion) {
+            console.log('Se ha conectado');
+            console.log(props.conexion);
+        } else {
+            console.log('Fallo effect');
+        }
+    }, [activeButtonColapsoSemanal]);
+*/}
     return (
         <div className="contenedor-general">
 
@@ -28,7 +46,8 @@ function Leyenda() {
                 <Form className="form-grupo-1">
                     <Form.Group as={Row} className="fecha">
                             <Form.Label className="label-right">Fecha de inicio de la simulación:</Form.Label>
-                            <Form.Control className="contenedor-fecha" type="date" value={startDate}/>
+                            <Form.Control className="contenedor-fecha" type="date" value={startDate}
+                                          onChange={handleDateChange}/>
                     </Form.Group>
                 </Form>
             </div>
@@ -37,13 +56,13 @@ function Leyenda() {
                 <div className="label">Tipo de visualización:</div>
                 <ButtonGroup aria-label="Semana/Colapso" className="botones">
                     <Button
-                        className={`custom-button ${activeButtonColapsoSemanal === 'Semana' ? 'active' : ''}`}
-                        onClick={() => setActiveButtonColapsoSemanal('Semana')}>
+                        className={`custom-button ${props.activeButtonColapsoSemanal === 'Semana' ? 'active' : ''}`}
+                        onClick={() => props.setActiveButtonColapsoSemanal('Semana')}>
                         Semana
                     </Button>
                     <Button
-                        className={`custom-button ${activeButtonColapsoSemanal === 'Colapso' ? 'active' : ''}`}
-                        onClick={() =>setActiveButtonColapsoSemanal('Colapso')}>
+                        className={`custom-button ${props.activeButtonColapsoSemanal === 'Colapso' ? 'active' : ''}`}
+                        onClick={() => props.setActiveButtonColapsoSemanal('Colapso')}>
                         Colapso
                     </Button>
                 </ButtonGroup>
@@ -51,17 +70,17 @@ function Leyenda() {
                 {/* Botones de control */}
                 <ButtonGroup aria-label="Barra de control" className="controles">
                     <Button
-                        className={`custom-button success ${activeButtonControles === 'Play' ? 'active' : ''}`}
-                        onClick={() => {  handleButtonClickControles('Play')}}>
+                        className={`custom-button success ${props.activeButtonControles === 'Play' ? 'active' : ''}`}
+                        onClick={() => { props.seguirEscena(); handleButtonClickControles('Play')}}>
                         <FaPlay className="controles play"/>
                     </Button>
                     <Button
-                        className={`custom-button danger ${activeButtonControles === 'Stop' ? 'active' : ''}`}
-                        onClick={() => {  handleButtonClickControles('Stop')}}>
+                        className={`custom-button danger ${props.activeButtonControles === 'Stop' ? 'active' : ''}`}
+                        onClick={() => { props.pausarEscena(); handleButtonClickControles('Stop')}}>
                         <FaPause className="controles stop"/>
                     </Button>
                     <Button
-                        className={`custom-button warning ${activeButtonControles === '1.5x' ? 'active' : ''}`}
+                        className={`custom-button warning ${props.activeButtonControles === '1.5x' ? 'active' : ''}`}
                         onClick={() => handleButtonClickControles('1.5x')}>
                         <HiRefresh className="controles-refresh"/>
                     </Button>
