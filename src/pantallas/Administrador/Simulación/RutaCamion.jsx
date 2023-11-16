@@ -2,10 +2,10 @@ import { useEffect, useRef } from "react";
 import anime from "animejs";
 
 function RutaCamion(props) {
-  let nodoPedido =[props.ped.x *14 + 7,(50 - props.ped.y)*14 + 7];
+  let nodoPedido =[props.ped.x *props.tamanioCelda + props.tamanioCelda/2,(50 - props.ped.y)*props.tamanioCelda + props.tamanioCelda/2];
   // [props.rutaCamion[ props.rutaCamion.length - 1 ].x *14 + 7, (50 - props.rutaCamion[props.rutaCamion.length - 1 ].y *14 + 7)]
-  let inicioRuta = [[props.inicio.x*14 + 7 , (50 - props.inicio.y) *14 + 7]];
-  let rutaconvertida = props.rutaCamion.map(({ x, y }) => [ x*14 + 7, (50 - y)*14 + 7]);
+  let inicioRuta = [[props.inicio.x*props.tamanioCelda + props.tamanioCelda/2 , (50 - props.inicio.y) *props.tamanioCelda + props.tamanioCelda/2]];
+  let rutaconvertida = props.rutaCamion.map(({ x, y }) => [ x*props.tamanioCelda + props.tamanioCelda/2, (50 - y)*props.tamanioCelda + props.tamanioCelda/2]);
   // let rutaTotal = inicioRuta.concat([rutaconvertida[0]]);
   let rutaTotal = inicioRuta.concat(rutaconvertida);
 
@@ -15,7 +15,8 @@ function RutaCamion(props) {
   let vectorX = (props.rutaCamion[0].x - props.inicio.x) === 0 ? (0): ((props.rutaCamion[0].x - props.inicio.x)/ Math.abs((props.rutaCamion[0].x - props.inicio.x)));
   let vectorY = (props.rutaCamion[0].y - props.inicio.y) === 0 ? (0): ((props.rutaCamion[0].y - props.inicio.y)/ Math.abs((props.rutaCamion[0].y - props.inicio.y)));
 
-  let rutaAnimacion = [[props.inicio.x *14 + 7, (50 - props.inicio.y)*14 + 7], [ (props.inicio.x + vectorX) *14 + 7, (50 - (props.inicio.y + vectorY)) *14 + 7]];
+  let rutaAnimacion = [[props.inicio.x *props.tamanioCelda + props.tamanioCelda/2, (50 - props.inicio.y)*props.tamanioCelda + props.tamanioCelda/2]
+  , [ (props.inicio.x + vectorX)*props.tamanioCelda + props.tamanioCelda/2, (50 - (props.inicio.y + vectorY))*props.tamanioCelda + props.tamanioCelda/2]];
   const pathAnimacion = rutaAnimacion ? `M${rutaAnimacion.join(' L')}` : '';
 
   function calcularDistanciaTotal(puntos) {
@@ -49,7 +50,6 @@ function RutaCamion(props) {
   const camionRef = useRef(null);
   const caminoRef = useRef(null);
 
-  const tiempo = (calcularDistanciaTotal(rutaCorte)/14 + 1)* props.duracionE ;
   const camion = camionRef.current;
   const camino = caminoRef.current;
   let path = anime.path(camino);
@@ -83,12 +83,12 @@ function RutaCamion(props) {
     return () => {
 
     };
-  }, [pathData, props.pausar]);
+  }, [rutaAnimacion, props.pausar]);
 
   return (
       <svg>
         <path ref={caminoRef} d={pathAnimacion} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
-        <path d={pathData} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="2" />
+        <path d={pathData} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
         <polygon ref={camionRef} points={flechaStr} fill="#000000" />
         {console.log( 'Ruta: ', pathData)}
       </svg>

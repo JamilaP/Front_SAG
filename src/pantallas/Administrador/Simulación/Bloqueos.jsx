@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import anime from "animejs";
 
 function RutaBloqueo(props) {
-    let rutaconvertida = props.rutaBloqueo.map(({ x, y }) => [x*14 + 7, (50 - y)*14 + 7]);
+    let rutaconvertida = props.rutaBloqueo.map(({ x, y }) => [x*props.tamanioCelda + props.tamanioCelda/2, (50 - y)*props.tamanioCelda + props.tamanioCelda/2]);
     const pathData = rutaconvertida ? `M${rutaconvertida.join(' L')}` : '';
 
     return (

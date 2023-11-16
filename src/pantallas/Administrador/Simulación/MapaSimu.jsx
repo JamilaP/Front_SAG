@@ -79,8 +79,8 @@ const MapaSimu = (props) => {
         {
             props.dataMapa && props.dataMapa.length > 0 && props.dataMapa.map(element => (
                 element.currentNode && element.currentNode.x && element.currentNode.y ? (
-                    <circle cx={element.currentNode.x * 14 + 7}
-                            cy= {(50 - element.currentNode.y) * 14 + 7}
+                    <circle cx={element.currentNode.x * cellSize + cellSize/2}
+                            cy= {(50 - element.currentNode.y) * cellSize + cellSize/2}
                             r="1" fill="blue" />
                 ): (
                     console.log('No hay datos', element)
@@ -95,7 +95,7 @@ const MapaSimu = (props) => {
         {
             props.dataBloqueos && props.dataBloqueos.length > 0 && props.dataBloqueos.map(element => (
                     element.vertices ?
-                        (<RutaBloqueo rutaBloqueo = {element.vertices}/>) :
+                        (<RutaBloqueo rutaBloqueo = {element.vertices} tamanioCelda = {cellSize}/>) :
                         (console.log('No hay bloqueos', element))
                 )
             )
@@ -107,13 +107,15 @@ const MapaSimu = (props) => {
                 element.route && element.route.nodes && (0 < element.route.nodes.length) && element.currentNode && element.currentNode
                 && element.orders && (0 < element.orders.length) ? (
                     <RutaCamion rutaCamion={element.route.nodes } inicio = {element.currentNode}
-                                ped = {element.orders[0].order.location} duracionE = {props.duracion} pausar = {props.pausarR}/>
+                                ped = {element.orders[0].order.location} duracionE = {props.duracion} pausar = {props.pausarR}
+                                tamanioCelda = {cellSize}/>
                     // console.log('Datos a procesar: ', element.orders.length)
                 ): (
                     element.route && element.route.nodes && (0 < element.route.nodes.length)  && element.currentNode && element.currentNode
                     && element.orders && (0 == element.orders.length) ? (
                         <RutaCamion rutaCamion={element.route.nodes } inicio = {element.currentNode}
-                                    ped = {element.route.nodes[element.route.nodes.length -1]} duracionE = {props.duracion} pausar = {props.pausarR}/>
+                                    ped = {element.route.nodes[element.route.nodes.length -1]} 
+                                    duracionE = {props.duracion} pausar = {props.pausarR} tamanioCelda = {cellSize}/>
                     ) : (console.log('No hay datos'))
 
                 )
