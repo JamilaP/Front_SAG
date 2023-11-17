@@ -16,20 +16,20 @@ const pedidos = [
             {
                 idCamion: "TA01",
                 cantidadGLP: 5,
-                ruta:"(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)->(10,50) -> (10,40) -> (10,30) -> " +
+                ruta: "(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)->(10,50) -> (10,40) -> (10,30) -> " +
                     "(10,20) -> (10,10) -> (10,0) -> (10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)",
                 estado: "En camino",
             },
             {
                 idCamion: "TA02",
                 cantidadGLP: 10,
-                ruta:"(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)",
+                ruta: "(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)",
                 estado: "En camino",
             },
             {
                 idCamion: "TA03",
                 cantidadGLP: 20,
-                ruta:"(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)",
+                ruta: "(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)",
                 estado: "Entregado",
             },
         ],
@@ -46,13 +46,13 @@ const pedidos = [
             {
                 idCamion: "TB01",
                 cantidadGLP: 15,
-                ruta:"(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)",
+                ruta: "(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)",
                 estado: "En camino",
             },
             {
                 idCamion: "TB02",
                 cantidadGLP: 10,
-                ruta:"(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)",
+                ruta: "(10,50) -> (10,40) -> (10,30) -> (10,20) -> (10,10) -> (10,0)",
                 estado: "En camino",
             },
         ],
@@ -89,47 +89,41 @@ function PedidosOD() {
 
     return (
         <div>
-            <h1 className="titulo">Detalle de pedidos</h1>
-
             <div className="barra-busqueda">
-                {/* Barra de búsqueda de texto */}
-                <div className="texto-busqueda">Búsqueda por pedido:</div>
-                <InputGroup className="mb-3">
-                    <FormControl
-                        placeholder="Buscar por ID de pedido"
-                        value={filtroIDPedido}
-                        onChange={(e) => setFiltroIDPedido(e.target.value)}
-                    />
 
-                </InputGroup>
-                <div className="texto-busqueda">Búsqueda por pedido:</div>
-                <InputGroup className="mb-3">
-                    <FormControl
-                        placeholder="Buscar por ID de cliente"
-                        value={filtroIDCliente}
-                        onChange={(e) => setFiltroIDCliente(e.target.value)}
-                    />
+                <div className="grupo-texto-input">
+                    <div className="texto-busqueda">Búsqueda por pedido:</div>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            placeholder="Buscar por ID de pedido"
+                            value={filtroIDPedido}
+                            onChange={(e) => setFiltroIDPedido(e.target.value)}
+                        />
 
-                </InputGroup>
-                {/* Menú desplegable para filtrar por estado */}
-                <div className="texto-busqueda"> Filtrado por estado:</div>
-                <DropdownButton className="dropdown-busqueda" id="dropdown-basic-button" title={filtroOpcion}>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('Todos')}>Todos</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('Entregado')}>Entregado</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('No Entregado')}>No Entregado</Dropdown.Item>
-                </DropdownButton>
+                    </InputGroup>
+                </div>
+                <div className="grupo-texto-input">
+                    <div className="texto-busqueda">Búsqueda por pedido:</div>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            placeholder="Buscar por ID de cliente"
+                            value={filtroIDCliente}
+                            onChange={(e) => setFiltroIDCliente(e.target.value)}
+                        />
+                    </InputGroup>
+                </div>
+
             </div>
 
-            <Table striped bordered hover>
+            <Table striped bordered hover className="tabla">
                 <thead>
                 <tr>
                     <th>ID Pedido</th>
-                    <th>Id-cliente</th>
+                    <th>ID Cliente</th>
                     <th>Ubicación</th>
-                    <th>Fecha y hora de llegada solicitada</th>
+                    <th>Fecha solicitada</th>
                     <th>Plazo (horas)</th>
-                    <th>Cantidad de GLP solicitado (m3)</th>
-                    <th>Estado</th>
+                    <th>GLP solicitado(m3)</th>
                     <th>Camiones</th>
                 </tr>
                 </thead>
@@ -142,10 +136,12 @@ function PedidosOD() {
                         <td>{pedido.fechaRegistro}</td>
                         <td>{pedido.horasLimite}</td>
                         <td>{pedido.cantidadGLP}</td>
-                        <td>{pedido.estado}</td>
                         <td>
-                            <Button className="my-boton" disabled={pedido.arrCamiones.length === 0}
-                                    onClick={() => {setMostrandoPedidoCamiones(pedido.arrCamiones);setIdPedido(pedido.idPedido)}}
+                            <Button className="boton-ver" disabled={pedido.arrCamiones.length === 0}
+                                    onClick={() => {
+                                        setMostrandoPedidoCamiones(pedido.arrCamiones);
+                                        setIdPedido(pedido.idPedido)
+                                    }}
                             >Ver</Button>
                             <ModalPedidosCamiones
                                 isOpen={mostrandoPedidoCamiones !== null}

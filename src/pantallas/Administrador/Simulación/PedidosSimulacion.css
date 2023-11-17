@@ -1,29 +1,44 @@
-.barra-busqueda-pedidos{
+.pedidos{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 5px;
+    height: 400px;
+}
+/*barra de busqueda*/
+.barra-busqueda {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+}
+.grupo-texto-input{
     display: flex;
     flex-direction: row;
-    justify-content: normal;
+    align-items: center;
+    height: 40px;
+    margin-bottom: 5px;
 }
-.barra-busqueda-pedidos .input-group {
-    margin-right: 20px;
-    margin-left: 15px;
+.mb-3{
+    margin-top: 15px;
 }
-.my-boton,
-.my-boton:focus,
-.my-boton:active,
-.my-boton:hover,
-.my-boton:visited {
+.tabla{
+    font-size: 12px;
+}
+
+/*tabla-boton*/
+.boton-ver,
+.boton-ver:focus,
+.boton-ver:active,
+.boton-ver:hover,
+.boton-ver:visited {
     background-color: #175C75;
     color: white;
     border: none;
 }
-
-
 .btn-primary:active {
     --bs-btn-active-bg: #175c7594;
 }
 .btn-primary:disabled {
     --bs-btn-disabled-bg: #175C75 !important;
 }
-.dropdown-menu a:active {
-    --bs-dropdown-link-active-bg: #175c7594;
-}
+

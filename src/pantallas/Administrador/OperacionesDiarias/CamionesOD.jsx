@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Button, DropdownButton, Table, Dropdown, InputGroup, FormControl} from "react-bootstrap";
+import React, {useState} from 'react';
+import {Button, Table, InputGroup, FormControl} from "react-bootstrap";
 import "./CamionesOD.css";
 
 const generarDatosCamiones = () => {
@@ -15,6 +15,7 @@ const generarDatosCamiones = () => {
             galonesDisponibles: Math.floor(Math.random() * 50) + 10, // Entre 10 y 59 galones disponibles
             consumoTotal: Math.floor(Math.random() * 50) + 30, // Entre 30 y 79 unidades de consumo total
             pedidoActual: `c-${Math.floor(Math.random() * 100) + 1}`, // Pedido aleatorio
+            arrPedidos: [],
         };
 
         camiones.push(camion);
@@ -23,12 +24,14 @@ const generarDatosCamiones = () => {
     return camiones;
 };
 
-const camiones = generarDatosCamiones();
+
 
 function CamionesOD() {
     const [filtroTexto, setFiltroTexto] = useState('');
     const [filtroOpcion, setFiltroOpcion] = useState('Todos');
-
+    const [mostrandoCamionesPedidos, setMostrandoCamionesPedidos] = useState(null);
+    const [idCamion, setIdCamion] = useState(null);
+    let camiones = generarDatosCamiones();
 
     // Función para filtrar los camiones según el texto y la opción seleccionada
     const camionesFiltrados = camiones.filter(camion => {
@@ -40,10 +43,11 @@ function CamionesOD() {
     });
 
     return (
-        <div className="contenedor-camiones">
+        <div className="camiones">
 
 
              <div className="barra-busqueda">
+                 <div className="grupo-texto-input">
                 <div className="texto-busqueda">Búsqueda por camión:</div>
                 <InputGroup className="mb-3">
                     <FormControl
@@ -52,6 +56,7 @@ function CamionesOD() {
                         onChange={(e) => setFiltroTexto(e.target.value)}
                     />
                 </InputGroup>
+                 </div>
             </div>
 
             <Table striped bordered hover className="tabla">
@@ -74,7 +79,12 @@ function CamionesOD() {
                         <td>{camion.consumoTotal}</td>
                         <td>{camion.pedidoActual}</td>
                         <td>
-                            <Button className="my-boton">Ver</Button>
+                            <Button className="boton-ver" disabled={camion.arrPedidos.length === 0}
+                                    onClick={() => {
+                                        setMostrandoCamionesPedidos(camion.arrPedidos);
+                                        setIdCamion(camion.id)
+                                    }}
+                            >Ver</Button>
                         </td>
                     </tr>
                 ))}

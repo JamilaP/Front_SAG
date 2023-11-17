@@ -7,16 +7,10 @@ function PedidosSimulacion(props) {
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
     const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
-
     const [mostrandoPedidoCamiones, setMostrandoPedidoCamiones] = useState(null);
     const [idPedido, setIdPedido] = useState(null);
     let nuevoArreglo;
 
-
-    useEffect(() => {
-        //console.log('data pedidos: ', data);
-        //console.log('arreglo de pedidos',nuevoArreglo);
-    }, [data]);
 
     // Verifica si data es un arreglo válido antes de mapearlo
     if (!data || data.length === 0) {
@@ -66,11 +60,11 @@ function PedidosSimulacion(props) {
     });
 
     return (
-        <div>
-            <h1 className="titulo">Detalle de pedidos</h1>
+        <div className="pedidos">
 
             <div className="barra-busqueda">
-                {/* Barra de búsqueda de texto */}
+
+                <div className="grupo-texto-input">
                 <div className="texto-busqueda">Búsqueda por pedido:</div>
                 <InputGroup className="mb-3">
                     <FormControl
@@ -78,50 +72,46 @@ function PedidosSimulacion(props) {
                         value={filtroIDPedido}
                         onChange={(e) => setFiltroIDPedido(e.target.value)}
                     />
-
                 </InputGroup>
-                <div className="texto-busqueda">Búsqueda por pedido:</div>
+                </div>
+
+                <div className="grupo-texto-input">
+                <div className="texto-busqueda">Búsqueda por cliente:</div>
                 <InputGroup className="mb-3">
                     <FormControl
                         placeholder="Buscar por ID de cliente"
                         value={filtroIDCliente}
                         onChange={(e) => setFiltroIDCliente(e.target.value)}
                     />
-
                 </InputGroup>
-                {/* Menú desplegable para filtrar por estado */}
-                <div className="texto-busqueda"> Filtrado por estado:</div>
-                <DropdownButton className="dropdown-busqueda" id="dropdown-basic-button" title={filtroOpcion}>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('Todos')}>Todos</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('DISPONIBLE')}>DISPONIBLE</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setFiltroOpcion('MANTENIMIENTO')}>MANTENIMIENTO</Dropdown.Item>
-                </DropdownButton>
+                </div>
+
             </div>
 
-            <Table striped bordered hover>
+            <Table striped bordered hover className="tabla">
                 <thead>
                 <tr>
                     <th>ID Pedido</th>
-                    <th>Id-cliente</th>
+                    <th>ID Cliente</th>
                     <th>Ubicación</th>
-                    <th>Fecha y hora de llegada solicitada</th>
+                    <th>Fecha solicitada</th>
                     <th>Plazo (horas)</th>
-                    <th>Cantidad de GLP solicitado (m3)</th>
+                    <th>GLP solicitado(m3)</th>
                     <th>Camiones</th>
                 </tr>
                 </thead>
                 <tbody>
                 {pedidosFiltrados && pedidosFiltrados.length > 0 ? (
                 pedidosFiltrados.map((pedido,index) => (
-                    <tr key={index}>
-                        <td>{index+1}</td>
+                    <tr key={pedido.idPedido}>
+                        <td>{pedido.idPedido}</td>
                         <td>{pedido.idCliente}</td>
                         <td>{pedido.ubicacion}</td>
                         <td>{pedido.fechaRegistro}</td>
                         <td>{pedido.horasLimite}</td>
                         <td>{pedido.cantidadGLP}</td>
                         <td>
-                            <Button variant="primary" disabled={pedido.arrCamiones.length === 0}
+                            <Button variant="primary" className="boton-ver" disabled={pedido.arrCamiones.length === 0}
                                     onClick={() => {setMostrandoPedidoCamiones(pedido.arrCamiones);setIdPedido(pedido.idPedido)}}
                             >Ver</Button>
                             <ModalPedidosCamiones
@@ -130,7 +120,6 @@ function PedidosSimulacion(props) {
                                 id={idPedido}
                                 data={mostrandoPedidoCamiones}
                             />
-                            {/* <Button className="my-boton">Ver</Button>*/}
                         </td>
                     </tr>
                 ))

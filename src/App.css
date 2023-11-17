@@ -1,75 +1,90 @@
 .App {
-  text-align: center;
-  height: 100%;
+    text-align: center;
+    height: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/*BARRA DE NAVEGACION*/
+.barra-navegacion {
+    background-color: #175C75;
+    display: flex;
+    flex-direction: row;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/*Logotipo*/
+.logotipo {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.imagen-logo {
+
+    width: 30px;
+    height: 30px;
 }
 
-.App-link {
-  color: #61dafb;
+.texto-logo {
+
+    font-size: 25px;
+    color: #FFFFFF;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/*link-navegacion*/
+.pestanas-navegacion {
+}
+
+.pestana-link.nav-link {
+    color: white;
+}
+
+.pestana-link.nav-link.selected,
+.pestana-link.nav-link:hover {
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.pestana-link. {
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+/*perfil*/
+.contenedor-perfil {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-left: auto;
+}
+
+.imagen-perfil {
+    margin-right: 3px;
+    width: 45px;
+    height: 45px;
+}
+
+.texto-persona {
+    display: flex;
+    flex-direction: column;
+    color: #FFFFFF;
+}
+
+.texto-persona .nombre {
+    font-weight: bold;
+}
+
+.texto-persona .rol {
+    font-size: 12px;
+}
+
+/*pantallas*/
+.contenido-pantallas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-/**/
-.custom-navbar{
-  background-color: #175C75;
-  display: flex;
-  flex-direction: row;
-}
-
-.contenedor-logo{
-  margin-left: 15px;
-}
-.custom-navbar-text{
-  color: #FFFFFF !important;
-  font-size: 14px;
-}
-.custom-navbar-text-log{
-  color: #FFFFFF !important;
-  font-size: 25px !important;
-  font-weight: 600;
-}
-.custom-navbar-text-log div {
-  display: flex;
-  align-items: center;
-}
-.custom-navbar-link {
-  color: #FFFFFF !important; ;
-}
-
-.custom-subtext {
-  color: ghostwhite;
-  display: block;
-}
-.custom-navbar-link.selected {
-  font-weight: bold; /* Cambia el peso de la fuente a negrita */
-}
 

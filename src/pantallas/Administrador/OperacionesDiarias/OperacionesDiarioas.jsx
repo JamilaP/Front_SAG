@@ -12,24 +12,20 @@ import {PiNotebookFill} from "react-icons/pi";
 import {TbNotebookOff} from "react-icons/tb";
 
 function OperacionesDiarioas() {
-    const [key, setKey] = useState('pestana1');
+    const [key, setKey] = useState('pestana2');
 
     return (
         <div className="OperacionesDiarias">
             <div className="contenedor-mapa-informacion">
                 <div className="contenedor-reporte">
-                        <div className="grupo-1">
-                            <BiSolidCalendarCheck className="icono-1"></BiSolidCalendarCheck>
-                            <div className="nombre">Fecha de simulación: 10/01/2023</div>
+                        <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
+                            <div className="nombre">Fecha operacional: 10/01/2023 03:04:12</div>
                         </div>
-                        <div className="grupo-1"><AiFillClockCircle className="icono-1"></AiFillClockCircle>
-                            <div className="nombre">Días transcurridos: 03:04:12</div>
-                        </div>
-                        <div className="grupo-1"><BiSolidTruck className="icono-1"></BiSolidTruck>
+                        <div className="grupo-icono-texto"><BiSolidTruck className="icono"></BiSolidTruck>
                             <div className="nombre">Porcentaje de flota ocupada: 30%</div>
                         </div>
-                        <div className="grupo-1"><PiNotebookFill className="icono-1"></PiNotebookFill>
-                            <div className="nombre">Pedidos atendidos: 1200</div>
+                        <div className="grupo-icono-texto"><PiNotebookFill className="icono"></PiNotebookFill>
+                            <div className="nombre">Pedidos atendidos en el día: 200</div>
                         </div>
                 </div>
                 <div className="contenedor-mapa">
@@ -38,7 +34,7 @@ function OperacionesDiarioas() {
             </div>
             <div className="contenedor-informacion">
                 <div className="contenedor-leyenda">
-                    <Leyenda/>
+                    <Leyenda pestaña={'operacionesDiarias'}/>
                 </div>
                 <div className="tabla-container">
                     <Container className="table-responsive">

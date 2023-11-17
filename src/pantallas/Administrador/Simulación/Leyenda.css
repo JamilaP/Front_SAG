@@ -1,105 +1,102 @@
-.contenedor-general{
+.leyenda{
     display: flex;
     flex-direction: column;
+    border-radius: 15px;
+    padding: 5px;
 }
-.card-leyenda {
-    width: 590px;
-    height: 90px;
+/*fechas de simulacion*/
+.grupo-text-fecha{
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+}
+.fecha-contenedor{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    width: 100%;
+}
+.texto-label{
+    width: 45%;
+    margin-top:6px;
+}
+.fecha{
+    width: 40%;
+}
+
+/*botones de simulacion*/
+.control-buttons{
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+/*texto*/
+.texto-tipo-visualizacion{
+    width: 30%;
+}
+/*botones colapso-semana*/
+.botones{
+    margin: 10px;
+}
+.boton{
+    color: #FFFFFF;
+    background-color: #CED4DA;
+    border: none;
+}
+
+.boton.active, .boton:hover, .boton:active {
+    background-color: #175C75;
+    color: white;
+}
+
+/*controles play stop refresh*/
+.icono-boton{
+    font-size: 15px;
+    color: black;
+}
+
+/*leyenda*/
+.card-leyenda{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    margin-top: 6px;
 
 }
 .titulo-leyenda{
+    width: 15%;
     font-size: 15px;
     font-weight: bold;
-    margin-left: 15px;
+    height: 100%;
 }
-.list-unstyled{
-    display: flex;
-    flex-direction: row;
-    margin-left: 50px;
-    font-size: 15px;
-}
-.simulacion-componentes{
-    display: flex;
-    height: 40px;
-}
-.fecha{
-    margin-left: 0px;
-    margin-right: 0px;
-}
-.label-right{
-    width: 260px;
 
-}
-.contenedor-fecha {
-    width: 250px;
-}
-/*Botones*/
-.control-buttons{
-    height: 50px;
-    width: 590px;
+/*leyenda iconos*/
+.lista-iconos-texto{
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 5px;
+    width: 85%;
+    list-style: none;
+    padding: 0px;
 }
-.label{
-    width: 160px;
-    display: flex;
-    flex-direction: flex-start;
-    margin-left: 15px;
-}
-.form-grupo-1{
-    margin-top: 5px;
-}
-
-
-
-.list-unstyled{
-    display: flex;
-    flex-direction: row;
-}
-.mr-3 {
-    margin: 5px;
-    font-size: 25px;
-}
-.d-flex{
+.icono-texto{
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 30px;
+    width: 100%;
+    font-size: 15px;
+    margin-top: 16px;
 }
-.geo-icon {
-    color: #7D8AFF;
-}
-
-.truck-icon {
+.icono-leyenda{
+    font-size: 25px;
     color: black;
 }
-
-.database-icon {
-    color: black;
+.icono-leyenda.bloqueo{
+    color:red;
 }
-.buildings-icon {
-    color: black;
-    margin-bottom: 9px;
-}
-.rise-icon {
-    color: #FF5733;
-}
-
-.route-icon {
-    color: #33FF57;
-}
-.titulo {
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-align: left;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 30px;
+.icono-leyenda.ruta{
+    color:green;
 }

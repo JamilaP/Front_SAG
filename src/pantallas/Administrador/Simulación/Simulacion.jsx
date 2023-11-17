@@ -19,7 +19,9 @@ import CamionesOD from "../OperacionesDiarias/CamionesOD";
 import PedidosOD from "../OperacionesDiarias/PedidosOD";
 
 function Simulacion() {
-    const [key, setKey] = useState('pestana1');
+
+    let conexion = null; //Conexion websocket
+    const [key, setKey] = useState('pestana2');
     const [dataSocket, setDataSocket] = useState([]);
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
@@ -28,11 +30,17 @@ function Simulacion() {
     const [pausar, setPausar] = useState(false);
     const [activeButtonControles, setActiveButtonControles] = useState(null);
     const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
-
-    //Conexion websocket
-    let conexion = null;
     const [startDate, setStartDate] = useState("2023-03-13"); // Valor inicial
 
+    // Botones de controles
+    const handleButtonClickControles = (buttonName) => {
+        setTimeout(() => {
+            console.log("Espera 2 segundos");
+        }, 2000);
+        setActiveButtonControles(buttonName);
+    };
+
+    //WEBSOCKET
     const onConnectSocket = () => {
         conexion.subscribe('/topic/simulation-progress', (mensaje) => {
             console.log('Data conseguida');
@@ -44,19 +52,14 @@ function Simulacion() {
             console.log('Stomp Error : ', frame);
         };
     };
-
     const onWebSocketClose = () => {
         console.log('WebSocket connection close');
         if (conexion !== null) {
             conexion.deactivate();
         }
     };
-
     const conectarWS = () => {
         conexion = new Client();
-        // const stompClient = new Client();
-        // setSClient(conexion);
-        //onWebSocketClose();
         console.log('Connecting to WebSocket...');
         try {
             conexion.configure({
@@ -70,9 +73,7 @@ function Simulacion() {
         conexion.onConnect = onConnectSocket;
         conexion.onWebSocketClose = onWebSocketClose;
         conexion.activate();
-        // console.log(conexion);
     };
-
     const enviarMensaje = () => {
         // conectarWS();
          console.log("parametros",startDate,filePedidos,activeButtonColapsoSemanal);
@@ -94,16 +95,6 @@ function Simulacion() {
             if(!conexion) setModal(e => ({ ...e, text: "Recuerde seleccionar el tipo de visualización", exito: false, open: true }));
         }
     };
-
-    // Botones de controles
-
-    const handleButtonClickControles = (buttonName) => {
-        setTimeout(() => {
-            console.log("Espera 2 segundos");
-        }, 2000);
-        setActiveButtonControles(buttonName);
-    };
-
     const moverEscena = () => {
         if(!pausar){
             if( indexData < dataSocket.length){
@@ -125,12 +116,12 @@ function Simulacion() {
     const pausarEscena = () => {
         setPausar(true);
     }
-
     const seguirEscena = () => {
         if(dataSocket.length == 0 ) enviarMensaje();
         setPausar(false);
     }
 
+    // conectar WS con el boton de colapso/semanal
     useEffect(() => {
         if (activeButtonColapsoSemanal) {
             conectarWS();
@@ -143,11 +134,6 @@ function Simulacion() {
         }
     }, [activeButtonColapsoSemanal]);
 
-    useEffect(() => {
-        console.log("fecha inicio",startDate);
-        console.log("file simu",filePedidos);
-    }, [startDate,filePedidos]);
-
     return (
         <div className="Simulacion">
             <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
@@ -155,18 +141,17 @@ function Simulacion() {
 
             <div className="contenedor-mapa-informacion">
                 <div className="contenedor-reporte">
-                    <div className="grupo-1">
-                        <BiSolidCalendarCheck className="icono-1"></BiSolidCalendarCheck>
-                        <div className="nombre">Fecha de simulación: 10/01/2023</div>
+                    <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
+                        <div className="texto">Fecha de simulación: 10/01/2023 03:04:12</div>
                     </div>
-                    <div className="grupo-1"><AiFillClockCircle className="icono-1"></AiFillClockCircle>
-                        <div className="nombre">Días transcurridos: 03:04:12</div>
+                    <div className="grupo-icono-texto"><AiFillClockCircle className="icono"></AiFillClockCircle>
+                        <div className="texto">Días transcurridos: 003</div>
                     </div>
-                    <div className="grupo-1"><BiSolidTruck className="icono-1"></BiSolidTruck>
-                        <div className="nombre">Porcentaje de flota ocupada: 30%</div>
+                    <div className="grupo-icono-texto"><BiSolidTruck className="icono"></BiSolidTruck>
+                        <div className="texto">Porcentaje de flota ocupada: 30%</div>
                     </div>
-                    <div className="grupo-1"><PiNotebookFill className="icono-1"></PiNotebookFill>
-                        <div className="nombre">Pedidos atendidos: 1200</div>
+                    <div className="grupo-icono-texto"><PiNotebookFill className="icono"></PiNotebookFill>
+                        <div className="texto">Pedidos atendidos: 1200</div>
                     </div>
                 </div>
                 <div className="contenedor-mapa">
@@ -191,16 +176,29 @@ function Simulacion() {
 
             <div className="contenedor-informacion">
                 <div className="contenedor-leyenda">
-                    <Leyenda conectarWS={conectarWS} seguirEscena={seguirEscena} pausarEscena={pausarEscena}
-                             conexion={conexion} setStartDate={setStartDate}
+                    <Leyenda pestaña={'simulacion'} conectarWS={conectarWS} seguirEscena={seguirEscena} pausarEscena={pausarEscena}
+                             conexion={conexion} setStartDate={setStartDate} startDate={startDate}
                              setActiveButtonColapsoSemanal={setActiveButtonColapsoSemanal} activeButtonColapsoSemanal={activeButtonColapsoSemanal}
                              setActiveButtonControles={setActiveButtonControles} activeButtonControles={activeButtonControles}/>
                 </div>
                 <div className="tabla-container">
                     <Container className="table-responsive">
                         <Tabs id="miPestanas" className="cuadro-pestanas" activeKey={key} onSelect={(k) => setKey(k)}>
-                            <Tab eventKey="pestana2" title="Camiones"><CamionesOD/></Tab>
-                            <Tab eventKey="pestana3" title="Pedidos"><PedidosOD/></Tab>
+                            <Tab eventKey="pestana2" title="Camiones">
+                                {dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
+                                    <Camiones data={dataSocket[indexData].trucks}/>
+                                ):(
+                                    <Camiones data={null}/>
+                                )
+                                }
+                            </Tab>
+                            <Tab eventKey="pestana3" title="Pedidos">
+                                {dataSocket && dataSocket[indexData] && dataSocket[indexData].orders ? (
+                                    <PedidosSimulacion data={dataSocket[indexData].orders}/>
+                                ):(
+                                    <PedidosSimulacion data={null}/>
+                                )}
+                            </Tab>
                         </Tabs>
                     </Container>
                 </div>

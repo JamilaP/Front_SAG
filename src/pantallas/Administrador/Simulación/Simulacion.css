@@ -1,60 +1,80 @@
-.nav-tabs .nav-link {
-    color: black;
-}
 .Simulacion{
     display: flex;
 }
-.contenedorCanvas{
-    position: absolute;
-    top: 0;
-    left: 0;
+
+/* reporte + mapa*/
+.contenedor-mapa-informacion {
+    display: flex;
+    flex-direction: column;
+    flex: 60%;
+}
+/*REPORTE*/
+.contenedor-reporte{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+.grupo-icono-texto{
+    display: flex;
+    flex-direction: row;
+    font-size: 13px;
+    margin-left: 5px; /*espacio entre grupos*/
+}
+.grupo-icono-texto .icono{
+    font-size: 20px;
+    margin-right: 3px;
+}
+.grupo-icono-texto .texto{
+    display: flex;
+    align-items: start;
+    margin-left: 3px;
 }
 
-.elemento{
-    position: relative;
-    top: 65vh;
-    left: 0;
+/*MAPA*/
+.contenedor-mapa{
+
 }
-.table-responsive{
+
+/*leyenda + tabla*/
+.contenedor-informacion {
+    flex: 40%;
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+
+    max-height: 675px;
+}
+/*LEYENDA*/
+.contenedor-leyenda{
     background-color: #DEE2E6;
+    border-radius: 15px;
+    margin: 10px;
 }
-.custom-button {
-    align-items: center;
-    border: none;
-    border-radius: 5px;
-    color: #FFFFFF;
-    background-color: #CED4DA;
+/*TABLA*/
+.tabla-container{
+    border-radius: 15px;
+    margin: 0px 10px 5px 10px;
+    overflow-y: auto;
+    height: 1000px;
+}
+.table-responsive {
+    background-color: #DEE2E6;
+    height: 100%;
+}
+.cuadro-pestanas{
 
 }
-.custom-button:hover, .custom-button:active {
-    background-color: #175C75 !important;
-}
-.custom-button.active {
-    background-color: #175C75;
-    color: white;
-}
-.custom-button.success {
+.nav-tabs .nav-link {
     color: black;
 }
 
-.custom-button.danger {
-    color: black;
-}
-.custom-button.warning {
-    color: black;
-}
-.controles{
-    align-items: center;
-    margin: 5px;
-    height: 10px;
-    width: 10px;
-}
-.controles-refresh{
-    font-size: 16px;
-}
-.botones{
-    margin: 15px;
-}
-.control-buttons{
-    margin-right: 100px;
-}
+
+
+
+
+
+
+
+
+
+
