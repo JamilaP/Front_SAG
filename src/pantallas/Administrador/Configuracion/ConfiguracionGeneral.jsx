@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button, Form} from "react-bootstrap";
 import "./ConfiguracionGeneral.css";
 import axios from 'axios';
 import {useFileContext} from '../../../Componentes/FileContext';
+import ModalResultado from "../../../Componentes/ModalResultado";
 
 const fileRoutes = {
     infraestructura: 'station/upload-file',
@@ -13,38 +14,50 @@ const fileRoutes = {
 
 function ConfiguracionGeneral() {
     const {selectedFiles, setFile} = useFileContext();
+    const [modal, setModal] = useState({ text: "", exito: true, open: false });
 
     const handleFileChange = (e, fieldName) => {
         const selectedFile = e.target.files[0];
         setFile(fieldName, selectedFile);
+
+        localStorage.setItem(`fileName_${fieldName}`, selectedFile.name);
     };
 
     const handleUpload = (fieldName) => {
         const file = selectedFiles[fieldName];
+
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
 
             const apiUrl = `http://localhost:8090/sag-genetico/api/${fileRoutes[fieldName]}`;
+            // Verificar si es para la ruta de mantenimiento
+            const method = fieldName === 'mantenimiento' ? 'put' : 'post';
 
-            axios.post(apiUrl, formData, {
+            axios[method](apiUrl, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
                 .then(response => {
+                    setModal(e => ({ ...e, text: "Se subio el archivo con exito", exito: true, open: true }));
                     console.log(`Archivo ${fieldName} subido con éxito`, response);
                 })
                 .catch(error => {
+                    setModal(e => ({ ...e, text: "No se pudo subir el archivo", exito: false, open: true }));
                     console.error(`Error al subir el archivo ${fieldName}`, error);
                 });
         } else {
+            setModal(e => ({ ...e, text: "No se ha seleccionado ningun archivo", exito: false, open: true }));
             console.error(`No se ha seleccionado ningún archivo para ${fieldName}`);
         }
+
     };
 
     return (
         <div className="configuracionGeneral">
+            <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
+                            closeModal={() => setModal(e => ({ ...e, open: false }))} />
 
             <h1 className="titulo">Configuración general</h1>
             <Form className="contenedor-registro-pedido">
@@ -56,7 +69,11 @@ function ConfiguracionGeneral() {
                             <Form.Control className="input" type="file"
                                           onChange={(e) => handleFileChange(e, fieldName)}/>
                             <span
-                                className="nombre-archivo">{selectedFiles[fieldName] ? selectedFiles[fieldName].name : 'Selecciona un archivo...'}</span>
+                                className="nombre-archivo">
+                               {selectedFiles[fieldName]
+                                   ? selectedFiles[fieldName].name
+                                   : localStorage.getItem(`fileName_${fieldName}`) || 'Selecciona un archivo...'}
+                            </span>
                         </Form.Group>
                         <Button className="boton-accion" onClick={() => handleUpload(fieldName)}>
                             Guardar
