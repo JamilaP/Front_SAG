@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Form } from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 import "./ConfiguracionGeneral.css";
 import axios from 'axios';
-import { useFileContext } from '../../../Componentes/FileContext';
+import {useFileContext} from '../../../Componentes/FileContext';
 
 const fileRoutes = {
     infraestructura: 'station/upload-file',
@@ -12,7 +12,7 @@ const fileRoutes = {
 };
 
 function ConfiguracionGeneral() {
-    const { selectedFiles, setFile } = useFileContext();
+    const {selectedFiles, setFile} = useFileContext();
 
     const handleFileChange = (e, fieldName) => {
         const selectedFile = e.target.files[0];
@@ -44,25 +44,27 @@ function ConfiguracionGeneral() {
     };
 
     return (
-        <div>
-            <h1 className="titulo-pagina">Configuración general</h1>
+        <div className="configuracionGeneral">
 
-            <div className="contenedor">
+            <h1 className="titulo">Configuración general</h1>
+            <Form className="contenedor-registro-pedido">
                 {Object.keys(selectedFiles).map(fieldName => (
-                    <div key={fieldName} className="grupo-label-control-general">
-                        <div className="label-inf">
-                            <Form.Label className="titulos-archivos">{fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}</Form.Label>
-                        </div>
-                        <div className="control">
-                            <Form.Control type="file" size="sm" onChange={(e) => handleFileChange(e, fieldName)} />
-                            <span>{selectedFiles[fieldName] ? selectedFiles[fieldName].name : 'Selecciona un archivo...'}</span>
-                        </div>
-                        <Button className="boton-guardar" variant="success" onClick={() => handleUpload(fieldName)}>
+                    <Form.Group key={fieldName} className="contendedor-texto-input">
+                        <Form.Label className="texto-input">Ingrese el archivo
+                            de {fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}:</Form.Label>
+                        <Form.Group className="input-nombreArchivo">
+                            <Form.Control className="input" type="file"
+                                          onChange={(e) => handleFileChange(e, fieldName)}/>
+                            <span
+                                className="nombre-archivo">{selectedFiles[fieldName] ? selectedFiles[fieldName].name : 'Selecciona un archivo...'}</span>
+                        </Form.Group>
+                        <Button className="boton-accion" onClick={() => handleUpload(fieldName)}>
                             Guardar
                         </Button>
-                    </div>
+                    </Form.Group>
                 ))}
-            </div>
+            </Form>
+
         </div>
     );
 }
