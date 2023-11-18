@@ -52,7 +52,7 @@ function App() {
                                   className={`pestana-link ${activeLink === 'pedidos' ? 'selected' : ''}`}
                                   onClick={() => handleLinkClick('pedidos')}
                         >Pedidos</Nav.Link>
-                        <Nav.Link as={Link} to="/administrador/infraestructura"
+                        <Nav.Link as={Link} to="/administrador/configuracion"
                                   className={`pestana-link ${activeLink === 'configuracion' ? 'selected' : ''}`}
                                   onClick={() => handleLinkClick('configuracion')}
                         >Configuración General</Nav.Link>
@@ -74,7 +74,7 @@ function App() {
                         <Route path="/" element={<Navigate to="/administrador/operaciones-diarias" />} />
                         <Route path="/administrador/operaciones-diarias" element={<OperacionesDiarioas/>}/>
                         <Route path="/administrador/simulacion" element={<Simulacion/>}/>
-                        <Route path="/administrador/infraestructura" element={<ConfiguracionGeneral/>}/>
+                        <Route path="/administrador/configuracion" element={<ConfiguracionGeneral/>}/>
                         <Route path="/administrador/pedidos" element={<Pedidos/>}/>
                     </Routes>
                 </FileProvider>

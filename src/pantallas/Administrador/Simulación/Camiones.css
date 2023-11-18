@@ -19,13 +19,12 @@
     margin-bottom: 5px;
 }
 .texto-busqueda{
-    width: 280px;
+    width: 200px;
 }
-.input-busqueda{
 
-}
 .mb-3{
     margin-top: 15px;
+    width: 250px;
 }
 /*tabla*/
 .tabla{

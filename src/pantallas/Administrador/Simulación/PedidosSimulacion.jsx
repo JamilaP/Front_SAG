@@ -2,8 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {Button, Dropdown, DropdownButton, FormControl, InputGroup, Table} from "react-bootstrap";
 import './PedidosSimulacion.css'
 import ModalPedidosCamiones from "../../../Componentes/ModalPedidosCamiones";
+
 function PedidosSimulacion(props) {
-    const { data } = props ; // Destructura la propiedad data
+    const {data} = props; // Destructura la propiedad data
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
     const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
@@ -16,7 +17,7 @@ function PedidosSimulacion(props) {
     if (!data || data.length === 0) {
         console.log('No hay datos para procesar en pedidos');
         nuevoArreglo = [];
-    }else{
+    } else {
         nuevoArreglo = data.map(pedido => {
             const fechaRegistro = new Date(pedido.order.registrationDateTime);
             let arrCamiones = [];
@@ -42,18 +43,18 @@ function PedidosSimulacion(props) {
                 idCliente: pedido.order.customerId,
                 cantidadGLP: pedido.order.requestedGLP,
                 horasLimite: pedido.order.deadlineHours,
-                ubicacion:`(${pedido.order.location.x},${pedido.order.location.y})`,
+                ubicacion: `(${pedido.order.location.x},${pedido.order.location.y})`,
                 arrCamiones: arrCamiones,
             };
         });
     }
 
     // Función para filtrar los pedidos según los filtros aplicados
-   const pedidosFiltrados = nuevoArreglo.filter(pedido => {
-       // Filtrar por texto
-       const coincideIDPedido = pedido.idPedido.toString().includes(filtroIDPedido);
+    const pedidosFiltrados = nuevoArreglo.filter(pedido => {
+        // Filtrar por texto
+        const coincideIDPedido = pedido.idPedido.toString().includes(filtroIDPedido);
         const coincideIDCliente = pedido.idCliente.toString().includes(filtroIDCliente);
-       // Filtrar por opción
+        // Filtrar por opción
         const coincideOpcion = (filtroOpcion === 'Todos' || pedido.estado === filtroOpcion);
 
         return coincideIDPedido && coincideIDCliente && coincideOpcion;
@@ -65,25 +66,25 @@ function PedidosSimulacion(props) {
             <div className="barra-busqueda">
 
                 <div className="grupo-texto-input">
-                <div className="texto-busqueda">Búsqueda por pedido:</div>
-                <InputGroup className="mb-3">
-                    <FormControl
-                        placeholder="Buscar por ID de pedido"
-                        value={filtroIDPedido}
-                        onChange={(e) => setFiltroIDPedido(e.target.value)}
-                    />
-                </InputGroup>
+                    <div className="texto-busqueda">Búsqueda por pedido:</div>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            placeholder="Buscar por ID de pedido"
+                            value={filtroIDPedido}
+                            onChange={(e) => setFiltroIDPedido(e.target.value)}
+                        />
+                    </InputGroup>
                 </div>
 
                 <div className="grupo-texto-input">
-                <div className="texto-busqueda">Búsqueda por cliente:</div>
-                <InputGroup className="mb-3">
-                    <FormControl
-                        placeholder="Buscar por ID de cliente"
-                        value={filtroIDCliente}
-                        onChange={(e) => setFiltroIDCliente(e.target.value)}
-                    />
-                </InputGroup>
+                    <div className="texto-busqueda">Búsqueda por cliente:</div>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            placeholder="Buscar por ID de cliente"
+                            value={filtroIDCliente}
+                            onChange={(e) => setFiltroIDCliente(e.target.value)}
+                        />
+                    </InputGroup>
                 </div>
 
             </div>
@@ -102,27 +103,31 @@ function PedidosSimulacion(props) {
                 </thead>
                 <tbody>
                 {pedidosFiltrados && pedidosFiltrados.length > 0 ? (
-                pedidosFiltrados.map((pedido,index) => (
-                    <tr key={pedido.idPedido}>
-                        <td>{pedido.idPedido}</td>
-                        <td>{pedido.idCliente}</td>
-                        <td>{pedido.ubicacion}</td>
-                        <td>{pedido.fechaRegistro}</td>
-                        <td>{pedido.horasLimite}</td>
-                        <td>{pedido.cantidadGLP}</td>
-                        <td>
-                            <Button variant="primary" className="boton-ver" disabled={pedido.arrCamiones.length === 0}
-                                    onClick={() => {setMostrandoPedidoCamiones(pedido.arrCamiones);setIdPedido(pedido.idPedido)}}
-                            >Ver</Button>
-                            <ModalPedidosCamiones
-                                isOpen={mostrandoPedidoCamiones !== null}
-                                closeModal={() => setMostrandoPedidoCamiones(null)}
-                                id={idPedido}
-                                data={mostrandoPedidoCamiones}
-                            />
-                        </td>
-                    </tr>
-                ))
+                    pedidosFiltrados.map((pedido, index) => (
+                        <tr key={pedido.idPedido}>
+                            <td>{pedido.idPedido}</td>
+                            <td>{pedido.idCliente}</td>
+                            <td>{pedido.ubicacion}</td>
+                            <td>{pedido.fechaRegistro}</td>
+                            <td>{pedido.horasLimite}</td>
+                            <td>{pedido.cantidadGLP}</td>
+                            <td>
+                                <Button variant="primary" className="boton-ver"
+                                        disabled={pedido.arrCamiones.length === 0}
+                                        onClick={() => {
+                                            setMostrandoPedidoCamiones(pedido.arrCamiones);
+                                            setIdPedido(pedido.idPedido)
+                                        }}
+                                >Ver</Button>
+                                <ModalPedidosCamiones
+                                    isOpen={mostrandoPedidoCamiones !== null}
+                                    closeModal={() => setMostrandoPedidoCamiones(null)}
+                                    id={idPedido}
+                                    data={mostrandoPedidoCamiones}
+                                />
+                            </td>
+                        </tr>
+                    ))
                 ) : (
                     <tr>
                         <td colSpan="8">No hay pedidos.</td>
