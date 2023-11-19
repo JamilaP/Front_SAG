@@ -14,7 +14,7 @@ const fileRoutes = {
 
 function ConfiguracionGeneral() {
     const {selectedFiles, setFile} = useFileContext();
-    const [modal, setModal] = useState({ text: "", exito: true, open: false });
+    const [modal, setModal] = useState({text: "", exito: true, open: false});
 
     const handleFileChange = (e, fieldName) => {
         const selectedFile = e.target.files[0];
@@ -40,15 +40,15 @@ function ConfiguracionGeneral() {
                 },
             })
                 .then(response => {
-                    setModal(e => ({ ...e, text: "Se subio el archivo con exito", exito: true, open: true }));
+                    setModal(e => ({...e, text: "Se subio el archivo con exito", exito: true, open: true}));
                     console.log(`Archivo ${fieldName} subido con éxito`, response);
                 })
                 .catch(error => {
-                    setModal(e => ({ ...e, text: "No se pudo subir el archivo", exito: false, open: true }));
+                    setModal(e => ({...e, text: "No se pudo subir el archivo", exito: false, open: true}));
                     console.error(`Error al subir el archivo ${fieldName}`, error);
                 });
         } else {
-            setModal(e => ({ ...e, text: "No se ha seleccionado ningun archivo", exito: false, open: true }));
+            setModal(e => ({...e, text: "No se ha seleccionado ningun archivo", exito: false, open: true}));
             console.error(`No se ha seleccionado ningún archivo para ${fieldName}`);
         }
 
@@ -57,7 +57,7 @@ function ConfiguracionGeneral() {
     return (
         <div className="configuracionGeneral">
             <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
-                            closeModal={() => setModal(e => ({ ...e, open: false }))} />
+                            closeModal={() => setModal(e => ({...e, open: false}))}/>
 
             <h1 className="titulo">Configuración general</h1>
             <Form className="contenedor-registro-pedido">
@@ -80,6 +80,23 @@ function ConfiguracionGeneral() {
                         </Button>
                     </Form.Group>
                 ))}
+            </Form>
+
+            <h1 className="titulo">Proyección de pedidos</h1>
+            <Form className="contenedor-registro-pedido">
+                <Form.Group className="contendedor-texto-input">
+                    <Form.Label className="texto-input">Ingrese el archivo de pedidos</Form.Label>
+                    <Form.Group className="input-nombreArchivo">
+                        <Form.Control className="input" type="file"/>
+                        <span
+                            className="nombre-archivo">
+                               archivo
+                            </span>
+                    </Form.Group>
+                    <Button className="boton-accion" >
+                        Guardar
+                    </Button>
+                </Form.Group>
             </Form>
 
         </div>

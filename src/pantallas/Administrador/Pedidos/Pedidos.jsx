@@ -64,8 +64,8 @@ function Pedidos() {
                     <Form.Control className="input" type="text" placeholder="Ingrese la cantidad de GLP"/>
                 </Form.Group>
                 <Form.Group className="contendedor-texto-input">
-                    <Form.Label className="texto-input">Fecha y Hora de Entrega Solicitada:</Form.Label>
-                    <Form.Control className="input" type="datetime-local"/>
+                    <Form.Label className="texto-input">Plazo limite de entrega en horas:</Form.Label>
+                    <Form.Control className="input" type="number" placeholder="Ingrese la cantidad de horas limte de entrega"/>
                     <Button className="boton-accion">
                         Registrar
                     </Button>
