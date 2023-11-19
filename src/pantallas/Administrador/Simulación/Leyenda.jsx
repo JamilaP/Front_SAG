@@ -25,7 +25,7 @@ function Leyenda(props) {
     return (
         <div className="leyenda">
 
-            {props.pestaña === 'simulacion' && (
+            {props.pestana === 'simulacion' && (
                 <>
                     <Form className="grupo-text-fecha">
                         <Form.Group className="fecha-contenedor">

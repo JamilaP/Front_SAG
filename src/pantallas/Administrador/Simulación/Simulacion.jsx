@@ -10,7 +10,7 @@ import {FaPlay, FaPause} from 'react-icons/fa';
 import {HiRefresh} from 'react-icons/hi';
 import {FiRefreshCcw} from 'react-icons/fi';
 import MapaSimu from './MapaSimu';
-import { Client } from '@stomp/stompjs';
+import {Client} from '@stomp/stompjs';
 import ModalResultado from '../../../Componentes/ModalResultado';
 import {BiSolidCalendarCheck, BiSolidTruck} from "react-icons/bi";
 import {AiFillClockCircle} from "react-icons/ai";
@@ -25,8 +25,8 @@ function Simulacion() {
     const [dataSocket, setDataSocket] = useState([]);
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
-    const [modal, setModal] = useState({ text: "", exito: true, open: false });
-    const [duracionEscena, setDuracionEscena] = useState(250);
+    const [modal, setModal] = useState({text: "", exito: true, open: false});
+    const [duracionEscena, setDuracionEscena] = useState(150);
     const [pausar, setPausar] = useState(false);
     const [activeButtonControles, setActiveButtonControles] = useState(null);
     const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
@@ -69,17 +69,17 @@ function Simulacion() {
         } catch (error) {
             console.log('No se pudo conectar', error);
         }
-        
+
         conexion.onConnect = onConnectSocket;
         conexion.onWebSocketClose = onWebSocketClose;
         conexion.activate();
     };
     const enviarMensaje = () => {
         // conectarWS();
-         console.log("parametros",startDate,filePedidos,activeButtonColapsoSemanal);
+        console.log("parametros", startDate, filePedidos, activeButtonColapsoSemanal);
         if (conexion && startDate && activeButtonColapsoSemanal) {
             console.log('CUMPLE CON TODO');
-            if(conexion.connected ){
+            if (conexion.connected) {
                 conexion.publish({
                     destination: '/app/weekly-simulation',
                     headers: {
@@ -90,15 +90,30 @@ function Simulacion() {
             console.log('Mensaje enviado');
         } else {
             console.log("No se pudo enviar el mensaje");
-            if(!startDate) setModal(e => ({ ...e, text: "Debe ingresar una fecha ", exito: false, open: true }));
-            if(!activeButtonColapsoSemanal) setModal(e => ({ ...e, text: "Debe seleccionar un tipo de visualización", exito: false, open: true }));
-            if(!conexion) setModal(e => ({ ...e, text: "Recuerde seleccionar el tipo de visualización", exito: false, open: true }));
+            if (!startDate) setModal(e => ({...e, text: "Debe ingresar una fecha ", exito: false, open: true}));
+            if (!activeButtonColapsoSemanal) setModal(e => ({
+                ...e,
+                text: "Debe seleccionar un tipo de visualización",
+                exito: false,
+                open: true
+            }));
+            if (!conexion) setModal(e => ({
+                ...e,
+                text: "Recuerde seleccionar el tipo de visualización",
+                exito: false,
+                open: true
+            }));
         }
     };
     const moverEscena = () => {
-        if(!pausar){
-            if( indexData < dataSocket.length){
-                if(indexData === 0 ){
+        if (!pausar) {
+            if (indexData < dataSocket.length) {
+                setTimeout(() => {
+                    setDataSocket((prevArreglo) => prevArreglo.slice(1));
+                    console.log("Escena removida después de esperar", indexData);
+                }, duracionEscena);
+
+                /*if(indexData === 0 ){
                     console.log("Esperando inicialmente al back...");
                     setTimeout(() => {
                         console.log("Escena movida después de esperar", indexData);
@@ -107,17 +122,17 @@ function Simulacion() {
                 setTimeout(() => {
                     setIndexData(indexData + 1);
                     console.log("Escena movida después de esperar", indexData);
-                }, duracionEscena);
+                }, duracionEscena);*/
                 //setRenderizarSeccionPosterior(true);
                 // Esperar 1000 milisegundos (1 segundo) antes de actualizar el estado
-            }else console.log("Se alcanzo el limite");
+            } else console.log("Se alcanzo el limite");
         }
     }
     const pausarEscena = () => {
         setPausar(true);
     }
     const seguirEscena = () => {
-        if(dataSocket.length == 0 ) enviarMensaje();
+        if (dataSocket.length == 0) enviarMensaje();
         setPausar(false);
     }
 
@@ -137,12 +152,13 @@ function Simulacion() {
     return (
         <div className="Simulacion">
             <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
-                            closeModal={() => setModal(e => ({ ...e, open: false }))} />
+                            closeModal={() => setModal(e => ({...e, open: false}))}/>
 
             <div className="contenedor-mapa-informacion">
                 <div className="contenedor-reporte">
                     <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
-                        <div className="texto">Fecha de simulación: 10/01/2023 03:04:12</div>
+                        <div className="texto">Fecha de
+                            simulación: {dataSocket[indexData]?.currentDateTime ?? new Date().toLocaleString()}</div>
                     </div>
                     <div className="grupo-icono-texto"><AiFillClockCircle className="icono"></AiFillClockCircle>
                         <div className="texto">Días transcurridos: 003</div>
@@ -156,17 +172,17 @@ function Simulacion() {
                 </div>
                 <div className="contenedor-mapa">
                     {/*<h6> { indexData == 0 ? ( 'Esperando al back...'): ( 'Segundo: ' + indexData ) } </h6>*/}
-                    <>{ console.log('Datos de escena: ', indexData ,' ', dataSocket[indexData])}</>
+                    <>{console.log('Datos de escena: ', indexData, ' ', dataSocket[indexData])}</>
                     {
                         dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
-                            <MapaSimu dataMapa = { dataSocket[indexData].trucks }
-                                      index = {indexData}
-                                      setIndex = {moverEscena}
-                                      dataBloqueos = {dataSocket[indexData].lockdowns}
-                                      duracion = {duracionEscena}
-                                      pausarR = {pausar}
-                                      pedidos = {dataSocket[indexData].orders}/>
-                        ):(
+                            <MapaSimu dataMapa={dataSocket[indexData].trucks}
+                                      index={indexData}
+                                      setIndex={moverEscena}
+                                      dataBloqueos={dataSocket[indexData].lockdowns}
+                                      duracion={duracionEscena}
+                                      pausarR={pausar}
+                                      pedidos={dataSocket[indexData].orders}/>
+                        ) : (
                             <MapaSimu/>
                         )
                     }
@@ -176,18 +192,22 @@ function Simulacion() {
 
             <div className="contenedor-informacion">
                 <div className="contenedor-leyenda">
-                    <Leyenda pestaña={'simulacion'} conectarWS={conectarWS} seguirEscena={seguirEscena} pausarEscena={pausarEscena}
+                    <Leyenda pestana={'simulacion'} conectarWS={conectarWS} seguirEscena={seguirEscena}
+                             pausarEscena={pausarEscena}
                              conexion={conexion} setStartDate={setStartDate} startDate={startDate}
-                             setActiveButtonColapsoSemanal={setActiveButtonColapsoSemanal} activeButtonColapsoSemanal={activeButtonColapsoSemanal}
-                             setActiveButtonControles={setActiveButtonControles} activeButtonControles={activeButtonControles}/>
+                             setActiveButtonColapsoSemanal={setActiveButtonColapsoSemanal}
+                             activeButtonColapsoSemanal={activeButtonColapsoSemanal}
+                             setActiveButtonControles={setActiveButtonControles}
+                             activeButtonControles={activeButtonControles}/>
                 </div>
+
                 <div className="tabla-container">
                     <Container className="table-responsive">
                         <Tabs id="miPestanas" className="cuadro-pestanas" activeKey={key} onSelect={(k) => setKey(k)}>
                             <Tab eventKey="pestana2" title="Camiones">
                                 {dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
                                     <Camiones data={dataSocket[indexData].trucks}/>
-                                ):(
+                                ) : (
                                     <Camiones data={null}/>
                                 )
                                 }
@@ -195,7 +215,7 @@ function Simulacion() {
                             <Tab eventKey="pestana3" title="Pedidos">
                                 {dataSocket && dataSocket[indexData] && dataSocket[indexData].orders ? (
                                     <PedidosSimulacion data={dataSocket[indexData].orders}/>
-                                ):(
+                                ) : (
                                     <PedidosSimulacion data={null}/>
                                 )}
                             </Tab>
@@ -204,7 +224,7 @@ function Simulacion() {
                 </div>
             </div>
 
-            </div>
+        </div>
     );
 }
 
