@@ -30,7 +30,7 @@ function ConfiguracionGeneral() {
             const formData = new FormData();
             formData.append('file', file);
 
-            const apiUrl = `http://localhost:8090/sag-genetico/api/${fileRoutes[fieldName]}`;
+            const apiUrl = `http://200.16.7.184:8090/sag-genetico/api/${fileRoutes[fieldName]}`;
             // Verificar si es para la ruta de mantenimiento
             const method = fieldName === 'mantenimiento' ? 'put' : 'post';
 

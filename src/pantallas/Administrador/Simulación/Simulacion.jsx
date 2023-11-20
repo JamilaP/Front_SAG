@@ -63,7 +63,7 @@ function Simulacion() {
         console.log('Connecting to WebSocket...');
         try {
             conexion.configure({
-                webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
+                webSocketFactory: () => new WebSocket('ws://200.16.7.184:8090/sag-genetico/api/ws-endpoint')
             });
             console.log('Conectado');
         } catch (error) {
