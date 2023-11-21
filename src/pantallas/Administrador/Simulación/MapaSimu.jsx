@@ -55,13 +55,15 @@ const MapaSimu = (props) => {
 
   useEffect(() => {
 
-    if(props.dataMapa && props.dataMapa.length > 0 && !props.pausar){
-      props.setIndex();
+    if(props.dataMapa && !props.pausarR ){
+      props.setIndex(false);
       console.log('Escena movida siguiente');
     }
-    else console.log('No se puede mover');
+    else {
+      console.log('No se puede mover');
+    }
 
-  }, [props.dataMapa]);
+  }, [props.dataMapa, props.pausarR]);
 
   return (
       <svg

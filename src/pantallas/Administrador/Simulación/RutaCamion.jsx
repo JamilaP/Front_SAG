@@ -1,7 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import anime from "animejs";
+import ModalCamion from "../../../Componentes/ModalCamion";
 
 function RutaCamion(props) {
+  const [showModal, setShowModal] = useState(false);
+  const handleShow = () => setShowModal(true);
+
+  let inicioRutaModal =  [[props.inicio.x, props.inicio.y]];
+  let rutaConvertidaModal =  props.rutaCamion.map(({ x, y }) => [x,y]);
+  let rutaTotalModal = inicioRutaModal.concat(rutaConvertidaModal);
+
   let nodoPedido =[props.ped.x *props.tamanioCelda + props.tamanioCelda/2,(50 - props.ped.y)*props.tamanioCelda + props.tamanioCelda/2];
   // [props.rutaCamion[ props.rutaCamion.length - 1 ].x *14 + 7, (50 - props.rutaCamion[props.rutaCamion.length - 1 ].y *14 + 7)]
   let inicioRuta = [[props.inicio.x*props.tamanioCelda + props.tamanioCelda/2 , (50 - props.inicio.y) *props.tamanioCelda + props.tamanioCelda/2]];
@@ -56,40 +64,55 @@ function RutaCamion(props) {
 
 
   useEffect(() => {
-    if (props.pausar){
-      var animacion = anime({
-        targets: camion,
-        translateX: inicioRuta[0][0] ,
-        translateY: inicioRuta[0][1] ,
-        rotate: 0 ,
-        duration: 10, // Animation duration in milliseconds
-        easing: "linear", // Easing function for smooth animation
-        autoplay: true
-      });
-      console.log('Pausa');
-    }else{
-      var animacion = anime({
-        targets: camion,
-        translateX: camino ? (path('x')) : (0) ,
-        translateY: camino ? (path('y')) : (0) ,
-        rotate: camino ? (path('angle')) : (0) ,
-        duration: props.duracionE*0.90, // Animation duration in milliseconds
-        easing: "linear", // Easing function for smooth animation
-        autoplay: false
-      });
+    var animacion = anime({
+      targets: camion,
+      translateX: camino ? (path('x')) : (0) ,
+      translateY: camino ? (path('y')) : (0) ,
+      rotate: camino ? (path('angle')) : (0) ,
+      duration: props.duracionE*0.90, // Animation duration in milliseconds
+      easing: "linear", // Easing function for smooth animation
+      autoplay: false
+    });
+
+    if (!props.pausar){
       animacion.play();
     }
+
+    // if (props.pausar){
+    //   var animacion = anime({
+    //     targets: camion,
+    //     translateX: inicioRuta[0][0] ,
+    //     translateY: inicioRuta[0][1] ,
+    //     rotate: 0 ,
+    //     duration: 10, // Animation duration in milliseconds
+    //     easing: "linear", // Easing function for smooth animation
+    //     autoplay: true
+    //   });
+    //   console.log('Pausa');
+    // }else{
+    //   var animacion = anime({
+    //     targets: camion,
+    //     translateX: camino ? (path('x')) : (0) ,
+    //     translateY: camino ? (path('y')) : (0) ,
+    //     rotate: camino ? (path('angle')) : (0) ,
+    //     duration: props.duracionE*0.90, // Animation duration in milliseconds
+    //     easing: "linear", // Easing function for smooth animation
+    //     autoplay: false
+    //   });
+    //   animacion.play();
+    // }
 
     return () => {
 
     };
-  }, [rutaAnimacion, props.pausar]);
+  }, [rutaAnimacion]);
 
   return (
       <svg>
         <path ref={caminoRef} d={pathAnimacion} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
         <path d={pathData} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
-        <polygon ref={camionRef} points={flechaStr} fill="#000000" />
+        <polygon onClick={handleShow} ref={camionRef} points={flechaStr} fill="#000000" />
+        <ModalCamion showM={showModal} setShowM = {setShowModal} idCamion = {props.idCamion} ruta={rutaTotalModal}/>
         {console.log( 'Ruta: ', pathData)}
       </svg>
 
