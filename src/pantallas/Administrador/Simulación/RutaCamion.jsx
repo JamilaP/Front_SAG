@@ -69,7 +69,7 @@ function RutaCamion(props) {
       translateX: camino ? (path('x')) : (0) ,
       translateY: camino ? (path('y')) : (0) ,
       rotate: camino ? (path('angle')) : (0) ,
-      duration: props.duracionE*0.90, // Animation duration in milliseconds
+      duration: props.duracionE*0.99, // Animation duration in milliseconds
       easing: "linear", // Easing function for smooth animation
       autoplay: false
     });
