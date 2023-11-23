@@ -14,6 +14,8 @@ import {Client} from '@stomp/stompjs';
 
 function App() {
 
+    let conexion = null;
+
     // const [conexion, setConexion] = useState(null);
     const [dataSocket, setDataSocket] = useState([]);
     const [modal, setModal] = useState({text: "", exito: true, open: false});
@@ -88,7 +90,7 @@ function App() {
         }
     };
 
-    let conexion = conectarWS(); //Conexion websocket
+//    let conexion = conectarWS(); //Conexion websocket
 
     // useEffect(() => {
     //     console.log('Conexion: ', conexion);

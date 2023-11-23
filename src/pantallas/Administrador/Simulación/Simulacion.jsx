@@ -17,7 +17,7 @@ import {AiFillClockCircle} from "react-icons/ai";
 import {PiNotebookFill} from "react-icons/pi";
 import CamionesOD from "../OperacionesDiarias/CamionesOD";
 import PedidosOD from "../OperacionesDiarias/PedidosOD";
-import { TbNotebookOff } from "react-icons/tb";
+import {TbNotebookOff} from "react-icons/tb";
 
 function Simulacion() {
 
@@ -65,25 +65,24 @@ function Simulacion() {
     const onWebSocketClose = () => {
         console.log('WebSocket connection close');
         if (conexion !== null) {
-            conexion.deactivate();
-        }
-    };
-    const conectarWS = () => {
-        // Cerrar la conexión WebSocket existente
-        console.log("estado de la conexcion al inicio de conectarWS",conexion);//null
-        if (conexion !== null) {
-            conexion.deactivate();
+            //conexion.deactivate();
+            conexion.activate();
         }
 
+    };
+    const conectarWS = () => {
         if (activeButtonColapsoSemanal) {
-            conexion = new Client();
+            const stompConfig = {
+                reconnectDelay: 200,
+            };
+            conexion = new Client(stompConfig);
             console.log('Connecting to WebSocket...');
             try {
                 conexion.configure({
                     webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
                 });
                 console.log('Conectado');
-                console.log("estado de la conexion despues de el URL conexion",conexion);
+                console.log("estado de la conexion despues de el URL conexion", conexion);
             } catch (error) {
                 console.log('No se pudo conectar', error);
             }
@@ -128,11 +127,13 @@ function Simulacion() {
     const moverEscena = (pausarArg) => {
         if (!pausarArg) {
             if (indexData < dataSocket.length) {
-                setTimeout(() => {
+                setDataSocket((prevArreglo) => prevArreglo.slice(1));
+
+                /*setTimeout(() => {
                     setDataSocket((prevArreglo) => prevArreglo.slice(1));
                     console.log("Escena removida después de esperar", indexData);
                 }, duracionEscena);
-
+*/
                 /*if(indexData === 0 ){
                     console.log("Esperando inicialmente al back...");
                     setTimeout(() => {
@@ -145,118 +146,126 @@ function Simulacion() {
                 }, duracionEscena);*/
                 //setRenderizarSeccionPosterior(true);
                 // Esperar 1000 milisegundos (1 segundo) antes de actualizar el estado
-            } else console.log("Se alcanzo el limite");
+            } else {
+                console.log("Se alcanzo el limite");
+            }
         }
     }
-    const pausarEscena = () => {
-        setPausar(true);
+
+
+const pausarEscena = () => {
+    setPausar(true);
+}
+const seguirEscena = () => {
+    if (dataSocket.length == 0) {
+        enviarMensaje();
     }
-    const seguirEscena = () => {
-        if (dataSocket.length == 0){
-            enviarMensaje();
-        }
-        setPausar(false);
+    setPausar(false);
+}
+
+// conectar WS con el boton de colapso/semanal
+useEffect(() => {
+    if (activeButtonColapsoSemanal === 'Semana') {
+        conectarWS();
     }
+    if (conexion) {
+        console.log('Se ha conectado');
+        console.log(conexion);
+    } else {
+        console.log('Fallo effect');
+    }
+}, [activeButtonColapsoSemanal]);
 
-    // conectar WS con el boton de colapso/semanal
-    useEffect(() => {
-        if (activeButtonColapsoSemanal==='Semana') {
-            conectarWS();
-        }
-        if (conexion) {
-            console.log('Se ha conectado');
-            console.log(conexion);
-        } else {
-            console.log('Fallo effect');
-        }
-    }, [activeButtonColapsoSemanal]);
+useEffect(() => {
+    console.log("conexion estado", conexion)
+}, [conexion]);
 
-    useEffect(() => {
-        console.log("conexion estado",conexion)
-    }, [conexion]);
+useEffect(() => {
+    setStartDate(localStorage.getItem('startDate'));
+}, []);
 
-    useEffect(() => {
-        setStartDate(localStorage.getItem('startDate'));
-    }, []);
+return (
+    <div className="Simulacion">
+        <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
+                        closeModal={() => setModal(e => ({...e, open: false}))}/>
 
-    return (
-        <div className="Simulacion" >
-            <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
-                            closeModal={() => setModal(e => ({...e, open: false}))}/>
-
-            <div className="contenedor-mapa-informacion">
-                <div className="contenedor-reporte">
-                    <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
-                        <div className="texto">Fecha de simulación: {formatearFecha(dataSocket[indexData]?.currentDateTime)}</div>
-                    </div>
-                    <div className="grupo-icono-texto"><BiSolidTruck className="icono"></BiSolidTruck>
-                        <div className="texto">Porcentaje de flota ocupada: {dataSocket[indexData]?.occupiedTrucksPercentage != null
+        <div className="contenedor-mapa-informacion">
+            <div className="contenedor-reporte">
+                <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
+                    <div className="texto">Fecha de
+                        simulación: {formatearFecha(dataSocket[indexData]?.currentDateTime)}</div>
+                </div>
+                <div className="grupo-icono-texto"><BiSolidTruck className="icono"></BiSolidTruck>
+                    <div className="texto">Porcentaje de flota
+                        ocupada: {dataSocket[indexData]?.occupiedTrucksPercentage != null
                             ? `${(dataSocket[indexData]?.occupiedTrucksPercentage * 100).toFixed(2)}%`
                             : "0%"}</div>
-                    </div>
-                    <div className="grupo-icono-texto"><PiNotebookFill className="icono"></PiNotebookFill>
-                        <div className="texto">Pedidos atendidos: {dataSocket[indexData]?.fulfilledOrdersNumber ?? "00"}</div>
-                    </div>
-                    <div className="grupo-icono-texto"><TbNotebookOff className="icono"></TbNotebookOff>
-                        <div className="texto">Pedidos pendientes en el día: {dataSocket[indexData]?.pendingOrdersOnTheDay ?? "00"}</div>
-                    </div>
                 </div>
-                <div className="contenedor-mapa">
-                    {/*<h6> { indexData == 0 ? ( 'Esperando al back...'): ( 'Segundo: ' + indexData ) } </h6>*/}
-                    <>{console.log('Datos de escena: ', indexData, ' ', dataSocket[indexData])}</>
-                    {
-                        dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
-                            <MapaSimu dataMapa={dataSocket[indexData].trucks}
-                                      index={indexData}
-                                      setIndex={moverEscena}
-                                      dataBloqueos={dataSocket[indexData].lockdowns}
-                                      duracion={duracionEscena}
-                                      pausarR={pausar}
-                                      pedidos={dataSocket[indexData].orders}/>
-                        ) : (
-                            <MapaSimu/>
-                        )
-                    }
+                <div className="grupo-icono-texto"><PiNotebookFill className="icono"></PiNotebookFill>
+                    <div className="texto">Pedidos
+                        atendidos: {dataSocket[indexData]?.fulfilledOrdersNumber ?? "00"}</div>
+                </div>
+                <div className="grupo-icono-texto"><TbNotebookOff className="icono"></TbNotebookOff>
+                    <div className="texto">Pedidos pendientes en el
+                        día: {dataSocket[indexData]?.pendingOrdersOnTheDay ?? "00"}</div>
                 </div>
             </div>
-
-
-            <div className="contenedor-informacion">
-                <div className="contenedor-leyenda">
-                    <Leyenda pestana={'simulacion'} conectarWS={conectarWS} seguirEscena={seguirEscena}
-                             pausarEscena={pausarEscena}
-                             conexion={conexion} setStartDate={setStartDate} startDate={startDate}
-                             setActiveButtonColapsoSemanal={setActiveButtonColapsoSemanal}
-                             activeButtonColapsoSemanal={activeButtonColapsoSemanal}
-                             setActiveButtonControles={setActiveButtonControles}
-                             activeButtonControles={activeButtonControles} setDataSocket={setDataSocket}/>
-                </div>
-
-                <div className="tabla-container">
-                    <Container className="table-responsive">
-                        <Tabs id="miPestanas" className="cuadro-pestanas" activeKey={key} onSelect={(k) => setKey(k)}>
-                            <Tab eventKey="pestana2" title="Camiones">
-                                {dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
-                                    <Camiones data={dataSocket[indexData].trucks}/>
-                                ) : (
-                                    <Camiones data={null}/>
-                                )
-                                }
-                            </Tab>
-                            <Tab eventKey="pestana3" title="Pedidos">
-                                {dataSocket && dataSocket[indexData] && dataSocket[indexData].orders ? (
-                                    <PedidosSimulacion data={dataSocket[indexData].orders}/>
-                                ) : (
-                                    <PedidosSimulacion data={null}/>
-                                )}
-                            </Tab>
-                        </Tabs>
-                    </Container>
-                </div>
+            <div className="contenedor-mapa">
+                {/*<h6> { indexData == 0 ? ( 'Esperando al back...'): ( 'Segundo: ' + indexData ) } </h6>*/}
+                <>{console.log('Datos de escena: ', indexData, ' ', dataSocket[indexData])}</>
+                {
+                    dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
+                        <MapaSimu dataMapa={dataSocket[indexData].trucks}
+                                  index={indexData}
+                                  setIndex={moverEscena}
+                                  dataBloqueos={dataSocket[indexData].lockdowns}
+                                  duracion={duracionEscena}
+                                  pausarR={pausar}
+                                  pedidos={dataSocket[indexData].orders}/>
+                    ) : (
+                        <MapaSimu/>
+                    )
+                }
             </div>
-
         </div>
-    );
+
+
+        <div className="contenedor-informacion">
+            <div className="contenedor-leyenda">
+                <Leyenda pestana={'simulacion'} conectarWS={conectarWS} seguirEscena={seguirEscena}
+                         pausarEscena={pausarEscena}
+                         conexion={conexion} setStartDate={setStartDate} startDate={startDate}
+                         setActiveButtonColapsoSemanal={setActiveButtonColapsoSemanal}
+                         activeButtonColapsoSemanal={activeButtonColapsoSemanal}
+                         setActiveButtonControles={setActiveButtonControles}
+                         activeButtonControles={activeButtonControles} setDataSocket={setDataSocket}/>
+            </div>
+
+            <div className="tabla-container">
+                <Container className="table-responsive">
+                    <Tabs id="miPestanas" className="cuadro-pestanas" activeKey={key} onSelect={(k) => setKey(k)}>
+                        <Tab eventKey="pestana2" title="Camiones">
+                            {dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
+                                <Camiones data={dataSocket[indexData].trucks}/>
+                            ) : (
+                                <Camiones data={null}/>
+                            )
+                            }
+                        </Tab>
+                        <Tab eventKey="pestana3" title="Pedidos">
+                            {dataSocket && dataSocket[indexData] && dataSocket[indexData].orders ? (
+                                <PedidosSimulacion data={dataSocket[indexData].orders}/>
+                            ) : (
+                                <PedidosSimulacion data={null}/>
+                            )}
+                        </Tab>
+                    </Tabs>
+                </Container>
+            </div>
+        </div>
+
+    </div>
+);
 }
 
 export default Simulacion;
