@@ -10,14 +10,90 @@ import OperacionesDiarioas from './pantallas/Administrador/OperacionesDiarias/Op
 import Pedidos from './pantallas/Administrador/Pedidos/Pedidos'
 import Simulacion from './pantallas/Administrador/Simulación/Simulacion'
 import {FileProvider} from './Componentes/FileContext';
+import {Client} from '@stomp/stompjs';
 
 function App() {
-    const [activeLink, setActiveLink] = useState('operaciones');
+
+    // const [conexion, setConexion] = useState(null);
+    const [dataSocket, setDataSocket] = useState([]);
+    const [modal, setModal] = useState({text: "", exito: true, open: false});
+
+    const [activeLink, setActiveLink] = useState("operaciones");
 
     const handleLinkClick = (id) => {
         setActiveLink(id);
         localStorage.setItem('activeTab', id);
     };
+
+    const onConnectSocket = (conexion) => {
+        conexion.subscribe('/topic/simulation-progress', (mensaje) => {
+            console.log('Data conseguida');
+            const data = JSON.parse(mensaje.body);
+            // Renderizacion
+            setDataSocket(prevDataSocket => [...prevDataSocket, data]);
+        });
+        conexion.onStompError = (frame) => {
+            console.log('Stomp Error : ', frame);
+        };
+    };
+
+    const onWebSocketClose = (conexion) => {
+        console.log('WebSocket connection close');
+        if (conexion !== null) {
+            conexion.deactivate();
+        }
+    };
+
+    const conectarWS = () => {
+        let conexion = null;
+        conexion = new Client();
+        console.log('Connecting to WebSocket...');
+        try {
+            conexion.configure({
+                webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
+            });
+            console.log('Conectado');
+        } catch (error) {
+            console.log('No se pudo conectar', error);
+        }
+
+        conexion.onConnect = onConnectSocket;
+        conexion.onWebSocketClose = onWebSocketClose;
+        conexion.activate();
+        return conexion;
+    };
+
+    const enviarMensaje = (conexion, startDate) => {
+        // conectarWS();
+        if (conexion && startDate) {
+            console.log('CUMPLE CON TODO');
+            if (conexion.connected) {
+                conexion.publish({
+                    destination: '/app/topic/daily-progress',
+                    headers: {
+                        'start_date': startDate,
+                    }
+                });
+            }
+            console.log('Mensaje enviado');
+        } else {
+            console.log("No se pudo enviar el mensaje");
+            if (!startDate) setModal(e => ({...e, text: "Debe ingresar una fecha ", exito: false, open: true}));
+            if (!conexion) setModal(e => ({
+                ...e,
+                text: "Recuerde seleccionar el tipo de visualización",
+                exito: false,
+                open: true
+            }));
+        }
+    };
+
+    let conexion = conectarWS(); //Conexion websocket
+
+    // useEffect(() => {
+    //     console.log('Conexion: ', conexion);
+    //     enviarMensaje(conexion, new Date());
+    // }, []);
 
     useEffect(() => {
         const storedTab = localStorage.getItem('activeTab');
@@ -32,8 +108,8 @@ function App() {
             <Navbar expand="lg" className="barra-navegacion">
 
                 <Navbar.Brand href="#home" className="logotipo">
-                        <Image src={logonav} className="imagen-logo"/>
-                        <span className="texto-logo">SAG</span>
+                    <Image src={logonav} className="imagen-logo"/>
+                    <span className="texto-logo">SAG</span>
                 </Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" className="menu-desplegable"/>
@@ -75,7 +151,7 @@ function App() {
                         <Route path="/administrador/operaciones-diarias" element={<OperacionesDiarioas/>}/>
                         <Route path="/administrador/simulacion" element={<Simulacion/>}/>
                         <Route path="/administrador/configuracion" element={<ConfiguracionGeneral/>}/>
-                        <Route path="/administrador/pedidos" element={<Pedidos/>}/>
+                        <Route path="/administrador/pedidos" element={<Pedidos conexion={conexion} enviarMensaje={enviarMensaje}/> }/>
                     </Routes>
                 </FileProvider>
             </div>
