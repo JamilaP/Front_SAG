@@ -15,6 +15,7 @@ const fileRoutes = {
 function ConfiguracionGeneral() {
     const {selectedFiles, setFile} = useFileContext();
     const [modal, setModal] = useState({text: "", exito: true, open: false});
+    const [file, setFileOrder] = useState(null);
 
     const handleFileChange = (e, fieldName) => {
         const selectedFile = e.target.files[0];
@@ -54,6 +55,32 @@ function ConfiguracionGeneral() {
 
     };
 
+    const handleUploadOrder = () => {
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            axios.post('http://localhost:8090/sag-genetico/api/order/upload-file', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(response => {
+                    // Manejar la respuesta del servidor si es necesario
+                    console.log('Archivo subido con éxito', response);
+
+                })
+                .catch(error => {
+                    // Manejar errores si la carga falla
+                    console.error('Error al subir el archivo', error);
+                });
+        } else {
+            // Manejar el caso en el que no se haya seleccionado ningún archivo
+            console.error('No se ha seleccionado ningún archivo');
+            setModal(e => ({ ...e, text: "Debe subir un archivo", exito: false, open: true }));
+        }
+    };
+
     return (
         <div className="configuracionGeneral">
             <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
@@ -90,10 +117,10 @@ function ConfiguracionGeneral() {
                         <Form.Control className="input" type="file"/>
                         <span
                             className="nombre-archivo">
-                               archivo
+                               nombreArchivo
                             </span>
                     </Form.Group>
-                    <Button className="boton-accion" >
+                    <Button className="boton-accion" onClick={handleUploadOrder}>
                         Guardar
                     </Button>
                 </Form.Group>

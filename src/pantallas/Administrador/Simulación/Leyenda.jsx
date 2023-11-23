@@ -10,15 +10,36 @@ import {FaPause, FaPlay} from "react-icons/fa";
 import {HiRefresh} from "react-icons/hi";
 
 function Leyenda(props) {
+    const [storedStartDate, setStoredStartDate] = useState(() => {
+        // Obtener la fecha almacenada en localStorage o usar el valor inicial
+        return localStorage.getItem('startDate') || props.startDate;
+    });
+
+    useEffect(() => {
+        // Actualizar el valor en localStorage cada vez que cambie la fecha
+        localStorage.setItem('startDate', storedStartDate);
+    }, [storedStartDate]);
+
     const handleButtonClickControles = (buttonName) => {
         setTimeout(() => {
             console.log("Espera 2 segundos");
         }, 2000);
         props.setActiveButtonControles(buttonName);
+        if(buttonName==='Refresh'){
+            //props.setActiveButtonColapsoSemanal(null);
+            //props.setActiveButtonControles(null);
+            //props.setDataSocket([]);
+            //props.conexion=null; //puede ser esto
+            //props.conexion.unsubscribe('/topic/simulation-progress');
+
+            //setStoredStartDate(props.startDate);
+            window.location.reload();
+        }
     };
 
     const handleDateChange = (e) => {
         const newStartDate = e.target.value;
+        setStoredStartDate(newStartDate); // Actualizar el estado y almacenar en localStorage
         props.setStartDate(newStartDate);
     };
 
@@ -30,7 +51,7 @@ function Leyenda(props) {
                     <Form className="grupo-text-fecha">
                         <Form.Group className="fecha-contenedor">
                             <Form.Label className="texto-label">Fecha de inicio de la simulación:</Form.Label>
-                            <Form.Control className="fecha" type="date" value={props.startDate}
+                            <Form.Control className="fecha" type="date" value={storedStartDate}
                                           onChange={handleDateChange}/>
                         </Form.Group>
                     </Form>
@@ -71,7 +92,7 @@ function Leyenda(props) {
                             </Button>
                             <Button
                                 className={`boton ${props.activeButtonControles === 'refresh' ? 'active' : ''}`}
-                                onClick={() => handleButtonClickControles('1.5x')}>
+                                onClick={() => handleButtonClickControles('Refresh')}>
                                 <HiRefresh className="icono-boton"/>
                             </Button>
                         </ButtonGroup>

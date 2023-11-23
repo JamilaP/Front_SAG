@@ -17,6 +17,7 @@ import {AiFillClockCircle} from "react-icons/ai";
 import {PiNotebookFill} from "react-icons/pi";
 import CamionesOD from "../OperacionesDiarias/CamionesOD";
 import PedidosOD from "../OperacionesDiarias/PedidosOD";
+import { TbNotebookOff } from "react-icons/tb";
 
 function Simulacion() {
 
@@ -26,19 +27,28 @@ function Simulacion() {
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
     const [modal, setModal] = useState({text: "", exito: true, open: false});
-    const [duracionEscena, setDuracionEscena] = useState(100);
+    const [duracionEscena, setDuracionEscena] = useState(10);
     const [pausar, setPausar] = useState(false);
     const [activeButtonControles, setActiveButtonControles] = useState(null);
     const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
-    const [startDate, setStartDate] = useState("2023-03-13"); // Valor inicial
+    const [startDate, setStartDate] = useState(null); // Valor inicial
 
-    // Botones de controles
-    const handleButtonClickControles = (buttonName) => {
-        setTimeout(() => {
-            console.log("Espera 2 segundos");
-        }, 2000);
-        setActiveButtonControles(buttonName);
-    };
+
+    function formatearFecha(fecha) {
+        if (!fecha) {
+            return '0000-00-00, 00:00:00';
+        }
+
+        const fechaObj = new Date(fecha);
+        const dia = fechaObj.getDate().toString().padStart(2, '0');
+        const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
+        const anio = fechaObj.getFullYear();
+        const horas = fechaObj.getHours().toString().padStart(2, '0');
+        const minutos = fechaObj.getMinutes().toString().padStart(2, '0');
+        const segundos = fechaObj.getSeconds().toString().padStart(2, '0');
+
+        return `${dia}-${mes}-${anio}, ${horas}:${minutos}:${segundos}`;
+    }
 
     //WEBSOCKET
     const onConnectSocket = () => {
@@ -59,20 +69,29 @@ function Simulacion() {
         }
     };
     const conectarWS = () => {
-        conexion = new Client();
-        console.log('Connecting to WebSocket...');
-        try {
-            conexion.configure({
-                webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
-            });
-            console.log('Conectado');
-        } catch (error) {
-            console.log('No se pudo conectar', error);
+        // Cerrar la conexión WebSocket existente
+        console.log("estado de la conexcion al inicio de conectarWS",conexion);//null
+        if (conexion !== null) {
+            conexion.deactivate();
         }
 
-        conexion.onConnect = onConnectSocket;
-        conexion.onWebSocketClose = onWebSocketClose;
-        conexion.activate();
+        if (activeButtonColapsoSemanal) {
+            conexion = new Client();
+            console.log('Connecting to WebSocket...');
+            try {
+                conexion.configure({
+                    webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
+                });
+                console.log('Conectado');
+                console.log("estado de la conexion despues de el URL conexion",conexion);
+            } catch (error) {
+                console.log('No se pudo conectar', error);
+            }
+
+            conexion.onConnect = onConnectSocket;
+            conexion.onWebSocketClose = onWebSocketClose;
+            conexion.activate();
+        }
     };
     const enviarMensaje = () => {
         // conectarWS();
@@ -106,7 +125,7 @@ function Simulacion() {
         }
     };
 
-    const moverEscena = (pausarArg) => {        
+    const moverEscena = (pausarArg) => {
         if (!pausarArg) {
             if (indexData < dataSocket.length) {
                 setTimeout(() => {
@@ -133,13 +152,15 @@ function Simulacion() {
         setPausar(true);
     }
     const seguirEscena = () => {
-        if (dataSocket.length == 0) enviarMensaje();
+        if (dataSocket.length == 0){
+            enviarMensaje();
+        }
         setPausar(false);
     }
 
     // conectar WS con el boton de colapso/semanal
     useEffect(() => {
-        if (activeButtonColapsoSemanal) {
+        if (activeButtonColapsoSemanal==='Semana') {
             conectarWS();
         }
         if (conexion) {
@@ -150,25 +171,30 @@ function Simulacion() {
         }
     }, [activeButtonColapsoSemanal]);
 
+    useEffect(() => {
+        console.log("conexion estado",conexion)
+    }, [conexion]);
+
     return (
-        <div className="Simulacion">
+        <div className="Simulacion" >
             <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
                             closeModal={() => setModal(e => ({...e, open: false}))}/>
 
             <div className="contenedor-mapa-informacion">
                 <div className="contenedor-reporte">
                     <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
-                        <div className="texto">Fecha de
-                            simulación: {dataSocket[indexData]?.currentDateTime ?? new Date().toLocaleString()}</div>
-                    </div>
-                    <div className="grupo-icono-texto"><AiFillClockCircle className="icono"></AiFillClockCircle>
-                        <div className="texto">Días transcurridos: 003</div>
+                        <div className="texto">Fecha de simulación: {formatearFecha(dataSocket[indexData]?.currentDateTime)}</div>
                     </div>
                     <div className="grupo-icono-texto"><BiSolidTruck className="icono"></BiSolidTruck>
-                        <div className="texto">Porcentaje de flota ocupada: 30%</div>
+                        <div className="texto">Porcentaje de flota ocupada: {dataSocket[indexData]?.occupiedTrucksPercentage != null
+                            ? `${(dataSocket[indexData]?.occupiedTrucksPercentage * 100).toFixed(2)}%`
+                            : "0%"}</div>
                     </div>
                     <div className="grupo-icono-texto"><PiNotebookFill className="icono"></PiNotebookFill>
-                        <div className="texto">Pedidos atendidos: 1200</div>
+                        <div className="texto">Pedidos atendidos: {dataSocket[indexData]?.fulfilledOrdersNumber ?? "00"}</div>
+                    </div>
+                    <div className="grupo-icono-texto"><TbNotebookOff className="icono"></TbNotebookOff>
+                        <div className="texto">Pedidos pendientes en el día: {dataSocket[indexData]?.pendingOrdersOnTheDay ?? "00"}</div>
                     </div>
                 </div>
                 <div className="contenedor-mapa">
@@ -199,7 +225,7 @@ function Simulacion() {
                              setActiveButtonColapsoSemanal={setActiveButtonColapsoSemanal}
                              activeButtonColapsoSemanal={activeButtonColapsoSemanal}
                              setActiveButtonControles={setActiveButtonControles}
-                             activeButtonControles={activeButtonControles}/>
+                             activeButtonControles={activeButtonControles} setDataSocket={setDataSocket}/>
                 </div>
 
                 <div className="tabla-container">
