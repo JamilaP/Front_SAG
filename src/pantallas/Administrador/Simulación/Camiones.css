@@ -48,7 +48,9 @@
 .btn-primary:disabled {
     --bs-btn-disabled-bg: #175C75 !important;
 }
-
+.camion-en-mantenimiento {
+    color: red !important; /* o cualquier otro estilo que desees aplicar */
+}
 
 
 

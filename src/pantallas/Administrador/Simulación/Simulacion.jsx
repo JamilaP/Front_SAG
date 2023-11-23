@@ -27,7 +27,7 @@ function Simulacion() {
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
     const [modal, setModal] = useState({text: "", exito: true, open: false});
-    const [duracionEscena, setDuracionEscena] = useState(10);
+    const [duracionEscena, setDuracionEscena] = useState(1);
     const [pausar, setPausar] = useState(false);
     const [activeButtonControles, setActiveButtonControles] = useState(null);
     const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
@@ -174,6 +174,10 @@ function Simulacion() {
     useEffect(() => {
         console.log("conexion estado",conexion)
     }, [conexion]);
+
+    useEffect(() => {
+        setStartDate(localStorage.getItem('startDate'));
+    }, []);
 
     return (
         <div className="Simulacion" >

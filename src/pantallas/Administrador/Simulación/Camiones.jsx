@@ -94,7 +94,7 @@ function Camiones(props) {
                 <tbody data-bs-search-live="true">
                 {camionesFiltrados && camionesFiltrados.length > 0 ? (
                     camionesFiltrados.map((camion) => (
-                        <tr key={camion.id}>
+                        <tr key={camion.id} className={camion.estado === 'MANTENIMIENTO' ? 'camion-en-mantenimiento' : ''}>
                             <td>{camion.id}</td>
                             <td>{camion.cargaActual}/{camion.cargaMaxima}</td>
                             <td>{camion.consumoTotal}</td>

@@ -12,7 +12,7 @@ import Simulacion from './pantallas/Administrador/Simulación/Simulacion'
 import {FileProvider} from './Componentes/FileContext';
 
 function App() {
-    const [activeLink, setActiveLink] = useState("operaciones");
+    const [activeLink, setActiveLink] = useState('operaciones');
 
     const handleLinkClick = (id) => {
         setActiveLink(id);
