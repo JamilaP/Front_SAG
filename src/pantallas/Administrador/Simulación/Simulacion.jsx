@@ -24,6 +24,7 @@ function Simulacion() {
     let conexion = null; //Conexion websocket
     const [key, setKey] = useState('pestana2');
     const [dataSocket, setDataSocket] = useState([]);
+    const [dataAnt, setDataAnt] = useState([]);
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
     const [modal, setModal] = useState({text: "", exito: true, open: false});
@@ -127,6 +128,7 @@ function Simulacion() {
     const moverEscena = (pausarArg) => {
         if (!pausarArg) {
             if (indexData < dataSocket.length) {
+                setDataAnt(dataSocket[0]);
                 setDataSocket((prevArreglo) => prevArreglo.slice(1));
 
                 /*setTimeout(() => {
@@ -223,7 +225,14 @@ return (
                                   pausarR={pausar}
                                   pedidos={dataSocket[indexData].orders}/>
                     ) : (
-                        <MapaSimu/>
+                        <MapaSimu 
+                        dataMapa={dataAnt.trucks}
+                        index={indexData}
+                        setIndex={moverEscena}
+                        dataBloqueos={dataAnt.lockdowns}
+                        duracion={duracionEscena}
+                        pausarR={pausar}
+                        pedidos={dataAnt.orders}/>
                     )
                 }
             </div>
@@ -248,7 +257,7 @@ return (
                             {dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
                                 <Camiones data={dataSocket[indexData].trucks}/>
                             ) : (
-                                <Camiones data={null}/>
+                                <Camiones data={dataAnt.trucks}/>
                             )
                             }
                         </Tab>
@@ -256,7 +265,7 @@ return (
                             {dataSocket && dataSocket[indexData] && dataSocket[indexData].orders ? (
                                 <PedidosSimulacion data={dataSocket[indexData].orders}/>
                             ) : (
-                                <PedidosSimulacion data={null}/>
+                                <PedidosSimulacion data={dataAnt.orders}/>
                             )}
                         </Tab>
                     </Tabs>
