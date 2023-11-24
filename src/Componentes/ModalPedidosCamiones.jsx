@@ -63,7 +63,7 @@ const ModalPedidosCamiones = ({ isOpen = false, closeModal, id,data }) => {
                         {data.map((camion) => (
                             <tr key={camion.idCamion}>
                                 <td>{camion.idCamion}</td>
-                                <td>{camion.cantidadGLP}</td>
+                                <td>{camion.GLPentregar}</td>
                                 <td>{camion.estado}</td>
                             </tr>
                         ))}

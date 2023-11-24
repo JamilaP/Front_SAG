@@ -24,7 +24,7 @@ function PedidosSimulacion(props) {
             if (pedido.truckAssignments && pedido.truckAssignments.length > 0) {
                 arrCamiones = pedido.truckAssignments.map(camion => ({
                     idCamion: camion.truck.truckId,
-                    GLPentregar: camion.truck.allocatedAmount,//VERIFICAR
+                    GLPentregar: camion.allocatedAmount,//VERIFICAR
                     estado: camion.truck.isAttended ? "Atendido" : "En camino",//VERIFICAR
 
                 }));

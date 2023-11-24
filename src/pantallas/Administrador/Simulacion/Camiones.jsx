@@ -34,7 +34,7 @@ function Camiones(props) {
                             second: "2-digit"
                         }),
                         idCliente: pedido.order.customerId,
-                        GPLaEntregar: pedido.order.allocatedAmount,
+                        GPLaEntregar: pedido.allocatedAmount,
                         ubicacion: `(${pedido.order.location.x},${pedido.order.location.y})`,
                         GLPSolicitado: pedido.order.requestedGLP,
                     };
