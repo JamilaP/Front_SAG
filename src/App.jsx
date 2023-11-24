@@ -8,7 +8,7 @@ import {Navbar, Nav, Image} from 'react-bootstrap';
 import ConfiguracionGeneral from './pantallas/Administrador/Configuracion/ConfiguracionGeneral'
 import OperacionesDiarioas from './pantallas/Administrador/OperacionesDiarias/OperacionesDiarioas'
 import Pedidos from './pantallas/Administrador/Pedidos/Pedidos'
-import Simulacion from './pantallas/Administrador/Simulación/Simulacion'
+import Simulacion from './pantallas/Administrador/Simulacion/Simulacion'
 import {FileProvider} from './Componentes/FileContext';
 import {Client} from '@stomp/stompjs';
 

@@ -28,7 +28,7 @@ function Simulacion() {
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
     const [modal, setModal] = useState({text: "", exito: true, open: false});
-    const [duracionEscena, setDuracionEscena] = useState(1);
+    const [duracionEscena, setDuracionEscena] = useState(10);
     const [pausar, setPausar] = useState(false);
     const [activeButtonControles, setActiveButtonControles] = useState(null);
     const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
@@ -129,13 +129,12 @@ function Simulacion() {
         if (!pausarArg) {
             if (indexData < dataSocket.length) {
                 setDataAnt(dataSocket[0]);
-                setDataSocket((prevArreglo) => prevArreglo.slice(1));
+                // setDataSocket((prevArreglo) => prevArreglo.slice(1));
 
-                /*setTimeout(() => {
+                setTimeout(() => {
                     setDataSocket((prevArreglo) => prevArreglo.slice(1));
                     console.log("Escena removida después de esperar", indexData);
                 }, duracionEscena);
-*/
                 /*if(indexData === 0 ){
                     console.log("Esperando inicialmente al back...");
                     setTimeout(() => {
@@ -195,21 +194,21 @@ return (
             <div className="contenedor-reporte">
                 <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
                     <div className="texto">Fecha de
-                        simulación: {formatearFecha(dataSocket[indexData]?.currentDateTime)}</div>
+                        simulación: {formatearFecha(dataAnt?.currentDateTime)}</div>
                 </div>
                 <div className="grupo-icono-texto"><BiSolidTruck className="icono"></BiSolidTruck>
                     <div className="texto">Porcentaje de flota
-                        ocupada: {dataSocket[indexData]?.occupiedTrucksPercentage != null
-                            ? `${(dataSocket[indexData]?.occupiedTrucksPercentage * 100).toFixed(2)}%`
+                        ocupada: {dataAnt?.occupiedTrucksPercentage != null
+                            ? `${(dataAnt?.occupiedTrucksPercentage * 100).toFixed(2)}%`
                             : "0%"}</div>
                 </div>
                 <div className="grupo-icono-texto"><PiNotebookFill className="icono"></PiNotebookFill>
                     <div className="texto">Pedidos
-                        atendidos: {dataSocket[indexData]?.fulfilledOrdersNumber ?? "00"}</div>
+                        atendidos: {dataAnt?.fulfilledOrdersNumber ?? "00"}</div>
                 </div>
                 <div className="grupo-icono-texto"><TbNotebookOff className="icono"></TbNotebookOff>
                     <div className="texto">Pedidos pendientes en el
-                        día: {dataSocket[indexData]?.pendingOrdersOnTheDay ?? "00"}</div>
+                        día: {dataAnt?.pendingOrdersOnTheDay ?? "00"}</div>
                 </div>
             </div>
             <div className="contenedor-mapa">

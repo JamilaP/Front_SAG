@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {Container, Tab, Tabs} from 'react-bootstrap';
-import Leyenda from "../Simulación/Leyenda";
+import Leyenda from "../Simulacion/Leyenda";
 import CamionesOD from "./CamionesOD";
-import CargaDeDatos from "../Simulación/CargaDeDatos";
+import CargaDeDatos from "../Simulacion/CargaDeDatos";
 import PedidosOD from "./PedidosOD";
 import "./OperacionesDiarias.css";
-import MapaSimu from "../Simulación/MapaSimu";
+import MapaSimu from "../Simulacion/MapaSimu";
 import {BiSolidCalendarCheck, BiSolidTruck} from "react-icons/bi";
 import {AiFillClockCircle} from "react-icons/ai";
 import {PiNotebookFill} from "react-icons/pi";
