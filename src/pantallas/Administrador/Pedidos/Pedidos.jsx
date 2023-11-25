@@ -6,7 +6,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import MyOverlay from "../../../Componentes/MyOverlay";
 
-function Pedidos() {
+function Pedidos(props) {
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
     const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
@@ -128,7 +128,7 @@ function Pedidos() {
         setOrderIdCounter(orderIdCounter + 1)
 
         // Realiza la solicitud POST al backend
-        axios.post('URL_DEL_BACKEND', newPedidoCopy)
+        axios.post('http://localhost:8090/sag-genetico/api/daily-operations/order', newPedidoCopy)
             .then(response => {
                 console.log(response.data);  // Puedes manejar la respuesta del backend aquí
                 setModal((e) => ({
@@ -215,8 +215,13 @@ function Pedidos() {
     });
 
 
+    useEffect(() => {
+        if(props.conexion) console.log('Se mantiene la conexion: ');
+    }, []);
+
     return (
         <div className="registroPedidos">
+            {/* {console.log(props.conexion)} */}
             <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
                             closeModal={() => setModal(e => ({...e, open: false}))}/>
 

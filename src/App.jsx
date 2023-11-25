@@ -17,7 +17,7 @@ function App() {
     let conexion = null;
 
     // const [conexion, setConexion] = useState(null);
-    const [dataSocket, setDataSocket] = useState([]);
+    const [c, setDataSocket] = useState([]);
     const [modal, setModal] = useState({text: "", exito: true, open: false});
 
     const [activeLink, setActiveLink] = useState("operaciones");
@@ -39,7 +39,7 @@ function App() {
         };
     };
 
-    const onWebSocketClose = (conexion) => {
+    const onWebSocketClose = () => {
         console.log('WebSocket connection close');
         if (conexion !== null) {
             conexion.deactivate();
@@ -90,12 +90,11 @@ function App() {
         }
     };
 
-//    let conexion = conectarWS(); //Conexion websocket
+   conexion = conectarWS(); //Conexion websocket
 
-    // useEffect(() => {
-    //     console.log('Conexion: ', conexion);
-    //     enviarMensaje(conexion, new Date());
-    // }, []);
+    useEffect(() => {
+        console.log('Conexion: ', conexion);
+    }, []);
 
     useEffect(() => {
         const storedTab = localStorage.getItem('activeTab');
@@ -150,7 +149,7 @@ function App() {
                 <FileProvider>
                     <Routes>
                         <Route path="/" element={<Navigate to="/administrador/operaciones-diarias" />} />
-                        <Route path="/administrador/operaciones-diarias" element={<OperacionesDiarioas/>}/>
+                        <Route path="/administrador/operaciones-diarias" element={<OperacionesDiarioas conexion={conexion} />}/>
                         <Route path="/administrador/simulacion" element={<Simulacion/>}/>
                         <Route path="/administrador/configuracion" element={<ConfiguracionGeneral/>}/>
                         <Route path="/administrador/pedidos" element={<Pedidos conexion={conexion} enviarMensaje={enviarMensaje}/> }/>
