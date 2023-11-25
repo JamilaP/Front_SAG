@@ -29,6 +29,7 @@ function App() {
     const [modal, setModal] = useState({text: "", exito: true, open: false});
 
     const [activeLink, setActiveLink] = useState("operaciones");
+    const [seEnvioMensaje, setSeEnvioMensaje] = useState(false);
 
     const moverEscena = (pausarArg) => {
         if (!pausarArg) {
@@ -61,6 +62,10 @@ function App() {
     const handleLinkClick = (id) => {
         setActiveLink(id);
         localStorage.setItem('activeTab', id);
+        if(!seEnvioMensaje){
+            enviarMensaje();
+            setSeEnvioMensaje(true);
+        }
     };
 
     const onConnectSocket = () => {
@@ -137,7 +142,7 @@ function App() {
     useEffect(() => {
         console.log('Conexion: ', conexion);
         console.log('Fecha actual app: ', formatoHoraActual);
-        // enviarMensaje(conexion, formatoHoraActual);
+        enviarMensaje();
     }, []);
 
     useEffect(() => {
@@ -149,8 +154,8 @@ function App() {
 
     return (
         <div className="App">
-            <button onClick={enviarMensaje}>Probar</button>
-            
+            {/*<button onClick={enviarMensaje}>Probar</button>*/}
+
             <Navbar expand="lg" className="barra-navegacion">
 
                 <Navbar.Brand href="#home" className="logotipo">

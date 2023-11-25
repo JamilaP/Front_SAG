@@ -6,7 +6,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import MyOverlay from "../../../Componentes/MyOverlay";
 
-function Pedidos() {
+function Pedidos(props) {
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
     const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
@@ -50,6 +50,7 @@ function Pedidos() {
 
     //agregar pedido
     const agregarPedido = () => {
+        //props.enviarMensaje();
         //validaciones
         if (newPedido.coordenadaX == 0 || newPedido.coordenadaY == 0 || newPedido.GLPsolicitado == 0 || newPedido.limiteHoras == 0) {
             setModal((e) => ({
