@@ -6,7 +6,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import MyOverlay from "../../../Componentes/MyOverlay";
 
-function Pedidos(props) {
+function Pedidos() {
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
     const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
@@ -43,7 +43,7 @@ function Pedidos(props) {
      useEffect(() => {
         try {
             // Hacer la solicitud GET a una URL específica
-            const response = axios.get('http://localhost:8090/sag-genetico/api/order/');
+            const response = axios.get('http://localhost:8090/sag-genetico/api/daily-operations/orders');
             // Manejar la respuesta
             console.log('Datos recibidos:', response.data);
             setPedidos(response.data);
@@ -110,6 +110,10 @@ function Pedidos(props) {
         newPedidoCopy.deadlineHours = newPedido.limiteHoras;
         newPedidoCopy.registrationDateTime = new Date().toISOString().replace("T", " ");*/
 
+        const AuxX = String(newPedido.coordenadaX).padStart(2, '0');
+        const AuxY = String(newPedido.coordenadaY).padStart(2, '0');
+        const AuxNodeId = `${AuxX}${AuxY}`;
+
         const newPedidoCopy = {
             orderId: orderIdCounter, // Generado
             registrationDateTime: new Date().toISOString().split(":00.")[0], // Fecha actual con segundos en "00"
@@ -117,9 +121,9 @@ function Pedidos(props) {
             requestedGLP: newPedido.GLPsolicitado,
             deadlineHours: newPedido.limiteHoras,
             location: {
-                nodeId: `${newPedido.coordenadaX}${newPedido.coordenadaY}`,
-                x: newPedido.coordenadaX,
-                y: newPedido.coordenadaY,
+                nodeId: AuxNodeId,
+                x: AuxX,
+                y: AuxY,
                 fcost: 0
             }
         };
@@ -215,13 +219,8 @@ function Pedidos(props) {
     });
 
 
-    useEffect(() => {
-        if(props.conexion) console.log('Se mantiene la conexion: ');
-    }, []);
-
     return (
         <div className="registroPedidos">
-            {/* {console.log(props.conexion)} */}
             <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
                             closeModal={() => setModal(e => ({...e, open: false}))}/>
 
@@ -232,23 +231,27 @@ function Pedidos(props) {
                     <MyOverlay target={coordenadaRefX.current} show={tooltipX} placement="right" text="Ingrese un número entre 0 y 50."/>
                     <Form.Control ref={coordenadaRefX} className="input-small" type="number"
                                   placeholder="Ingrese la coordenada X" onMouseEnter={() => setTooltipX(true)}
-                                  onMouseLeave={() => setTooltipX(false)}/>
+                                  onMouseLeave={() => setTooltipX(false)}
+                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, coordenadaX: e.target.value }))}/>
                     <MyOverlay target={coordenadaRefY.current} show={tooltipY} placement="right" text="Ingrese un número entre 0 y 70."/>
                     <Form.Control ref={coordenadaRefY} className="input-small" type="number"
                                   placeholder="Ingrese la coordenada Y" onMouseEnter={() => setTooltipY(true)}
-                                  onMouseLeave={() => setTooltipY(false)}/>
+                                  onMouseLeave={() => setTooltipY(false)}
+                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, coordenadaY: e.target.value }))}/>
                 </Form.Group>
 
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">GLP Solicitado:</Form.Label>
-                    <Form.Control className="input" type="number" placeholder="Ingrese la cantidad de GLP" />
+                    <Form.Control className="input" type="number" placeholder="Ingrese la cantidad de GLP"
+                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, requestedGLP: e.target.value }))}/>
                 </Form.Group>
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">Plazo limite de entrega en horas:</Form.Label>
                     <MyOverlay target={coordenadaRefHL.current} show={tooltipHL} placement="right" text="El plazo mínimo es 4 horas"/>
                     <Form.Control ref={coordenadaRefHL} className="input" type="number"
                                   placeholder="Ingrese la cantidad de horas limte de entrega" onMouseEnter={() => setTooltipHL(true)}
-                                  onMouseLeave={() => setTooltipHL(false)}/>
+                                  onMouseLeave={() => setTooltipHL(false)}
+                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, limiteHoras: e.target.value }))}/>
                     <Button className="boton-accion" onClick={agregarPedido}>
                         Registrar
                     </Button>
@@ -322,16 +325,16 @@ function Pedidos(props) {
                     <tbody>
                     {pedidosFiltrados && pedidosFiltrados.length > 0 ? (
                         pedidosFiltrados.map((pedido) => (
-                        <tr key={pedido.idPedido}>
-                            <td>{pedido.idPedido}</td>
-                            <td>{pedido.idCliente}</td>
-                            <td>{pedido.ubicacion}</td>
-                            <td>{pedido.fechaHoraSolicitada}</td>
-                            <td>{pedido.plazoHoras}</td>
-                            <td>{pedido.cantidadGLPSolicitado}</td>
-                            <td>{pedido.estado}</td>
-                        </tr>
-                    ))
+                            <tr key={pedido.idPedido}>
+                                <td>{pedido.idPedido}</td>
+                                <td>{pedido.idCliente}</td>
+                                <td>{pedido.ubicacion}</td>
+                                <td>{pedido.fechaHoraSolicitada}</td>
+                                <td>{pedido.plazoHoras}</td>
+                                <td>{pedido.cantidadGLPSolicitado}</td>
+                                <td>{pedido.estado}</td>
+                            </tr>
+                        ))
                     ) : (
                         <tr>
                             <td colSpan="8">No hay pedidos.</td>
