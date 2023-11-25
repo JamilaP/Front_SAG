@@ -10,6 +10,8 @@ import {BiSolidCalendarCheck, BiSolidTruck} from "react-icons/bi";
 import {AiFillClockCircle} from "react-icons/ai";
 import {PiNotebookFill} from "react-icons/pi";
 import {TbNotebookOff} from "react-icons/tb";
+import Camiones from "../Simulacion/Camiones";
+import PedidosSimulacion from "../Simulacion/PedidosSimulacion";
 
 function OperacionesDiarioas(props) {
     const [key, setKey] = useState('pestana2');
@@ -58,8 +60,20 @@ function OperacionesDiarioas(props) {
                 <div className="tabla-container">
                     <Container className="table-responsive">
                         <Tabs id="miPestanas" className="cuadro-pestanas" activeKey={key} onSelect={(k) => setKey(k)}>
-                            <Tab eventKey="pestana2" title="Camiones"><CamionesOD/></Tab>
-                            <Tab eventKey="pestana3" title="Pedidos"><PedidosOD/></Tab>
+                            <Tab eventKey="pestana2" title="Camiones">
+                                {props.dataSocket && props.dataSocket[props.indexData] && props.dataSocket[props.indexData].trucks ? (
+                                    <Camiones data={props.dataSocket[props.indexData].trucks}/>
+                                ) : (
+                                    <Camiones data={props.dataAnt.trucks}/>
+                                )}
+                            </Tab>
+                            <Tab eventKey="pestana3" title="Pedidos">
+                                {props.dataSocket && props.dataSocket[props.indexData] && props.dataSocket[props.indexData].orders ? (
+                                    <PedidosSimulacion data={props.dataSocket[props.indexData].orders}/>
+                                ) : (
+                                    <PedidosSimulacion data={props.dataAnt.orders}/>
+                                )}
+                            </Tab>
                         </Tabs>
                     </Container>
                 </div>

@@ -11,6 +11,7 @@ import Pedidos from './pantallas/Administrador/Pedidos/Pedidos'
 import Simulacion from './pantallas/Administrador/Simulacion/Simulacion'
 import {FileProvider} from './Componentes/FileContext';
 import {Client} from '@stomp/stompjs';
+import ModalColapso from "./Componentes/ModalColapso";
 
 function App() {
 
@@ -149,7 +150,7 @@ function App() {
     return (
         <div className="App">
             <button onClick={enviarMensaje}>Probar</button>
-
+            
             <Navbar expand="lg" className="barra-navegacion">
 
                 <Navbar.Brand href="#home" className="logotipo">

@@ -22,31 +22,31 @@ function Pedidos() {
     const coordenadaRefY = useRef(null);
     const coordenadaRefGLP = useRef(null);
     const coordenadaRefHL = useRef(null);
-    const {fileSelect, setFileSelect} = useState(null);
+    const [fileSelect, setFileSelect] = useState(null);
     let formatoHoraActual;
 
     const [newPedido, setNewPedido] = useState({
-        GLPsolicitado: 0,
-        coordenadaX: 0,
-        coordenadaY: 0,
-        limiteHoras: 0,
+        GLPsolicitado: "",
+        coordenadaX: "",
+        coordenadaY: "",
+        limiteHoras: "",
     })
 
-    /*
+
     //obtener pedidos
-     useEffect(() => {
-        try {
-            // Hacer la solicitud GET a una URL específica
-            const response = axios.get('http://localhost:8090/sag-genetico/api/daily-operations/orders');
-            // Manejar la respuesta
-            console.log('Datos recibidos:', response.data);
-            setPedidos(response.data);
-        } catch (error) {
-            // Manejar los errores
-            console.error('Error al realizar la solicitud GET:', error);
-        }
-    }, [actualizarPedidos]); // Dependencia para el useEffect
-*/
+    useEffect(() => {
+        axios.get('http://localhost:8090/sag-genetico/api/daily-operations/orders')
+            .then(response => {
+                // Manejar la respuesta
+                console.log('Datos recibidos:', response.data);
+                setPedidos(response.data);
+            })
+            .catch(error => {
+                // Manejar los errores
+                console.error('Error al realizar la solicitud GET:', error);
+            });
+    }, [actualizarPedidos]);
+
 
     //agregar pedido
     const agregarPedido = () => {
@@ -110,12 +110,11 @@ function Pedidos() {
 
         const horaActual = new Date();
         formatoHoraActual = `${horaActual.getFullYear()}-${(horaActual.getMonth() + 1).toString().padStart(2, '0')}-${horaActual.getDate().toString().padStart(2, '0')}T${horaActual.getHours().toString().padStart(2, '0')}:${horaActual.getMinutes().toString().padStart(2, '0')}:00`;
-        console.log('Fecha ACTUAL: ', formatoHoraActual);
 
         const newPedidoCopy = {
-            orderId: orderIdCounter, // Generado
+            orderId: pedidos.length+1 || 1, // Generado
             registrationDateTime: formatoHoraActual, // Fecha actual con segundos en "00"
-            customerId: `c-${uuidv4()}`, // Generado
+            customerId: `c-${Math.floor(Math.random() * (999 - 10 + 1)) + 10}`, // Generado
             requestedGLP: newPedido.GLPsolicitado,
             deadlineHours: newPedido.limiteHoras,
             location: {
@@ -183,8 +182,7 @@ function Pedidos() {
             const formData = new FormData();
             formData.append('file', file);
 
-            const apiUrl = `http://localhost:8090/sag-genetico/api/order/upload-file`;
-
+            const apiUrl = `http://localhost:8090/sag-genetico/api/daily-operations/order/upload-file`;
             axios.post(apiUrl, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -210,8 +208,8 @@ function Pedidos() {
     // Función para filtrar los pedidos según los filtros aplicados
     const pedidosFiltrados = pedidos.filter(pedido => {
         // Filtrar por texto
-        const coincideIDPedido = pedido.idPedido.toString().includes(filtroIDPedido);
-        const coincideIDCliente = pedido.idCliente.toString().includes(filtroIDCliente);
+        const coincideIDPedido = pedido.order.orderId.toString().includes(filtroIDPedido);
+        const coincideIDCliente = pedido.order.customerId.toString().includes(filtroIDCliente);
         // Filtrar por opción
         const coincideOpcion = (filtroOpcion === 'Todos' || pedido.estado === filtroOpcion);
 
@@ -232,17 +230,20 @@ function Pedidos() {
                     <Form.Control ref={coordenadaRefX} className="input-small" type="number"
                                   placeholder="Ingrese la coordenada X" onMouseEnter={() => setTooltipX(true)}
                                   onMouseLeave={() => setTooltipX(false)}
+                                  value={newPedido.coordenadaX}
                                   onChange={(e) => setNewPedido((prev) => ({ ...prev, coordenadaX: e.target.value }))}/>
                     <MyOverlay target={coordenadaRefY.current} show={tooltipY} placement="right" text="Ingrese un número entre 0 y 70."/>
                     <Form.Control ref={coordenadaRefY} className="input-small" type="number"
                                   placeholder="Ingrese la coordenada Y" onMouseEnter={() => setTooltipY(true)}
                                   onMouseLeave={() => setTooltipY(false)}
+                                  value={newPedido.coordenadaY}
                                   onChange={(e) => setNewPedido((prev) => ({ ...prev, coordenadaY: e.target.value }))}/>
                 </Form.Group>
 
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">GLP Solicitado:</Form.Label>
                     <Form.Control className="input" type="number" placeholder="Ingrese la cantidad de GLP"
+                                  value={newPedido.GLPsolicitado}
                                   onChange={(e) => setNewPedido((prev) => ({ ...prev, GLPsolicitado: e.target.value }))}/>
                 </Form.Group>
                 <Form.Group className="contendedor-texto-input">
@@ -251,6 +252,7 @@ function Pedidos() {
                     <Form.Control ref={coordenadaRefHL} className="input" type="number"
                                   placeholder="Ingrese la cantidad de horas limte de entrega" onMouseEnter={() => setTooltipHL(true)}
                                   onMouseLeave={() => setTooltipHL(false)}
+                                  value={newPedido.limiteHoras}
                                   onChange={(e) => setNewPedido((prev) => ({ ...prev, limiteHoras: e.target.value }))}/>
                     <Button className="boton-accion" onClick={agregarPedido}>
                         Registrar
@@ -325,14 +327,14 @@ function Pedidos() {
                     <tbody>
                     {pedidosFiltrados && pedidosFiltrados.length > 0 ? (
                         pedidosFiltrados.map((pedido) => (
-                            <tr key={pedido.idPedido}>
-                                <td>{pedido.idPedido}</td>
-                                <td>{pedido.idCliente}</td>
-                                <td>{pedido.ubicacion}</td>
-                                <td>{pedido.fechaHoraSolicitada}</td>
-                                <td>{pedido.plazoHoras}</td>
-                                <td>{pedido.cantidadGLPSolicitado}</td>
-                                <td>{pedido.estado}</td>
+                            <tr key={pedido.order.orderId}>
+                                <td>{pedido.order.orderId}</td>
+                                <td>{pedido.order.customerId}</td>
+                                <td>{`(${pedido.order.location.x},${pedido.order.location.y})`}</td>
+                                <td>{pedido.order.registrationDateTime}</td>
+                                <td>{pedido.order.deadlineHours}</td>
+                                <td>{pedido.order.requestedGLP}</td>
+                                <td>{pedido.order.status}</td>
                             </tr>
                         ))
                     ) : (
