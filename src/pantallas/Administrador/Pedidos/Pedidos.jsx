@@ -23,19 +23,13 @@ function Pedidos() {
     const coordenadaRefGLP = useRef(null);
     const coordenadaRefHL = useRef(null);
     const {fileSelect, setFileSelect} = useState(null);
+    let formatoHoraActual;
 
     const [newPedido, setNewPedido] = useState({
-        orderId: "",
-        registrationDateTime: new Date().toISOString().split(":00.")[0], // Fecha actual con segundos en "00"
-        customerId: "",
-        requestedGLP: 0,
-        deadlineHours: 0,
-        location: {
-            nodeId: `00`,
-            x: 0,
-            y: 0,
-            fcost: 0
-        },
+        GLPsolicitado: 0,
+        coordenadaX: 0,
+        coordenadaY: 0,
+        limiteHoras: 0,
     })
 
     /*
@@ -114,9 +108,13 @@ function Pedidos() {
         const AuxY = String(newPedido.coordenadaY).padStart(2, '0');
         const AuxNodeId = `${AuxX}${AuxY}`;
 
+        const horaActual = new Date();
+        formatoHoraActual = `${horaActual.getFullYear()}-${(horaActual.getMonth() + 1).toString().padStart(2, '0')}-${horaActual.getDate().toString().padStart(2, '0')}T${horaActual.getHours().toString().padStart(2, '0')}:${horaActual.getMinutes().toString().padStart(2, '0')}:00`;
+        console.log('Fecha ACTUAL: ', formatoHoraActual);
+
         const newPedidoCopy = {
             orderId: orderIdCounter, // Generado
-            registrationDateTime: new Date().toISOString().split(":00.")[0], // Fecha actual con segundos en "00"
+            registrationDateTime: formatoHoraActual, // Fecha actual con segundos en "00"
             customerId: `c-${uuidv4()}`, // Generado
             requestedGLP: newPedido.GLPsolicitado,
             deadlineHours: newPedido.limiteHoras,
@@ -129,7 +127,7 @@ function Pedidos() {
         };
 
         // Incrementa el contador para la próxima vez
-        setOrderIdCounter(orderIdCounter + 1)
+        setOrderIdCounter(orderIdCounter + 1);
 
         // Realiza la solicitud POST al backend
         axios.post('http://localhost:8090/sag-genetico/api/daily-operations/order', newPedidoCopy)
@@ -147,9 +145,9 @@ function Pedidos() {
                 // Limpiar los campos del formulario
                 setNewPedido((e) => ({
                     ...e,
+                    GLPsolicitado: "",
                     coordenadaX: "",
                     coordenadaY: "",
-                    GLPsolicitado: "",
                     limiteHoras: "",
                 }));
             })
@@ -163,6 +161,8 @@ function Pedidos() {
                     open: true,
                 }));
             });
+
+
     };
 
     const handleFileChange = (event) => {
@@ -243,7 +243,7 @@ function Pedidos() {
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">GLP Solicitado:</Form.Label>
                     <Form.Control className="input" type="number" placeholder="Ingrese la cantidad de GLP"
-                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, requestedGLP: e.target.value }))}/>
+                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, GLPsolicitado: e.target.value }))}/>
                 </Form.Group>
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">Plazo limite de entrega en horas:</Form.Label>

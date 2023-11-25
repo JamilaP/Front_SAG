@@ -15,20 +15,55 @@ import {Client} from '@stomp/stompjs';
 function App() {
 
     let conexion = null;
+    const horaActual = new Date();
+    const formatoHoraActual = `${horaActual.getFullYear()}-${(horaActual.getMonth() + 1).toString().padStart(2, '0')}-${horaActual.getDate().toString().padStart(2, '0')}`;
 
     // const [conexion, setConexion] = useState(null);
-    const [c, setDataSocket] = useState([]);
+    const [dataSocket, setDataSocket] = useState([]);
+    const [duracionEscena, setDuracionEscena] = useState(7200);
+    const [indexData, setIndexData] = useState(0);
+    const [pausar, setPausar] = useState(false);
+    const [dataAnt, setDataAnt] = useState([]);
+
     const [modal, setModal] = useState({text: "", exito: true, open: false});
 
     const [activeLink, setActiveLink] = useState("operaciones");
+
+    const moverEscena = (pausarArg) => {
+        if (!pausarArg) {
+            if (indexData < dataSocket.length) {
+                setDataAnt(dataSocket[0]);
+                // setDataSocket((prevArreglo) => prevArreglo.slice(1));
+
+                setTimeout(() => {
+                    setDataSocket((prevArreglo) => prevArreglo.slice(1));
+                    console.log("Escena removida después de esperar", indexData);
+                }, duracionEscena);
+                /*if(indexData === 0 ){
+                    console.log("Esperando inicialmente al back...");
+                    setTimeout(() => {
+                        console.log("Escena movida después de esperar", indexData);
+                    }, 10000);
+                }
+                setTimeout(() => {
+                    setIndexData(indexData + 1);
+                    console.log("Escena movida después de esperar", indexData);
+                }, duracionEscena);*/
+                //setRenderizarSeccionPosterior(true);
+                // Esperar 1000 milisegundos (1 segundo) antes de actualizar el estado
+            } else {
+                console.log("Se alcanzo el limite");
+            }
+        }
+    }
 
     const handleLinkClick = (id) => {
         setActiveLink(id);
         localStorage.setItem('activeTab', id);
     };
 
-    const onConnectSocket = (conexion) => {
-        conexion.subscribe('/topic/simulation-progress', (mensaje) => {
+    const onConnectSocket = () => {
+        conexion.subscribe('/topic/daily-progress', (mensaje) => {
             console.log('Data conseguida');
             const data = JSON.parse(mensaje.body);
             // Renderizacion
@@ -42,7 +77,7 @@ function App() {
     const onWebSocketClose = () => {
         console.log('WebSocket connection close');
         if (conexion !== null) {
-            conexion.deactivate();
+            conexion.activate();
         }
     };
 
@@ -65,22 +100,28 @@ function App() {
         return conexion;
     };
 
-    const enviarMensaje = (conexion, startDate) => {
+    const enviarMensaje = () => {
         // conectarWS();
-        if (conexion && startDate) {
+        if (conexion && formatoHoraActual) {
             console.log('CUMPLE CON TODO');
             if (conexion.connected) {
-                conexion.publish({
-                    destination: '/app/topic/daily-progress',
-                    headers: {
-                        'start_date': startDate,
-                    }
-                });
+                try {
+                    conexion.publish({
+                        destination: '/app/daily-operations',
+                        headers: {
+                            'start_date': formatoHoraActual,
+                        },
+                        body: 'hola'
+                    });                    
+                } catch (error) {
+                    console.log('No se envio el mensaje')
+                }
+                
             }
             console.log('Mensaje enviado');
         } else {
             console.log("No se pudo enviar el mensaje");
-            if (!startDate) setModal(e => ({...e, text: "Debe ingresar una fecha ", exito: false, open: true}));
+            if (!formatoHoraActual) setModal(e => ({...e, text: "Debe ingresar una fecha ", exito: false, open: true}));
             if (!conexion) setModal(e => ({
                 ...e,
                 text: "Recuerde seleccionar el tipo de visualización",
@@ -94,6 +135,8 @@ function App() {
 
     useEffect(() => {
         console.log('Conexion: ', conexion);
+        console.log('Fecha actual app: ', formatoHoraActual);
+        // enviarMensaje(conexion, formatoHoraActual);
     }, []);
 
     useEffect(() => {
@@ -105,6 +148,7 @@ function App() {
 
     return (
         <div className="App">
+            <button onClick={enviarMensaje}>Probar</button>
 
             <Navbar expand="lg" className="barra-navegacion">
 
@@ -149,7 +193,15 @@ function App() {
                 <FileProvider>
                     <Routes>
                         <Route path="/" element={<Navigate to="/administrador/operaciones-diarias" />} />
-                        <Route path="/administrador/operaciones-diarias" element={<OperacionesDiarioas conexion={conexion} />}/>
+                        <Route path="/administrador/operaciones-diarias" 
+                        element={<OperacionesDiarioas 
+                        conexion={conexion} 
+                        dataSocket={dataSocket}
+                        indexData={indexData}
+                        moverEscena={moverEscena}
+                        duracionEscena={duracionEscena}
+                        pausar={pausar}
+                        dataAnt={dataAnt}/>}/>
                         <Route path="/administrador/simulacion" element={<Simulacion/>}/>
                         <Route path="/administrador/configuracion" element={<ConfiguracionGeneral/>}/>
                         <Route path="/administrador/pedidos" element={<Pedidos conexion={conexion} enviarMensaje={enviarMensaje}/> }/>

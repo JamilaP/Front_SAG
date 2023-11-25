@@ -73,10 +73,8 @@ function RutaCamion(props) {
       easing: "linear", // Easing function for smooth animation
       autoplay: false
     });
-
-    if (!props.pausar){
-      animacion.play();
-    }
+    animacion.play();
+      
 
     // if (props.pausar){
     //   var animacion = anime({

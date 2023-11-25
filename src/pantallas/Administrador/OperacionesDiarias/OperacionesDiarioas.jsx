@@ -11,7 +11,7 @@ import {AiFillClockCircle} from "react-icons/ai";
 import {PiNotebookFill} from "react-icons/pi";
 import {TbNotebookOff} from "react-icons/tb";
 
-function OperacionesDiarioas() {
+function OperacionesDiarioas(props) {
     const [key, setKey] = useState('pestana2');
 
     return (
@@ -29,7 +29,26 @@ function OperacionesDiarioas() {
                         </div>
                 </div>
                 <div className="contenedor-mapa">
-                    <MapaSimu/>
+                {
+                    props.dataSocket && props.dataSocket[props.indexData] && props.dataSocket[props.indexData].trucks ? (
+                        <MapaSimu dataMapa={props.dataSocket[props.indexData].trucks}
+                                  index={props.indexData}
+                                  setIndex={props.moverEscena}
+                                  dataBloqueos={props.dataSocket[props.indexData].lockdowns}
+                                  duracion={props.duracionEscena}
+                                  pausarR={props.pausar}
+                                  pedidos={props.dataSocket[props.indexData].orders}/>
+                    ) : (
+                        <MapaSimu 
+                        dataMapa={props.dataAnt.trucks}
+                        index={props.indexData}
+                        setIndex={props.moverEscena}
+                        dataBloqueos={props.dataAnt.lockdowns}
+                        duracion={props.duracionEscena}
+                        pausarR={props.pausar}
+                        pedidos={props.dataAnt.orders}/>
+                    )
+                }
                 </div>
             </div>
             <div className="contenedor-informacion">
