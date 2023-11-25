@@ -27,8 +27,13 @@
     margin-left: 35px;
     margin-top: 5px;
 }
+.input-small{
+    width: 220px;
+    font-size: 15px;
+    margin-right: 10px;
+}
 .input{
-    width: 400px;
+    width: 450px;
     font-size: 15px;
 }
 .boton-accion,

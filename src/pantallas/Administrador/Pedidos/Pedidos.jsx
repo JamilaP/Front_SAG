@@ -1,42 +1,207 @@
-import React, {useState} from 'react';
-import {Form, Button, Dropdown,DropdownButton, Table, InputGroup, FormControl} from 'react-bootstrap';
+import React, {useState,useEffect,useRef} from 'react';
+import {Form, Button, Dropdown,DropdownButton, Table, InputGroup, FormControl,Overlay,Tooltip} from 'react-bootstrap';
 import "./Pedidos.css";
-
-const generarFechaAleatoria = () => {
-    const fecha = new Date();
-    fecha.setDate(fecha.getDate() + Math.floor(Math.random() * 10));
-    fecha.setHours(Math.floor(Math.random() * 24));
-    fecha.setMinutes(Math.floor(Math.random() * 60));
-    return fecha.toISOString().replace("T", " ");
-};
-
-const generarPedidosAleatorios = (cantidad) => {
-    const pedidosGenerados = [];
-
-    for (let i = 1; i <= cantidad; i++) {
-        const nuevoPedido = {
-            idPedido: i,
-            idCliente: 100 + i,
-            ubicacion: `Lugar ${i}`,
-            fechaHoraSolicitada: generarFechaAleatoria(),
-            plazoHoras: Math.floor(Math.random() * 48) + 1,
-            cantidadGLPSolicitado: Math.floor(Math.random() * 15) + 1,
-            estado: i % 2 === 0 ? "En camino" : "Atendido",
-        };
-
-        pedidosGenerados.push(nuevoPedido);
-    }
-
-    return pedidosGenerados;
-};
-
-const pedidos = generarPedidosAleatorios(3);
-
+import ModalResultado from '../../../Componentes/ModalResultado';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+import MyOverlay from "../../../Componentes/MyOverlay";
 
 function Pedidos() {
     const [filtroIDPedido, setFiltroIDPedido] = useState(''); // Estado para el filtro de ID de pedido
     const [filtroIDCliente, setFiltroIDCliente] = useState(''); // Estado para el filtro de ID de cliente
     const [filtroOpcion, setFiltroOpcion] = useState('Todos'); // Estado para el filtro del menú desplegable
+    const [modal, setModal] = useState({text: "", exito: true, open: false});
+    const [pedidos, setPedidos] = useState([]);
+    const [orderIdCounter, setOrderIdCounter] = useState(1);
+    const [actualizarPedidos, setActualizarPedidos] = useState(false);
+    const [tooltipX, setTooltipX] = useState(false);
+    const [tooltipY, setTooltipY] = useState(false);
+    const [tooltipGLP, setTooltipGLP] = useState(false);
+    const [tooltipHL, setTooltipHL] = useState(false);
+    const coordenadaRefX = useRef(null);
+    const coordenadaRefY = useRef(null);
+    const coordenadaRefGLP = useRef(null);
+    const coordenadaRefHL = useRef(null);
+    const {fileSelect, setFileSelect} = useState(null);
+
+    const [newPedido, setNewPedido] = useState({
+        orderId: "",
+        registrationDateTime: new Date().toISOString().split(":00.")[0], // Fecha actual con segundos en "00"
+        customerId: "",
+        requestedGLP: 0,
+        deadlineHours: 0,
+        location: {
+            nodeId: `00`,
+            x: 0,
+            y: 0,
+            fcost: 0
+        },
+    })
+
+    /*
+    //obtener pedidos
+     useEffect(() => {
+        try {
+            // Hacer la solicitud GET a una URL específica
+            const response = axios.get('http://localhost:8090/sag-genetico/api/order/');
+            // Manejar la respuesta
+            console.log('Datos recibidos:', response.data);
+            setPedidos(response.data);
+        } catch (error) {
+            // Manejar los errores
+            console.error('Error al realizar la solicitud GET:', error);
+        }
+    }, [actualizarPedidos]); // Dependencia para el useEffect
+*/
+
+    //agregar pedido
+    const agregarPedido = () => {
+        //validaciones
+        if (newPedido.coordenadaX == 0 || newPedido.coordenadaY == 0 || newPedido.GLPsolicitado == 0 || newPedido.limiteHoras == 0) {
+            setModal((e) => ({
+                ...e,
+                text: "Debe llenar todos los campos",
+                exito: false,
+                open: true,
+            }));
+            return;
+        }
+        if (newPedido.coordenadaX < 0 && newPedido.coordenadaX > 51) {
+            setModal((e) => ({
+                ...e,
+                text: "Debe ingresar una coordenada del 1 al 50",
+                exito: false,
+                open: true,
+            }));
+            return;
+        }
+        if (newPedido.coordenadaY < 0 || newPedido.coordenadaY > 71) {
+            setModal((e) => ({
+                ...e,
+                text: "Debe ingresar una coordenada del 1 al 70",
+                exito: false,
+                open: true,
+            }));
+            return;
+        }
+        if (newPedido.GLPsolicitado <= 0) {
+            setModal((e) => ({
+                ...e,
+                text: "Debe ingresar una cantidad positiva de GLP",
+                exito: false,
+                open: true,
+            }));
+            return;
+        }
+        if (newPedido.limiteHoras < 4) {
+            setModal((e) => ({
+                ...e,
+                text: "Debe ingresar un valor mayor a 4 horas",
+                exito: false,
+                open: true,
+            }));
+            return;
+        }
+
+        //para enbiar al back
+        /*let newPedidoCopy = {...newPedido};
+        newPedidoCopy.location.x = newPedido.coordenadaX;
+        newPedidoCopy.requestedGLP = newPedido.coordenadaY;
+        newPedidoCopy.deadlineHours = newPedido.limiteHoras;
+        newPedidoCopy.registrationDateTime = new Date().toISOString().replace("T", " ");*/
+
+        const newPedidoCopy = {
+            orderId: orderIdCounter, // Generado
+            registrationDateTime: new Date().toISOString().split(":00.")[0], // Fecha actual con segundos en "00"
+            customerId: `c-${uuidv4()}`, // Generado
+            requestedGLP: newPedido.GLPsolicitado,
+            deadlineHours: newPedido.limiteHoras,
+            location: {
+                nodeId: `${newPedido.coordenadaX}${newPedido.coordenadaY}`,
+                x: newPedido.coordenadaX,
+                y: newPedido.coordenadaY,
+                fcost: 0
+            }
+        };
+
+        // Incrementa el contador para la próxima vez
+        setOrderIdCounter(orderIdCounter + 1)
+
+        // Realiza la solicitud POST al backend
+        axios.post('URL_DEL_BACKEND', newPedidoCopy)
+            .then(response => {
+                console.log(response.data);  // Puedes manejar la respuesta del backend aquí
+                setModal((e) => ({
+                    ...e,
+                    text: "Se registro el pedido con exito",
+                    exito: true,
+                    open: true,
+                }));
+                // Cambia el estado para activar el useEffect
+                setActualizarPedidos(prev => !prev);
+
+                // Limpiar los campos del formulario
+                setNewPedido((e) => ({
+                    ...e,
+                    coordenadaX: "",
+                    coordenadaY: "",
+                    GLPsolicitado: "",
+                    limiteHoras: "",
+                }));
+            })
+            .catch(error => {
+                console.error('Error al enviar el pedido:', error);
+                // Puedes manejar el error de alguna manera
+                setModal((e) => ({
+                    ...e,
+                    text: "Ocurrio un error, no se pudo registrar el pedido",
+                    exito: false,
+                    open: true,
+                }));
+            });
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            localStorage.setItem('fileName_pedidos', file.name);
+            setFileSelect(file.name);
+        } else {
+            localStorage.removeItem('fileName_pedidos');
+            setFileSelect('Selecciona un archivo...');
+        }
+    };
+    const handleUpload = () => {
+        const file = fileSelect;
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const apiUrl = `http://localhost:8090/sag-genetico/api/order/upload-file`;
+
+            axios.post(apiUrl, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+                .then(response => {
+                    setModal(e => ({...e, text: "Se subio el archivo con exito", exito: true, open: true}));
+                    // Cambia el estado para activar el useEffect
+                    setActualizarPedidos(prev => !prev);
+                    console.log(`Archivo de pedidos se subido con éxito`, response);
+                })
+                .catch(error => {
+                    setModal(e => ({...e, text: "No se pudo subir el archivo", exito: false, open: true}));
+                    console.error(`Error al subir el archivo pedidos`, error);
+                });
+        } else {
+            setModal(e => ({...e, text: "No se ha seleccionado ningun archivo", exito: false, open: true}));
+            console.error(`No se ha seleccionado ningún archivo `);
+        }
+
+    };
 
     // Función para filtrar los pedidos según los filtros aplicados
     const pedidosFiltrados = pedidos.filter(pedido => {
@@ -52,21 +217,34 @@ function Pedidos() {
 
     return (
         <div className="registroPedidos">
+            <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
+                            closeModal={() => setModal(e => ({...e, open: false}))}/>
 
             <h1 className="titulo">Registrar Pedido</h1>
             <Form className="contenedor-registro-pedido">
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">Coordenada del Pedido:</Form.Label>
-                    <Form.Control className="input" type="text" placeholder="Ingrese la coordenada (X;Y)"/>
+                    <MyOverlay target={coordenadaRefX.current} show={tooltipX} placement="right" text="Ingrese un número entre 0 y 50."/>
+                    <Form.Control ref={coordenadaRefX} className="input-small" type="number"
+                                  placeholder="Ingrese la coordenada X" onMouseEnter={() => setTooltipX(true)}
+                                  onMouseLeave={() => setTooltipX(false)}/>
+                    <MyOverlay target={coordenadaRefY.current} show={tooltipY} placement="right" text="Ingrese un número entre 0 y 70."/>
+                    <Form.Control ref={coordenadaRefY} className="input-small" type="number"
+                                  placeholder="Ingrese la coordenada Y" onMouseEnter={() => setTooltipY(true)}
+                                  onMouseLeave={() => setTooltipY(false)}/>
                 </Form.Group>
+
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">GLP Solicitado:</Form.Label>
-                    <Form.Control className="input" type="text" placeholder="Ingrese la cantidad de GLP"/>
+                    <Form.Control className="input" type="number" placeholder="Ingrese la cantidad de GLP" />
                 </Form.Group>
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">Plazo limite de entrega en horas:</Form.Label>
-                    <Form.Control className="input" type="number" placeholder="Ingrese la cantidad de horas limte de entrega"/>
-                    <Button className="boton-accion">
+                    <MyOverlay target={coordenadaRefHL.current} show={tooltipHL} placement="right" text="El plazo mínimo es 4 horas"/>
+                    <Form.Control ref={coordenadaRefHL} className="input" type="number"
+                                  placeholder="Ingrese la cantidad de horas limte de entrega" onMouseEnter={() => setTooltipHL(true)}
+                                  onMouseLeave={() => setTooltipHL(false)}/>
+                    <Button className="boton-accion" onClick={agregarPedido}>
                         Registrar
                     </Button>
                 </Form.Group>
@@ -77,10 +255,12 @@ function Pedidos() {
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">Ingrese el archivo de pedidos:</Form.Label>
                     <Form.Group className="input-nombreArchivo">
-                        <Form.Control className="input" type="file"/>
-                        <span className="nombre-archivo">nombre</span>
+                        <Form.Control className="input" type="file" onChange={handleFileChange}/>
+                        <span className="nombre-archivo">
+                            {fileSelect ? localStorage.getItem(`fileName_pedidos`) : 'Selecciona un archivo...'}
+                        </span>
                     </Form.Group>
-                    <Button className="boton-accion">
+                    <Button className="boton-accion" onClick={handleUpload}>
                         Guardar
                     </Button>
                 </Form.Group>
@@ -135,7 +315,8 @@ function Pedidos() {
                     </tr>
                     </thead>
                     <tbody>
-                    {pedidos.map((pedido) => (
+                    {pedidosFiltrados && pedidosFiltrados.length > 0 ? (
+                        pedidosFiltrados.map((pedido) => (
                         <tr key={pedido.idPedido}>
                             <td>{pedido.idPedido}</td>
                             <td>{pedido.idCliente}</td>
@@ -145,7 +326,12 @@ function Pedidos() {
                             <td>{pedido.cantidadGLPSolicitado}</td>
                             <td>{pedido.estado}</td>
                         </tr>
-                    ))}
+                    ))
+                    ) : (
+                        <tr>
+                            <td colSpan="8">No hay pedidos.</td>
+                        </tr>
+                    )}
                     </tbody>
                 </Table>
             </div>
