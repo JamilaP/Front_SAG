@@ -6,28 +6,13 @@ import "./ModalColapso.css"
 import { CSSTransition } from "react-transition-group";
 import { useEffect, useRef } from "react";
 
-const ModalColapso = ({ mensaje = "", isOpen = false, closeModal, exito = true,reporteData,startDate}) => {
+const ModalFinSemanal = ({ mensaje = "", isOpen = false, closeModal, exito = true,reporteData}) => {
     const modalRef = useRef(null);
     const manejoClickAfuera = (event) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
             closeModal();
         }
     };
-    const calcularDuracionSimulacion = () => {
-        const fechaInicio = new Date(startDate);
-        const fechaFin = new Date(reporteData.currentDateTime);
-
-        const diferencia = fechaFin - fechaInicio;
-        const segundos = Math.floor(diferencia / 1000);
-
-        const dias = Math.floor(segundos / (3600 * 24));
-        const horas = Math.floor((segundos % (3600 * 24)) / 3600);
-        const minutos = Math.floor((segundos % 3600) / 60);
-        const segundosRestantes = segundos % 60;
-
-        return `${dias} días ${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundosRestantes.toString().padStart(2, '0')}`;
-    };
-
     useEffect(() => {
         document.addEventListener('mousedown', manejoClickAfuera);
         return () => {
@@ -44,26 +29,22 @@ const ModalColapso = ({ mensaje = "", isOpen = false, closeModal, exito = true,r
             <div className={`modal-container ${!isOpen ? "closing" : ""} `} >
                 <div className={`modal-custom-res ${!isOpen ? "closing" : ""}`} ref={modalRef}>
                     <div className="encabezado">
-                        <IoWarning color="#FFCB00" fontSize={"50px"} />
-                        <div className="texto-titulo">Ocurrió el colapso lógistico</div>
+                        <BsCheckCircle color="#008768" fontSize={"50px"} />
+                        <div className="texto-titulo">Se terminó la simualción semanal</div>
                     </div>
                     <hr></hr>
                     <div className="reporte-data">
                         <div className="texto-reporte">
-                            <div className="enunciado-reporte">Fecha de colapso: </div>
+                            <div className="enunciado-reporte">Fecha inicio: </div>
                             <div className="data-reporte">{reporteData.currentDateTime}</div>
                         </div>
                         <div className="texto-reporte">
-                            <div className="enunciado-reporte">Pedido que no se logró atender: </div>
-                            <div className="data-reporte">{reporteData.orders && reporteData.orders[0] && reporteData.orders[0].order && reporteData.orders[0].order.customerId}</div>
-                        </div>
-                        <div className="texto-reporte">
-                            <div className="enunciado-reporte">Tiempo de duración de la simulación: </div>
-                            <div className="data-reporte">{calcularDuracionSimulacion()}</div>
+                            <div className="enunciado-reporte">Fecha fin: </div>
+                            <div className="data-reporte">{reporteData.currentDateTime}</div>
                         </div>
                         <div className="texto-reporte">
                             <div className="enunciado-reporte">Número de pedidos atendidos: </div>
-                            <div className="data-reporte">{reporteData.fulfilledOrdersNumber}</div>
+                            <div className="data-reporte">{reporteData.currentDateTime}</div>
                         </div>
                     </div>
                     <div className="botones">
@@ -76,4 +57,4 @@ const ModalColapso = ({ mensaje = "", isOpen = false, closeModal, exito = true,r
     );
 };
 
-export default ModalColapso;
+export default ModalFinSemanal;
