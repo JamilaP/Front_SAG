@@ -5,6 +5,7 @@ import ModalCamion from "../../../Componentes/ModalCamion";
 function RutaCamion(props) {
   const [showModal, setShowModal] = useState(false);
   const handleShow = () => setShowModal(true);
+  const animation = useRef(null);
 
   let inicioRutaModal =  [[props.inicio.x, props.inicio.y]];
   let rutaConvertidaModal =  props.rutaCamion.map(({ x, y }) => [x,y]);
@@ -47,10 +48,10 @@ function RutaCamion(props) {
 
   const inicioX = 0 ;
   const inicioY = 0 ;
-  const flechaStr = inicioX + ',' + inicioY + ' '
-      + (inicioX - 10) + ',' + (inicioY+5) + ' '
-      + (inicioX - 8) + ',' + (inicioY) + ' '
-      + (inicioX - 10) + ',' + (inicioY-5);
+  const flechaStr = 0 + ',' + 0 + ' '
+      + (0 - 10) + ',' + (0+5) + ' '
+      + (0 - 8) + ',' + (0) + ' '
+      + (0 - 10) + ',' + (0-5);
 
 
   const pathData = rutaCorte ? `M${rutaCorte.join(' L')}` : '';
@@ -62,20 +63,18 @@ function RutaCamion(props) {
   const camino = caminoRef.current;
   let path = anime.path(camino);
 
+  animation.current = anime({
+    targets: camion,
+    translateX: camino ? (path('x')) : (0) ,
+    translateY: camino ? (path('y')) : (0) ,
+    rotate: camino ? (path('angle')) : (0) ,
+    duration: props.duracionE, // Animation duration in milliseconds
+    easing: "linear", // Easing function for smooth animation
+    autoplay: false
+  });
 
   useEffect(() => {
-    var animacion = anime({
-      targets: camion,
-      translateX: camino ? (path('x')) : (0) ,
-      translateY: camino ? (path('y')) : (0) ,
-      rotate: camino ? (path('angle')) : (0) ,
-      duration: props.duracionE*0.99, // Animation duration in milliseconds
-      easing: "linear", // Easing function for smooth animation
-      autoplay: false
-    });
-    animacion.play();
-      
-
+    console.log('Preparando animacion');
     // if (props.pausar){
     //   var animacion = anime({
     //     targets: camion,
@@ -111,6 +110,7 @@ function RutaCamion(props) {
         <path d={pathData} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
         <polygon onClick={handleShow} ref={camionRef} points={flechaStr} fill="#000000" />
         <ModalCamion showM={showModal} setShowM = {setShowModal} idCamion = {props.idCamion} ruta={rutaTotalModal}/>
+        {props.pausar ? animation.current.pause() : animation.current.play()}
         {console.log( 'Ruta: ', pathData)}
       </svg>
 

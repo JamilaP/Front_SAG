@@ -13,6 +13,12 @@ const MapaSimu = (props) => {
   // });
 
   // const rutaDatos = dataMapa[0];
+
+  const flechaStr = 0 + ',' + 0 + ' '
+      + (0 - 10) + ',' + (0+5) + ' '
+      + (0 - 8) + ',' + (0) + ' '
+      + (0 - 10) + ',' + (0-5);
+      
   let rutaConvertida;
   const ruta = [[7, 7], [7, 21], [21, 21], [21, 161]];
   const ruta2 = [[35, 21], [161, 21], [161, 161], [21, 161]];
@@ -94,6 +100,10 @@ const MapaSimu = (props) => {
                     <circle cx={element.currentNode.x * cellSize + cellSize/2}
                             cy= {(50 - element.currentNode.y) * cellSize + cellSize/2}
                             r="1" fill="blue" />
+                    // <svg x = {element.currentNode.x * cellSize - 5} y = {(50 - element.currentNode.x)*cellSize - 14 }>
+                    //   <polygon  points={flechaStr} fill="#000000" />
+                    //   <svg/>
+                    
                 ): (
                     console.log('No hay datos', element)
                     // , props.setIndex()
