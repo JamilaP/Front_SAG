@@ -120,11 +120,12 @@
     display: flex;
     flex-direction: row;
     margin-bottom: 10px;
+    background-color: red;
 }
 .enunciado-reporte{
     width: 350px;
 }
-.data-reporte{
+.data-reporte-fechas{
     width: 150px;
 }
 .encabezado{
@@ -137,4 +138,5 @@
     color: black;
     font-size: 25px;
     font-weight: bold;
+    margin-left: 10px;
 }

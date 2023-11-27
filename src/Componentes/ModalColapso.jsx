@@ -14,7 +14,7 @@ const ModalColapso = ({ mensaje = "", isOpen = false, closeModal, exito = true,r
         }
     };
     const calcularDuracionSimulacion = () => {
-        const fechaInicio = new Date(startDate);
+        const fechaInicio = new Date(`${startDate}T00:00:00`);
         const fechaFin = new Date(reporteData.currentDateTime);
 
         const diferencia = fechaFin - fechaInicio;
@@ -27,6 +27,21 @@ const ModalColapso = ({ mensaje = "", isOpen = false, closeModal, exito = true,r
 
         return `${dias} días ${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundosRestantes.toString().padStart(2, '0')}`;
     };
+    const transformarFecha = (date,soloFechas) => {
+        let dateObj;
+        if(soloFechas==1) { dateObj = new Date(`${date}T00:00:00`);}
+        else { dateObj = new Date(date);}
+
+        // Obtiene las partes de la fecha
+        const day = dateObj.getDate().toString().padStart(2, '0');
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Los meses son indexados desde 0
+        const year = dateObj.getFullYear();
+        const hours = dateObj.getHours().toString().padStart(2, '0');
+        const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+        const seconds = dateObj.getSeconds().toString().padStart(2, '0');
+
+        return `${day}-${month}-${year}, ${hours}:${minutes}:${seconds}`;
+    }
 
     useEffect(() => {
         document.addEventListener('mousedown', manejoClickAfuera);
@@ -51,10 +66,10 @@ const ModalColapso = ({ mensaje = "", isOpen = false, closeModal, exito = true,r
                     <div className="reporte-data">
                         <div className="texto-reporte">
                             <div className="enunciado-reporte">Fecha de colapso: </div>
-                            <div className="data-reporte">{reporteData.currentDateTime}</div>
+                            <div className="data-reporte">{transformarFecha(reporteData.currentDateTime,0)}</div>
                         </div>
                         <div className="texto-reporte">
-                            <div className="enunciado-reporte">Pedido que no se logró atender: </div>
+                            <div className="enunciado-reporte">Cliente que no se logró atender: </div>
                             <div className="data-reporte">{reporteData.orders && reporteData.orders[0] && reporteData.orders[0].order && reporteData.orders[0].order.customerId}</div>
                         </div>
                         <div className="texto-reporte">

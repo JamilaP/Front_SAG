@@ -16,6 +16,7 @@ function ConfiguracionGeneral() {
     const {selectedFiles, setFile} = useFileContext();
     const [modal, setModal] = useState({text: "", exito: true, open: false});
     const [file, setFileOrder] = useState(null);
+    const [orderFileName, setOrderFileName] = useState(localStorage.getItem('fileName_order') || 'Selecciona un archivo...');
 
     const handleFileChange = (e, fieldName) => {
         const selectedFile = e.target.files[0];
@@ -56,6 +57,8 @@ function ConfiguracionGeneral() {
     };
 
     const handleUploadOrder = () => {
+        const file = selectedFiles['order'];
+
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
@@ -114,10 +117,14 @@ function ConfiguracionGeneral() {
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">Ingrese el archivo de pedidos</Form.Label>
                     <Form.Group className="input-nombreArchivo">
-                        <Form.Control className="input" type="file"/>
+                        <Form.Control className="input" type="file"
+                                      onChange={(e) => {
+                                          handleFileChange(e, 'order');
+                                          setOrderFileName(e.target.files[0] ? e.target.files[0].name : 'Selecciona un archivo...');
+                                      }}/>
                         <span
                             className="nombre-archivo">
-                               nombreArchivo
+                               {orderFileName}
                             </span>
                     </Form.Group>
                     <Button className="boton-accion" onClick={handleUploadOrder}>

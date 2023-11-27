@@ -237,7 +237,7 @@ function Simulacion() {
 
             <ModalFinSemanal isOpen={modalFin.open} mensaje={modalFin.text} exito={modalFin.exito}
                              closeModal={() => setModalFin(e => ({...e, open: false}))}
-                             reporteData={dataAnt} />
+                             reporteData={dataAnt} startDate={startDate}/>
 
             <div className="contenedor-mapa-informacion">
                 <div className="contenedor-reporte">

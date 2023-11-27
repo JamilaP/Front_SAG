@@ -47,6 +47,21 @@ function Pedidos(props) {
             });
     }, [actualizarPedidos]);
 
+    function formatearFecha(fecha) {
+        if (!fecha) {
+            return '0000-00-00, 00:00:00';
+        }
+
+        const fechaObj = new Date(fecha);
+        const dia = fechaObj.getDate().toString().padStart(2, '0');
+        const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
+        const anio = fechaObj.getFullYear();
+        const horas = fechaObj.getHours().toString().padStart(2, '0');
+        const minutos = fechaObj.getMinutes().toString().padStart(2, '0');
+        const segundos = fechaObj.getSeconds().toString().padStart(2, '0');
+
+        return `${dia}-${mes}-${anio}, ${horas}:${minutos}:${segundos}`;
+    }
 
     //agregar pedido
     const agregarPedido = () => {
@@ -177,46 +192,51 @@ function Pedidos(props) {
         }
     };
     const handleUpload = () => {
-        const file = fileSelect;
+        const fileInput  = document.getElementById('fileInput');
 
-        if (file) {
+        if (fileInput.files.length > 0)  {
+            const file = fileInput.files[0];
+
             const formData = new FormData();
             formData.append('file', file);
 
             const apiUrl = `http://localhost:8090/sag-genetico/api/daily-operations/order/upload-file`;
+
             axios.post(apiUrl, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
                 .then(response => {
-                    setModal(e => ({...e, text: "Se subio el archivo con exito", exito: true, open: true}));
+                    setModal(e => ({...e, text: "Se subió el archivo con éxito", exito: true, open: true}));
                     // Cambia el estado para activar el useEffect
                     setActualizarPedidos(prev => !prev);
-                    console.log(`Archivo de pedidos se subido con éxito`, response);
+                    console.log(`Archivo de pedidos se subió con éxito`, response);
                 })
                 .catch(error => {
                     setModal(e => ({...e, text: "No se pudo subir el archivo", exito: false, open: true}));
                     console.error(`Error al subir el archivo pedidos`, error);
                 });
         } else {
-            setModal(e => ({...e, text: "No se ha seleccionado ningun archivo", exito: false, open: true}));
+            setModal(e => ({...e, text: "No se ha seleccionado ningún archivo", exito: false, open: true}));
             console.error(`No se ha seleccionado ningún archivo `);
         }
-
     };
 
-    // Función para filtrar los pedidos según los filtros aplicados
+    // Función para filtrar los pedidos según los filtros aplicados //ARREGLAR EL NULL DE PEDIDOS
     const pedidosFiltrados = pedidos.filter(pedido => {
         // Filtrar por texto
-        const coincideIDPedido = pedido.order.orderId.toString().includes(filtroIDPedido);
-        const coincideIDCliente = pedido.order.customerId.toString().includes(filtroIDCliente);
+        const coincideIDPedido = pedido.order && pedido.order.orderId && pedido.order.orderId.toString().includes(filtroIDPedido);
+        const coincideIDCliente = pedido.order && pedido.order.customerId && pedido.order.customerId.toString().includes(filtroIDCliente);
         // Filtrar por opción
         const coincideOpcion = (filtroOpcion === 'Todos' || pedido.estado === filtroOpcion);
 
         return coincideIDPedido && coincideIDCliente && coincideOpcion;
     });
 
+    useEffect(() => {
+        console.log("Pedidos guardados", pedidos)
+    }, [pedidos]);
 
     return (
         <div className="registroPedidos">
@@ -266,7 +286,7 @@ function Pedidos(props) {
                 <Form.Group className="contendedor-texto-input">
                     <Form.Label className="texto-input">Ingrese el archivo de pedidos:</Form.Label>
                     <Form.Group className="input-nombreArchivo">
-                        <Form.Control className="input" type="file" onChange={handleFileChange}/>
+                        <Form.Control id="fileInput" className="input" type="file" onChange={handleFileChange} />
                         <span className="nombre-archivo">
                             {fileSelect ? localStorage.getItem(`fileName_pedidos`) : 'Selecciona un archivo...'}
                         </span>
@@ -326,13 +346,13 @@ function Pedidos(props) {
                     </tr>
                     </thead>
                     <tbody>
-                    {pedidosFiltrados && pedidosFiltrados.length > 0 ? (
-                        pedidosFiltrados.map((pedido) => (
+                    {pedidos && pedidos.length > 0 ? (
+                        pedidos.map((pedido) => (
                             <tr key={pedido.order.orderId}>
                                 <td>{pedido.order.orderId}</td>
                                 <td>{pedido.order.customerId}</td>
                                 <td>{`(${pedido.order.location.x},${pedido.order.location.y})`}</td>
-                                <td>{pedido.order.registrationDateTime}</td>
+                                <td>{formatearFecha(pedido.order.registrationDateTime)}</td>
                                 <td>{pedido.order.deadlineHours}</td>
                                 <td>{pedido.order.requestedGLP}</td>
                                 <td>{pedido.order.status}</td>

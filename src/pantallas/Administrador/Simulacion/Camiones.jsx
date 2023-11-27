@@ -78,6 +78,7 @@ function Camiones(props) {
                         />
                     </InputGroup>
                 </div>
+                <p className="nota">*Los camiones en rojo estan en mantenimiento</p>
             </div>
 
             <Table striped bordered hover className="tabla">
@@ -94,12 +95,22 @@ function Camiones(props) {
                 <tbody data-bs-search-live="true">
                 {camionesFiltrados && camionesFiltrados.length > 0 ? (
                     camionesFiltrados.map((camion) => (
-                        <tr key={camion.id} className={camion.estado === 'MANTENIMIENTO' ? 'camion-en-mantenimiento' : ''}>
-                            <td>{camion.id}</td>
-                            <td>{camion.cargaActual}/{camion.cargaMaxima}</td>
-                            <td>{camion.consumoTotal}</td>
-                            <td>{camion.pedidos}</td>
-                            <td>{camion.pedidoActual}</td>
+                        <tr key={camion.id} className={camion.estado === "EN_MANTENIMIENTO" ? 'camion-en-mantenimiento' : ''}>
+                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                                {camion.id}
+                            </td>
+                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                                {camion.cargaActual}/{camion.cargaMaxima}
+                            </td>
+                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                                {camion.consumoTotal}
+                            </td>
+                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                                {camion.pedidos}
+                            </td>
+                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                                {camion.pedidoActual}
+                            </td>
                             <td>
                                 <Button className="boton-ver" disabled={camion.arrPedidos.length === 0}
                                         onClick={() => {
