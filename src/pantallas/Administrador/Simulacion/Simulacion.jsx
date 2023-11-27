@@ -25,10 +25,11 @@ function Simulacion() {
     const [key, setKey] = useState('pestana2');
     const [dataSocket, setDataSocket] = useState([]);
     const [dataAnt, setDataAnt] = useState([]);
+    const [dataAct, setDataAct] = useState([]);
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
     const [modal, setModal] = useState({text: "", exito: true, open: false});
-    const [duracionEscena, setDuracionEscena] = useState(100);
+    const [duracionEscena, setDuracionEscena] = useState(1000);
     const [pausar, setPausar] = useState(false);
     const [activeButtonControles, setActiveButtonControles] = useState(null);
     const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
@@ -128,23 +129,26 @@ function Simulacion() {
     const moverEscena = (pausarArg) => {
         if (!pausarArg) {
             if (indexData < dataSocket.length) {
-                setDataAnt(dataSocket[0]);
+                setDataAnt(dataSocket[indexData]);
                 // setDataSocket((prevArreglo) => prevArreglo.slice(1));
+                setDataSocket((prevArreglo) => prevArreglo.slice(1));
+                console.log("Se ha movido");
 
-                setTimeout(() => {
-                    setDataSocket((prevArreglo) => prevArreglo.slice(1));
-                    console.log("Escena removida después de esperar", indexData);
-                }, duracionEscena);
+                // setTimeout(() => {
+                //     setDataSocket((prevArreglo) => prevArreglo.slice(1));
+                //     console.log("Escena removida después de esperar", indexData);
+                // }, duracionEscena);
                 /*if(indexData === 0 ){
                     console.log("Esperando inicialmente al back...");
                     setTimeout(() => {
                         console.log("Escena movida después de esperar", indexData);
                     }, 10000);
                 }
-                setTimeout(() => {
-                    setIndexData(indexData + 1);
-                    console.log("Escena movida después de esperar", indexData);
-                }, duracionEscena);*/
+                */
+                // setTimeout(() => {
+                //     setIndexData(indexData + 1);
+                //     console.log("Escena movida después de esperar", indexData);
+                // }, duracionEscena);
                 //setRenderizarSeccionPosterior(true);
                 // Esperar 1000 milisegundos (1 segundo) antes de actualizar el estado
             } else {
