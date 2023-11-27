@@ -25,7 +25,7 @@ function RutaCamion(props) {
   let vectorY = (props.rutaCamion[0].y - props.inicio.y) === 0 ? (0): ((props.rutaCamion[0].y - props.inicio.y)/ Math.abs((props.rutaCamion[0].y - props.inicio.y)));
 
   let rutaAnimacion = [[props.inicio.x *props.tamanioCelda + props.tamanioCelda/2, (50 - props.inicio.y)*props.tamanioCelda + props.tamanioCelda/2]
-  , [ (props.inicio.x + vectorX)*props.tamanioCelda + props.tamanioCelda/2, (50 - (props.inicio.y + vectorY))*props.tamanioCelda + props.tamanioCelda/2]];
+    , [ (props.inicio.x + vectorX)*props.tamanioCelda + props.tamanioCelda/2, (50 - (props.inicio.y + vectorY))*props.tamanioCelda + props.tamanioCelda/2]];
   const pathAnimacion = rutaAnimacion ? `M${rutaAnimacion.join(' L')}` : '';
 
   function calcularDistanciaTotal(puntos) {
@@ -45,6 +45,7 @@ function RutaCamion(props) {
 
     return distanciaTotal;
   }
+
 
   const inicioX = 0 ;
   const inicioY = 0 ;
@@ -73,45 +74,47 @@ function RutaCamion(props) {
     autoplay: false
   });
 
-  useEffect(() => {
-    console.log('Preparando animacion');
-    // if (props.pausar){
-    //   var animacion = anime({
-    //     targets: camion,
-    //     translateX: inicioRuta[0][0] ,
-    //     translateY: inicioRuta[0][1] ,
-    //     rotate: 0 ,
-    //     duration: 10, // Animation duration in milliseconds
-    //     easing: "linear", // Easing function for smooth animation
-    //     autoplay: true
-    //   });
-    //   console.log('Pausa');
-    // }else{
-    //   var animacion = anime({
-    //     targets: camion,
-    //     translateX: camino ? (path('x')) : (0) ,
-    //     translateY: camino ? (path('y')) : (0) ,
-    //     rotate: camino ? (path('angle')) : (0) ,
-    //     duration: props.duracionE*0.90, // Animation duration in milliseconds
-    //     easing: "linear", // Easing function for smooth animation
-    //     autoplay: false
-    //   });
-    //   animacion.play();
-    // }
+  animation.current.finished.then();
 
-    return () => {
+  // useEffect(() => {
+  //   console.log('Preparando animacion');
+  //   // if (props.pausar){
+  //   //   var animacion = anime({
+  //   //     targets: camion,
+  //   //     translateX: inicioRuta[0][0] ,
+  //   //     translateY: inicioRuta[0][1] ,
+  //   //     rotate: 0 ,
+  //   //     duration: 10, // Animation duration in milliseconds
+  //   //     easing: "linear", // Easing function for smooth animation
+  //   //     autoplay: true
+  //   //   });
+  //   //   console.log('Pausa');
+  //   // }else{
+  //   //   var animacion = anime({
+  //   //     targets: camion,
+  //   //     translateX: camino ? (path('x')) : (0) ,
+  //   //     translateY: camino ? (path('y')) : (0) ,
+  //   //     rotate: camino ? (path('angle')) : (0) ,
+  //   //     duration: props.duracionE*0.90, // Animation duration in milliseconds
+  //   //     easing: "linear", // Easing function for smooth animation
+  //   //     autoplay: false
+  //   //   });
+  //   //   animacion.play();
+  //   // }
 
-    };
-  }, [rutaAnimacion]);
+  //   return () => {
+
+  //   };
+  // }, [rutaAnimacion]);
 
   return (
       <svg>
         <path ref={caminoRef} d={pathAnimacion} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
         <path d={pathData} fill="transparent" stroke="rgba(27, 157, 38, 0.83)" strokeWidth="1" />
-        <polygon onClick={handleShow} ref={camionRef} points={flechaStr} fill="#000000" />
+        {/* <polygon onClick={handleShow} ref={camionRef} points={flechaStr} fill="#000000" /> */}
         <ModalCamion showM={showModal} setShowM = {setShowModal} idCamion = {props.idCamion} ruta={rutaTotalModal}/>
-        {props.pausar ? animation.current.pause() : animation.current.play()}
-        {console.log( 'Ruta: ', pathData)}
+        {/* {props.pausar ? animation.current.pause() : animation.current.play()} */}
+        {console.log( 'Animando camion ')}
       </svg>
 
   );

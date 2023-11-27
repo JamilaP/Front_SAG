@@ -21,7 +21,7 @@ function App() {
 
     // const [conexion, setConexion] = useState(null);
     const [dataSocket, setDataSocket] = useState([]);
-    const [duracionEscena, setDuracionEscena] = useState(7200);
+    const [duracionEscena, setDuracionEscena] = useState(60000);
     const [indexData, setIndexData] = useState(0);
     const [pausar, setPausar] = useState(false);
     const [dataAnt, setDataAnt] = useState([]);
@@ -35,12 +35,12 @@ function App() {
         if (!pausarArg) {
             if (indexData < dataSocket.length) {
                 setDataAnt(dataSocket[0]);
-                // setDataSocket((prevArreglo) => prevArreglo.slice(1));
+                setDataSocket((prevArreglo) => prevArreglo.slice(1));
 
-                setTimeout(() => {
+                /*setTimeout(() => {
                     setDataSocket((prevArreglo) => prevArreglo.slice(1));
                     console.log("Escena removida después de esperar", indexData);
-                }, duracionEscena);
+                }, duracionEscena);*/
                 /*if(indexData === 0 ){
                     console.log("Esperando inicialmente al back...");
                     setTimeout(() => {

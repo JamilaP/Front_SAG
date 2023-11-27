@@ -30,7 +30,7 @@ function Simulacion() {
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
     const [modal, setModal] = useState({text: "", exito: true, open: false});
-    const [duracionEscena, setDuracionEscena] = useState(100);
+    const [duracionEscena, setDuracionEscena] = useState(200);
     const [pausar, setPausar] = useState(false);
     const [activeButtonControles, setActiveButtonControles] = useState(null);
     const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
@@ -77,10 +77,7 @@ function Simulacion() {
     };
     const conectarWS = () => {
         if (activeButtonColapsoSemanal) {
-            const stompConfig = {
-                reconnectDelay: 200,
-            };
-            conexion = new Client(stompConfig);
+            conexion = new Client();
             console.log('Connecting to WebSocket...');
             try {
                 conexion.configure({
@@ -134,11 +131,12 @@ function Simulacion() {
             if (indexData < dataSocket.length) {
                 setDataAnt(dataSocket[0]);
                 // setDataSocket((prevArreglo) => prevArreglo.slice(1));
+                setDataSocket((prevArreglo) => prevArreglo.slice(1));
 
-                setTimeout(() => {
+               /* setTimeout(() => {
                     setDataSocket((prevArreglo) => prevArreglo.slice(1));
                     console.log("Escena removida después de esperar", indexData);
-                }, duracionEscena);
+                }, duracionEscena);*/
                 /*if(indexData === 0 ){
                     console.log("Esperando inicialmente al back...");
                     setTimeout(() => {
