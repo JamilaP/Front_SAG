@@ -24,6 +24,10 @@ function AnimacionCamiones(props) {
                     arrVectores.push(
                         [vectorX*props.tamanioCelda, vectorY*props.tamanioCelda]
                     );
+                }else{
+                    arrVectores.push(
+                        [0, 0]
+                    );
                 }
             }
         }
@@ -83,7 +87,7 @@ function AnimacionCamiones(props) {
           translateY: function(target, index){
             let a = inicios[index] ? inicios[index][1] : 0 ;
             let b = movimientos[index] ? movimientos[index][1] : 0 ; 
-            return [a , a + b];
+            return [a , a - b];
           },
           translateX: function(target, index){
             let a = inicios[index] ? inicios[index][0] : 0 ;
@@ -91,6 +95,15 @@ function AnimacionCamiones(props) {
             return [a , a + b];
           },
           duration: props.duracion,
+          rotate: {
+            value: function (target, index, targets) {
+                const deltaX = movimientos[index][0];
+                const deltaY = -movimientos[index][1];
+                return Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+            },
+            duration: 1, // Cambia el valor según tu necesidad
+            easing: 'easeInOutSine',
+            },
         //   rotate: 90,
           // delay: anime.stagger(100)
         });

@@ -130,7 +130,7 @@ const MapaSimu = (props) => {
                 element.currentNode && element.currentNode.x && element.currentNode.y ? (
                     <circle cx={element.currentNode.x * cellSize + cellSize/2}
                             cy= {(50 - element.currentNode.y) * cellSize + cellSize/2}
-                            r="4" fill="blue" />
+                            r="1" fill="blue" />
                     // <svg x = {element.currentNode.x * cellSize - 5} y = {(50 - element.currentNode.x)*cellSize - 14 }>
                     //   <polygon  points={flechaStr} fill="#000000" />
                     //   <svg/>
