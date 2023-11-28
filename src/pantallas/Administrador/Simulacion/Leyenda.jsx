@@ -22,7 +22,7 @@ function Leyenda(props) {
 
     const handleButtonClickControles = (buttonName) => {
         setTimeout(() => {
-            console.log("Espera 2 segundos");
+            // console.log("Espera 2 segundos");
         }, 2000);
         props.setActiveButtonControles(buttonName);
         if(buttonName==='Refresh'){

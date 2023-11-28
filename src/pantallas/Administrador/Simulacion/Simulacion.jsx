@@ -27,10 +27,11 @@ function Simulacion() {
     const [key, setKey] = useState('pestana2');
     const [dataSocket, setDataSocket] = useState([]);
     const [dataAnt, setDataAnt] = useState([]);
+    const [buff, setBuff] = useState(0);
     const [indexData, setIndexData] = useState(0);
     const [filePedidos, setFilePedidos] = useState(null);
     const [modal, setModal] = useState({text: "", exito: true, open: false});
-    const [duracionEscena, setDuracionEscena] = useState(200);
+    const [duracionEscena, setDuracionEscena] = useState(50);
     const [pausar, setPausar] = useState(false);
     const [activeButtonControles, setActiveButtonControles] = useState(null);
     const [activeButtonColapsoSemanal, setActiveButtonColapsoSemanal] = useState(null);
@@ -66,12 +67,15 @@ function Simulacion() {
         conexion.onStompError = (frame) => {
             console.log('Stomp Error : ', frame);
         };
+
+        conexion.send('/topic/simulation-progress', {}, 'Contenido del mensaje');
     };
     const onWebSocketClose = () => {
         console.log('WebSocket connection close');
         if (conexion !== null) {
             //conexion.deactivate();
             conexion.activate();
+            
         }
 
     };
@@ -126,12 +130,36 @@ function Simulacion() {
         }
     };
 
-    const moverEscena = (pausarArg) => {
+    const levantarSocket = (conexion) => {
+        console.log('Intentando reactivar');
+        // let conexion = null;
+        // conexion = new Client();
+        // conexion.configure({
+        //     webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
+        // });
+        // conexion.activate();
+        // let hola = await conexion.activate();
+        if (conexion && conexion.connected) {
+            conexion.send('/app/weekly-simulation', {}, 'Contenido del mensaje');
+            console.log('Reactivando');
+            // conexion.publish({
+            //     destination: '/app/weekly-simulation',
+            //     body: 'Hola, estoy vivo'
+            // });
+        }
+        // conexion.subscribe
+    }
+
+    const moverEscena = (pausarArg, conexion) => {
         if (!pausarArg) {
             if (indexData < dataSocket.length) {
                 setDataAnt(dataSocket[0]);
+                console.log("Escena pasada");
                 // setDataSocket((prevArreglo) => prevArreglo.slice(1));
                 setDataSocket((prevArreglo) => prevArreglo.slice(1));
+
+                if(buff % 100 === 4) levantarSocket(conexion);
+                setBuff(buff + 1);                
 
                /* setTimeout(() => {
                     setDataSocket((prevArreglo) => prevArreglo.slice(1));
@@ -260,7 +288,7 @@ function Simulacion() {
                 </div>
                 <div className="contenedor-mapa">
                     {/*<h6> { indexData == 0 ? ( 'Esperando al back...'): ( 'Segundo: ' + indexData ) } </h6>*/}
-                    <>{console.log('Datos de escena: ', indexData, ' ', dataSocket[indexData])}</>
+                    <>{ /* console.log('Datos de escena: ', indexData, ' ', dataSocket[indexData])*/}</>
                     {
                         dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
                             <MapaSimu dataMapa={dataSocket[indexData].trucks}
@@ -269,7 +297,8 @@ function Simulacion() {
                                       dataBloqueos={dataSocket[indexData].lockdowns}
                                       duracion={duracionEscena}
                                       pausarR={pausar}
-                                      pedidos={dataSocket[indexData].orders}/>
+                                      pedidos={dataSocket[indexData].orders}
+                                      conexion = {conexion}/>
                         ) : (
                             <MapaSimu
                                 dataMapa={dataAnt.trucks}
@@ -278,7 +307,8 @@ function Simulacion() {
                                 dataBloqueos={dataAnt.lockdowns}
                                 duracion={duracionEscena}
                                 pausarR={pausar}
-                                pedidos={dataAnt.orders}/>
+                                pedidos={dataAnt.orders}
+                                conexion = {conexion}/>
                         )
                     }
                 </div>

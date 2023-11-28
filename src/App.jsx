@@ -137,7 +137,7 @@ function App() {
         }
     };
 
-   conexion = conectarWS(); //Conexion websocket
+//    conexion = conectarWS(); //Conexion websocket
 
     useEffect(() => {
         console.log('Conexion: ', conexion);

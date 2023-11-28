@@ -12,7 +12,7 @@ function RutaBloqueo(props) {
         // }
         // </>
         <svg>
-          {console.log("Bloqueo: ",pathData)}
+          {/* {console.log("Bloqueo: ",pathData)} */}
           <path d={pathData} fill="transparent" stroke="rgba(209, 40, 59, 0.8)" strokeWidth="4" />
         </svg>  
     );

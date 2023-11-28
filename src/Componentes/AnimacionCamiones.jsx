@@ -50,10 +50,10 @@ function AnimacionCamiones(props) {
     const movimientos = calcularMovimientos(props.camiones);
 
     useEffect(() => {
-        console.log('Camiones ', props.camiones);
-        console.log('Mover ', mover);
+        // console.log('Camiones ', props.camiones);
+        // console.log('Mover ', mover);
         if (props.camiones &&  0 < props.camiones.length){
-            console.log('ejecutando creacion');
+            // console.log('ejecutando creacion');
             const nuevosPoligonos = [];
             for (let i = 0; i < props.camiones.length; i++) {
                 nuevosPoligonos.push(
@@ -65,9 +65,10 @@ function AnimacionCamiones(props) {
         }
         else{
             // props.pasarAnimar();
-            props.moverEscena(false);
+            console.log('Pasar sin animacion');
+            props.moverEscena(false, props.conexion);
         }
-    }, [props.camiones]);
+    }, [props.camiones, props.pausar]);
   
     useEffect(() => {
     //   const inicioY = [0,50,200];
@@ -75,11 +76,11 @@ function AnimacionCamiones(props) {
     //   const movimientosY = [0,100,100];
     //   const movimientosX = [80,50,100];
 
-    console.log('Inicios', inicios);
-    console.log('Movimientos', movimientos); 
+    // console.log('Inicios', inicios);
+    // console.log('Movimientos', movimientos); 
 
       if(mover){
-        console.log('ejecutando animacion');
+        // console.log('ejecutando animacion');
         let animacion = anime({
           targets: '.hola',
           easing: "linear",
@@ -111,16 +112,16 @@ function AnimacionCamiones(props) {
         animacion.finished.then(() => {
           reportar();
         });        
-        animacion.play();
+        props.pausar ? animacion.pause() : animacion.play();
       }
       return () => {setMover(false);}
       ;             
-    }, [mover]);
+    }, [mover, props.pausar]);
 
     function reportar() {
       console.log('Pasar al siguiente');
     //   props.pasarAnimar();
-      props.moverEscena(false);
+      props.moverEscena(false, props.conexion);
     }
 
   return (

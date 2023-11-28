@@ -76,6 +76,9 @@ function RutaCamion(props) {
 
   animation.current.finished.then();
 
+  useEffect(() => {
+  }, [props.pausar]);
+
   // useEffect(() => {
   //   console.log('Preparando animacion');
   //   // if (props.pausar){
@@ -114,7 +117,6 @@ function RutaCamion(props) {
         {/* <polygon onClick={handleShow} ref={camionRef} points={flechaStr} fill="#000000" /> */}
         <ModalCamion showM={showModal} setShowM = {setShowModal} idCamion = {props.idCamion} ruta={rutaTotalModal}/>
         {/* {props.pausar ? animation.current.pause() : animation.current.play()} */}
-        {console.log( 'Animando camion ')}
       </svg>
 
   );

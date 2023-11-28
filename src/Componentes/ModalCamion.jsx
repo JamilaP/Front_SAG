@@ -10,7 +10,7 @@ function ModalCamion(props) {
 
   return (
     <>
-    {console.log('Ruta pasada: ', props.ruta)}
+    {/* {console.log('Ruta pasada: ', props.ruta)} */}
       <Modal size='sm' show={props.showM} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title> Camion {props.idCamion}</Modal.Title>

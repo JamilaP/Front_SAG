@@ -15,7 +15,7 @@ function PedidosSimulacion(props) {
 
     // Verifica si data es un arreglo válido antes de mapearlo
     if (!data || data.length === 0) {
-        console.log('No hay datos para procesar en pedidos');
+        // console.log('No hay datos para procesar en pedidos');
         nuevoArreglo = [];
     } else {
         nuevoArreglo = data.map(pedido => {

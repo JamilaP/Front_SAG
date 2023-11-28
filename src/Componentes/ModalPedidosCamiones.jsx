@@ -21,12 +21,12 @@ const ModalPedidosCamiones = ({ isOpen = false, closeModal, id,data }) => {
     }, [closeModal]);
 
     useEffect(() => {
-        console.log('data glp: ', data);
+        // console.log('data glp: ', data);
     }, [data]);
 
     // Verifica si data es un arreglo válido antes de mapearlo
     if (!data || data.length === 0) {
-        console.log('No hay datos para procesar');
+        // console.log('No hay datos para procesar');
         return;
     }
     return (
