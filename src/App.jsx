@@ -1,5 +1,5 @@
 import {Routes, Route, Link,Navigate} from 'react-router-dom';
-import React, {useEffect,useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import logonav from './imagenes/logo-nav.png';
 import perfil from './imagenes/perfil.png';
 import './App.css';
@@ -15,6 +15,7 @@ import ModalColapso from "./Componentes/ModalColapso";
 
 function App() {
 
+    //const [conexion ,setConexion]= useState(null);
     let conexion = null;
     const horaActual = new Date();
     const formatoHoraActual = `${horaActual.getFullYear()}-${(horaActual.getMonth() + 1).toString().padStart(2, '0')}-${horaActual.getDate().toString().padStart(2, '0')}`;
@@ -59,9 +60,13 @@ function App() {
         }
     }
 
-    const handleLinkClick = (id) => {
+    const handleLinkClick = async (id) => {
         setActiveLink(id);
         localStorage.setItem('activeTab', id);
+
+        //conexion = await conectarWS();
+        //console.log('Conexion despues de conectarWS: ', conexion.connected);
+
         if(!seEnvioMensaje){
             enviarMensaje();
             setSeEnvioMensaje(true);
@@ -69,14 +74,18 @@ function App() {
     };
 
     const onConnectSocket = () => {
+        //siempre esta coneected
         conexion.subscribe('/topic/daily-progress', (mensaje) => {
             const data = JSON.parse(mensaje.body);
             console.log('Data conseguida',data);
             // Renderizacion
             setDataSocket(prevDataSocket => {
                 // Verificar si el nuevo dato es diferente al último dato en el array
-                if (JSON.stringify(prevDataSocket[prevDataSocket.length - 1]) !== JSON.stringify(data)) {
-                    // Agregar el nuevo dato solo si es diferente
+                let aux1= JSON.stringify(prevDataSocket[prevDataSocket.length - 1]?.currentDateTime);
+                let aux2= JSON.stringify(data.currentDateTime);
+                console.log('aux1',aux1,aux2);
+                if (JSON.stringify(prevDataSocket[prevDataSocket.length - 1]) !== JSON.stringify(data)){
+                    // Agregar el nuevo dato solo si es diferente y mayor
                     return [...prevDataSocket, data];
                 } else {
                     return prevDataSocket;
@@ -86,6 +95,8 @@ function App() {
         conexion.onStompError = (frame) => {
             console.log('Stomp Error : ', frame);
         };
+
+
     };
 
     const onWebSocketClose = () => {
@@ -111,14 +122,17 @@ function App() {
         conexion.onConnect = onConnectSocket;
         conexion.onWebSocketClose = onWebSocketClose;
         conexion.activate();
+
         return conexion;
     };
 
     const enviarMensaje = () => {
+
         // conectarWS();
         if (conexion && formatoHoraActual) {
-            console.log('CUMPLE CON TODO');
+            console.log('CUMPLE CON TODO',conexion.connected);
             if (conexion.connected) {
+                console.log('Conectado ENTRO');
                 try {
                     conexion.publish({
                         destination: '/app/daily-operations',
@@ -145,7 +159,7 @@ function App() {
         }
     };
 
-    conexion = conectarWS(); //Conexion websocket
+    conexion = conectarWS();
 
     useEffect(() => {
         console.log('Conexion: ', conexion);
@@ -158,6 +172,8 @@ function App() {
         if (storedTab) {
             setActiveLink(storedTab);
         }
+        // Recuperar la conexión del localStorage
+
     }, []);
 
     return (

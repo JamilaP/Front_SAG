@@ -16,12 +16,28 @@ import PedidosSimulacion from "../Simulacion/PedidosSimulacion";
 function OperacionesDiarioas(props) {
     const [key, setKey] = useState('pestana2');
 
+    function formatearFecha(fecha) {
+        if (!fecha) {
+            return '0000-00-00, 00:00:00';
+        }
+
+        const fechaObj = new Date(fecha);
+        const dia = fechaObj.getDate().toString().padStart(2, '0');
+        const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
+        const anio = fechaObj.getFullYear();
+        const horas = fechaObj.getHours().toString().padStart(2, '0');
+        const minutos = fechaObj.getMinutes().toString().padStart(2, '0');
+        const segundos = fechaObj.getSeconds().toString().padStart(2, '0');
+
+        return `${dia}-${mes}-${anio}, ${horas}:${minutos}:${segundos}`;
+    }
+
     return (
         <div className="OperacionesDiarias">
             <div className="contenedor-mapa-informacion">
                 <div className="contenedor-reporte">
                         <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
-                            <div className="nombre">Fecha operacional: 10/01/2023 03:04:12</div>
+                            <div className="texto">Fecha de las operaciones: {formatearFecha(props.dataAnt?.currentDateTime)}</div>
                         </div>
                         <div className="grupo-icono-texto"><BiSolidTruck className="icono"></BiSolidTruck>
                             <div className="nombre">Porcentaje de flota ocupada: 30%</div>
