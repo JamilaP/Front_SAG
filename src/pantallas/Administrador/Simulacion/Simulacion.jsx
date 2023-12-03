@@ -143,60 +143,19 @@ function Simulacion() {
         }
     };
 
-    const levantarSocket = (conexion) => {
-        console.log('Intentando reactivar');
-        // let conexion = null;
-        // conexion = new Client();
-        // conexion.configure({
-        //     webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
-        // });
-        // conexion.activate();
-        // let hola = await conexion.activate();
-        if (conexion && conexion.connected) {
-            conexion.send('/app/weekly-simulation', {}, 'Contenido del mensaje');
-            console.log('Reactivando');
-            // conexion.publish({
-            //     destination: '/app/weekly-simulation',
-            //     body: 'Hola, estoy vivo'
-            // });
-        }
-        // conexion.subscribe
-    }
+
 
     const moverEscena = (pausarArg, conexion) => {
         if (!pausarArg) {
             if (indexData < dataSocket.length) {
                 setDataAnt(dataSocket[0]);
                 console.log("Escena pasada");
-                // setDataSocket((prevArreglo) => prevArreglo.slice(1));
                 setDataSocket((prevArreglo) => prevArreglo.slice(1));
-
-                if(buff % 100 === 4) levantarSocket(conexion);
-                setBuff(buff + 1);                
-
-               /* setTimeout(() => {
-                    setDataSocket((prevArreglo) => prevArreglo.slice(1));
-                    console.log("Escena removida después de esperar", indexData);
-                }, duracionEscena);*/
-                /*if(indexData === 0 ){
-                    console.log("Esperando inicialmente al back...");
-                    setTimeout(() => {
-                        console.log("Escena movida después de esperar", indexData);
-                    }, 10000);
-                }
-                setTimeout(() => {
-                    setIndexData(indexData + 1);
-                    console.log("Escena movida después de esperar", indexData);
-                }, duracionEscena);*/
-                //setRenderizarSeccionPosterior(true);
-                // Esperar 1000 milisegundos (1 segundo) antes de actualizar el estado
             } else {
                 console.log("Se alcanzo el limite");
             }
         }
     }
-
-
     const pausarEscena = () => {
         setPausar(true);
     }
@@ -255,7 +214,6 @@ function Simulacion() {
                 // Si las fechas son iguales, activa el modal ModalFinSemanal
                 setModalFin({ text: "", exito: true, open: true });
                 setLlegoFinal(true);
-                // Desactivar modal
             }
         }
     }, [startDate, dataAnt]);
@@ -319,7 +277,7 @@ function Simulacion() {
                                       duracion={duracionEscena}
                                       pausarR={pausar}
                                       pedidos={dataSocket[indexData].orders}
-                                      conexion = {conexion}/>
+                            />
                         ) : (
                             <MapaSimu
                                 dataMapa={dataAnt.trucks}
@@ -329,7 +287,7 @@ function Simulacion() {
                                 duracion={duracionEscena}
                                 pausarR={pausar}
                                 pedidos={dataAnt.orders}
-                                conexion = {conexion}/>
+                            />
                         )
                     }
                 </div>

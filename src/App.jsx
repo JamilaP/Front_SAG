@@ -1,5 +1,5 @@
 import {Routes, Route, Link,Navigate} from 'react-router-dom';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef ,useState} from 'react';
 import logonav from './imagenes/logo-nav.png';
 import perfil from './imagenes/perfil.png';
 import './App.css';
@@ -15,8 +15,9 @@ import ModalColapso from "./Componentes/ModalColapso";
 
 function App() {
 
-    //const [conexion ,setConexion]= useState(null);
-    let conexion = null;
+    // let conexion = null;
+    const [conexion, setConexion] = useState(null);
+    // var conexion = useRef(null);
     const horaActual = new Date();
     const formatoHoraActual = `${horaActual.getFullYear()}-${(horaActual.getMonth() + 1).toString().padStart(2, '0')}-${horaActual.getDate().toString().padStart(2, '0')}`;
 
@@ -37,36 +38,15 @@ function App() {
             if (indexData < dataSocket.length) {
                 setDataAnt(dataSocket[0]);
                 setDataSocket((prevArreglo) => prevArreglo.slice(1));
-
-                /*setTimeout(() => {
-                    setDataSocket((prevArreglo) => prevArreglo.slice(1));
-                    console.log("Escena removida después de esperar", indexData);
-                }, duracionEscena);*/
-                /*if(indexData === 0 ){
-                    console.log("Esperando inicialmente al back...");
-                    setTimeout(() => {
-                        console.log("Escena movida después de esperar", indexData);
-                    }, 10000);
-                }
-                setTimeout(() => {
-                    setIndexData(indexData + 1);
-                    console.log("Escena movida después de esperar", indexData);
-                }, duracionEscena);*/
-                //setRenderizarSeccionPosterior(true);
-                // Esperar 1000 milisegundos (1 segundo) antes de actualizar el estado
             } else {
                 console.log("Se alcanzo el limite");
             }
         }
     }
 
-    const handleLinkClick = async (id) => {
+    const handleLinkClick = (id) => {
         setActiveLink(id);
         localStorage.setItem('activeTab', id);
-
-        //conexion = await conectarWS();
-        //console.log('Conexion despues de conectarWS: ', conexion.connected);
-
         if(!seEnvioMensaje){
             enviarMensaje();
             setSeEnvioMensaje(true);
@@ -74,29 +54,15 @@ function App() {
     };
 
     const onConnectSocket = () => {
-        //siempre esta coneected
         conexion.subscribe('/topic/daily-progress', (mensaje) => {
             const data = JSON.parse(mensaje.body);
-            console.log('Data conseguida',data);
+            console.log('Data conseguida', data);
             // Renderizacion
-            setDataSocket(prevDataSocket => {
-                // Verificar si el nuevo dato es diferente al último dato en el array
-                let aux1= JSON.stringify(prevDataSocket[prevDataSocket.length - 1]?.currentDateTime);
-                let aux2= JSON.stringify(data.currentDateTime);
-                console.log('aux1',aux1,aux2);
-                if (JSON.stringify(prevDataSocket[prevDataSocket.length - 1]) !== JSON.stringify(data)){
-                    // Agregar el nuevo dato solo si es diferente y mayor
-                    return [...prevDataSocket, data];
-                } else {
-                    return prevDataSocket;
-                }
-            });
+            setDataSocket(prevDataSocket => [...prevDataSocket, data]);
         });
         conexion.onStompError = (frame) => {
             console.log('Stomp Error : ', frame);
         };
-
-
     };
 
     const onWebSocketClose = () => {
@@ -107,32 +73,27 @@ function App() {
     };
 
     const conectarWS = () => {
-        let conexion = null;
-        conexion = new Client();
+        setConexion(new Client());
         console.log('Connecting to WebSocket...');
         try {
             conexion.configure({
                 webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
             });
+            conexion.onConnect = onConnectSocket;
+            conexion.onWebSocketClose = onWebSocketClose;
+            conexion.activate();
             console.log('Conectado');
         } catch (error) {
             console.log('No se pudo conectar', error);
         }
 
-        conexion.onConnect = onConnectSocket;
-        conexion.onWebSocketClose = onWebSocketClose;
-        conexion.activate();
-
-        return conexion;
     };
 
     const enviarMensaje = () => {
-
         // conectarWS();
         if (conexion && formatoHoraActual) {
-            console.log('CUMPLE CON TODO',conexion.connected);
+            console.log('CUMPLE CON TODO');
             if (conexion.connected) {
-                console.log('Conectado ENTRO');
                 try {
                     conexion.publish({
                         destination: '/app/daily-operations',
@@ -159,12 +120,8 @@ function App() {
         }
     };
 
-    conexion = conectarWS();
-
-    useEffect(() => {
-        console.log('Conexion: ', conexion);
-        console.log('Fecha actual app: ', formatoHoraActual);
-        //enviarMensaje();
+    useEffect (() => {
+        conectarWS();
     }, []);
 
     useEffect(() => {
@@ -172,9 +129,19 @@ function App() {
         if (storedTab) {
             setActiveLink(storedTab);
         }
-        // Recuperar la conexión del localStorage
-
     }, []);
+
+    useEffect(() => {
+        console.log('Conexion: ', conexion);
+        if(conexion){
+            conexion.configure({
+                webSocketFactory: () => new WebSocket('ws://localhost:8090/sag-genetico/api/ws-endpoint')
+            });
+            conexion.onConnect = onConnectSocket;
+            conexion.onWebSocketClose = onWebSocketClose;
+            conexion.activate();
+        }
+    }, [conexion]);
 
     return (
         <div className="App">
@@ -224,17 +191,16 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Navigate to="/administrador/operaciones-diarias" />} />
                         <Route path="/administrador/operaciones-diarias"
-                        element={<OperacionesDiarioas
-                        conexion={conexion}
-                        dataSocket={dataSocket}
-                        indexData={indexData}
-                        moverEscena={moverEscena}
-                        duracionEscena={duracionEscena}
-                        pausar={pausar}
-                        dataAnt={dataAnt}/>}/>
+                               element={<OperacionesDiarioas
+                                   dataSocket={dataSocket}
+                                   indexData={indexData}
+                                   moverEscena={moverEscena}
+                                   duracionEscena={duracionEscena}
+                                   pausar={pausar}
+                                   dataAnt={dataAnt}/>}/>
                         <Route path="/administrador/simulacion" element={<Simulacion/>}/>
                         <Route path="/administrador/configuracion" element={<ConfiguracionGeneral/>}/>
-                        <Route path="/administrador/pedidos" element={<Pedidos conexion={conexion} enviarMensaje={enviarMensaje}/> }/>
+                        <Route path="/administrador/pedidos" element={<Pedidos /> }/>
                     </Routes>
                 </FileProvider>
             </div>
