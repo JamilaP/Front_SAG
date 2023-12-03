@@ -56,6 +56,23 @@
     color: red;
     margin: 0px;
 }
-
+.nota-reporte{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 550px;
+}
+/*reporte final*/
+.link-reporte{
+    text-align: start;
+    margin-left: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    color: red;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+}
 
 

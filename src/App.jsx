@@ -70,10 +70,18 @@ function App() {
 
     const onConnectSocket = () => {
         conexion.subscribe('/topic/daily-progress', (mensaje) => {
-            console.log('Data conseguida');
             const data = JSON.parse(mensaje.body);
+            console.log('Data conseguida',data);
             // Renderizacion
-            setDataSocket(prevDataSocket => [...prevDataSocket, data]);
+            setDataSocket(prevDataSocket => {
+                // Verificar si el nuevo dato es diferente al último dato en el array
+                if (JSON.stringify(prevDataSocket[prevDataSocket.length - 1]) !== JSON.stringify(data)) {
+                    // Agregar el nuevo dato solo si es diferente
+                    return [...prevDataSocket, data];
+                } else {
+                    return prevDataSocket;
+                }
+            });
         });
         conexion.onStompError = (frame) => {
             console.log('Stomp Error : ', frame);
@@ -118,11 +126,11 @@ function App() {
                             'start_date': formatoHoraActual,
                         },
                         body: 'hola'
-                    });                    
+                    });
                 } catch (error) {
                     console.log('No se envio el mensaje')
                 }
-                
+
             }
             console.log('Mensaje enviado');
         } else {
@@ -137,12 +145,12 @@ function App() {
         }
     };
 
-//    conexion = conectarWS(); //Conexion websocket
+    conexion = conectarWS(); //Conexion websocket
 
     useEffect(() => {
         console.log('Conexion: ', conexion);
         console.log('Fecha actual app: ', formatoHoraActual);
-        enviarMensaje();
+        //enviarMensaje();
     }, []);
 
     useEffect(() => {
@@ -199,9 +207,9 @@ function App() {
                 <FileProvider>
                     <Routes>
                         <Route path="/" element={<Navigate to="/administrador/operaciones-diarias" />} />
-                        <Route path="/administrador/operaciones-diarias" 
-                        element={<OperacionesDiarioas 
-                        conexion={conexion} 
+                        <Route path="/administrador/operaciones-diarias"
+                        element={<OperacionesDiarioas
+                        conexion={conexion}
                         dataSocket={dataSocket}
                         indexData={indexData}
                         moverEscena={moverEscena}

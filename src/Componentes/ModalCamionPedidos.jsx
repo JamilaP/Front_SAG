@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import {Button, Table} from "react-bootstrap";
 
-const ModalCamioneedidos = ({ isOpen = false, closeModal, camion,data }) => {
+const ModalCamionPedidos = ({ isOpen = false, closeModal, camion,data }) => {
     const modalRef = useRef(null);
     const manejoClickAfuera = (event) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -74,4 +74,4 @@ const ModalCamioneedidos = ({ isOpen = false, closeModal, camion,data }) => {
     );
 };
 
-export default ModalCamioneedidos;
+export default ModalCamionPedidos;

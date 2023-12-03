@@ -55,6 +55,12 @@ function Camiones(props) {
         });
     }
 
+    const togglePopup = () => {
+        //setMostrarPopup(!modalReporte);
+        props.setModal(e => ({...e, text: "", exito: false, open: true}));
+    };
+
+
     // Función para filtrar los camiones según el texto y la opción seleccionada
     const camionesFiltrados = nuevoArreglo.filter(camion => {
         // Filtrar por texto
@@ -78,7 +84,10 @@ function Camiones(props) {
                         />
                     </InputGroup>
                 </div>
-                <p className="nota">*Los camiones en rojo estan en mantenimiento</p>
+                <div className="nota-reporte">
+                    <p className="nota">*Los camiones en rojo estan en mantenimiento</p>
+                    {props.llegoFinal ? (<div className="link-reporte" onClick={togglePopup}>Ver Reporte</div>):(<> </>)}
+                </div>
             </div>
 
             <Table striped bordered hover className="tabla">
@@ -95,20 +104,21 @@ function Camiones(props) {
                 <tbody data-bs-search-live="true">
                 {camionesFiltrados && camionesFiltrados.length > 0 ? (
                     camionesFiltrados.map((camion) => (
-                        <tr key={camion.id} className={camion.estado === "EN_MANTENIMIENTO" ? 'camion-en-mantenimiento' : ''}>
-                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                        <tr key={camion.id}
+                            className={camion.estado === "EN_MANTENIMIENTO" ? 'camion-en-mantenimiento' : ''}>
+                            <td style={{color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit'}}>
                                 {camion.id}
                             </td>
-                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                            <td style={{color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit'}}>
                                 {camion.cargaActual}/{camion.cargaMaxima}
                             </td>
-                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                            <td style={{color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit'}}>
                                 {camion.consumoTotal}
                             </td>
-                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                            <td style={{color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit'}}>
                                 {camion.pedidos}
                             </td>
-                            <td style={{ color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit' }}>
+                            <td style={{color: camion.estado === 'EN_MANTENIMIENTO' ? 'red' : 'inherit'}}>
                                 {camion.pedidoActual}
                             </td>
                             <td>

@@ -6,7 +6,7 @@ import "./ModalColapso.css"
 import {CSSTransition} from "react-transition-group";
 import {useEffect, useRef} from "react";
 
-const ModalFinSemanal = ({mensaje = "", isOpen = false, closeModal, exito = true, reporteData, startDate}) => {
+const ModalFinSemanal = ({mensaje = "", isOpen = false, closeModal, exito = true, reporteData, startDate,setModal}) => {
     const modalRef = useRef(null);
     const manejoClickAfuera = (event) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -64,7 +64,8 @@ const ModalFinSemanal = ({mensaje = "", isOpen = false, closeModal, exito = true
                         </div>
                     </div>
                     <div className="botones">
-                        <Button className="boton-aceptar" onClick={() => closeModal()}>Aceptar</Button>
+                        <Button className="boton-aceptar" onClick={() => { closeModal();
+                            setModal(e => ({...e, text: "", exito: false, open: true})); }}>Ver Reporte</Button>
                     </div>
                 </div>
 

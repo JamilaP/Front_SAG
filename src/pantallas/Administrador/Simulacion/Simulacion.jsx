@@ -20,6 +20,8 @@ import PedidosOD from "../OperacionesDiarias/PedidosOD";
 import {TbNotebookOff} from "react-icons/tb";
 import ModalColapso from "../../../Componentes/ModalColapso";
 import ModalFinSemanal from "../../../Componentes/ModalFinSemanal";
+import ModalReporte from "../../../Componentes/ModalReporte";
+import modalReporte from "../../../Componentes/ModalReporte";
 
 function Simulacion() {
 
@@ -38,7 +40,8 @@ function Simulacion() {
     const [startDate, setStartDate] = useState(null); // Valor inicial
     const [modalColapso, setModalColapso] = useState({text: "", exito: true, open: false});
     const [modalFin, setModalFin] = useState({text: "", exito: true, open: false});
-
+    const [modalReporteSemanal, setModalReporteSemanal] = useState({text: "", exito: true, open: false});
+    const [llegoFinal, setLlegoFinal] = useState(false);
 
     function formatearFecha(fecha) {
         if (!fecha) {
@@ -55,6 +58,16 @@ function Simulacion() {
 
         return `${dia}-${mes}-${anio}, ${horas}:${minutos}:${segundos}`;
     }
+
+    const getColorClass = (percentage) => {
+        if (percentage >= 0.8 && percentage < 0.9) {
+            return 'naranja';
+        } else if (percentage >= 0.9 && percentage <= 1) {
+            return 'rojo';
+        } else {
+            return 'verde'; // Puedes ajustar esto según tus necesidades, por ejemplo, puedes tener una clase predeterminada.
+        }
+    };
 
     //WEBSOCKET
     const onConnectSocket = () => {
@@ -218,6 +231,7 @@ function Simulacion() {
     useEffect(() => {
         if(dataSocket && dataSocket[indexData] && dataSocket[indexData].collapse) {
             setModalColapso(e => ({...e, text: "", exito: false, open: true}));
+            setLlegoFinal(true);
         }
     }, [dataSocket]);
 
@@ -240,6 +254,7 @@ function Simulacion() {
             if (endDate.getTime() === currentDateTimeObj.getTime()) {
                 // Si las fechas son iguales, activa el modal ModalFinSemanal
                 setModalFin({ text: "", exito: true, open: true });
+                setLlegoFinal(true);
                 // Desactivar modal
             }
         }
@@ -253,17 +268,20 @@ function Simulacion() {
                 dataSocket && dataSocket[indexData] && dataSocket[indexData].collapse ? (
                     <ModalColapso isOpen={modalColapso.open} mensaje={modalColapso.text} exito={modalColapso.exito}
                                   closeModal={() => setModalColapso(e => ({...e, open: false}))}
-                                  reporteData={dataSocket[indexData]} startDate={startDate}/>
+                                  reporteData={dataSocket[indexData]} startDate={startDate} setModal={setModalReporteSemanal}/>
 
                 ) : (
                     <ModalColapso isOpen={modalColapso.open} mensaje={modalColapso.text} exito={modalColapso.exito}
                                   closeModal={() => setModalColapso(e => ({...e, open: false}))}
-                                  reporteData={dataAnt} startDate={startDate}/>
+                                  reporteData={dataAnt} startDate={startDate} setModal={setModalReporteSemanal}/>
                 )}
 
             <ModalFinSemanal isOpen={modalFin.open} mensaje={modalFin.text} exito={modalFin.exito}
                              closeModal={() => setModalFin(e => ({...e, open: false}))}
-                             reporteData={dataAnt} startDate={startDate}/>
+                             reporteData={dataAnt} startDate={startDate} setModal={setModalReporteSemanal}/>
+            <ModalReporte isOpen={modalReporteSemanal.open} mensaje={modalReporteSemanal.text} exito={modalReporteSemanal.exito}
+                          closeModal={() => setModalReporteSemanal(e => ({...e, open: false}))}
+                          data={dataAnt.trucks}></ModalReporte>
 
             <div className="contenedor-mapa-informacion">
                 <div className="contenedor-reporte">
@@ -271,12 +289,15 @@ function Simulacion() {
                         <div className="texto">Fecha de
                             simulación: {formatearFecha(dataAnt?.currentDateTime)}</div>
                     </div>
-                    <div className="grupo-icono-texto"><BiSolidTruck className="icono"></BiSolidTruck>
-                        <div className="texto">Porcentaje de flota
-                            ocupada: {dataAnt?.occupiedTrucksPercentage != null
-                                ? `${(dataAnt?.occupiedTrucksPercentage * 100).toFixed(2)}%`
-                                : "0%"}</div>
+                    <div className="grupo-icono-texto">
+                        <BiSolidTruck className="icono" />
+                        <div className={`texto ${getColorClass(dataAnt?.occupiedTrucksPercentage)}`}>
+                            Porcentaje de flota ocupada: {dataAnt?.occupiedTrucksPercentage != null
+                            ? `${(dataAnt?.occupiedTrucksPercentage * 100).toFixed(0)}%`
+                            : "0%"}
+                        </div>
                     </div>
+
                     <div className="grupo-icono-texto"><PiNotebookFill className="icono"></PiNotebookFill>
                         <div className="texto">Pedidos
                             atendidos: {dataAnt?.fulfilledOrdersNumber ?? "00"}</div>
@@ -331,9 +352,9 @@ function Simulacion() {
                         <Tabs id="miPestanas" className="cuadro-pestanas" activeKey={key} onSelect={(k) => setKey(k)}>
                             <Tab eventKey="pestana2" title="Camiones">
                                 {dataSocket && dataSocket[indexData] && dataSocket[indexData].trucks ? (
-                                    <Camiones data={dataSocket[indexData].trucks}/>
+                                    <Camiones data={dataSocket[indexData].trucks} llegoFinal={llegoFinal} setModal={setModalReporteSemanal}/>
                                 ) : (
-                                    <Camiones data={dataAnt.trucks}/>
+                                    <Camiones data={dataAnt.trucks} llegoFinal={llegoFinal} setModal={setModalReporteSemanal}/>
                                 )
                                 }
                             </Tab>
