@@ -23,7 +23,7 @@ function App() {
 
     // const [conexion, setConexion] = useState(null);
     const [dataSocket, setDataSocket] = useState([]);
-    const [duracionEscena, setDuracionEscena] = useState(60000);
+    const [duracionEscena, setDuracionEscena] = useState(45000);
     const [indexData, setIndexData] = useState(0);
     const [pausar, setPausar] = useState(false);
     const [dataAnt, setDataAnt] = useState([]);
@@ -36,11 +36,14 @@ function App() {
     const moverEscena = (pausarArg) => {
         if (!pausarArg) {
             if (indexData < dataSocket.length) {
+                console.log("Paso");
                 setDataAnt(dataSocket[0]);
                 setDataSocket((prevArreglo) => prevArreglo.slice(1));
             } else {
                 console.log("Se alcanzo el limite");
             }
+        }else{
+            console.log("Pausado");
         }
     }
 
@@ -121,7 +124,7 @@ function App() {
     };
 
     useEffect (() => {
-        conectarWS();
+        if(!conexion) conectarWS();
     }, []);
 
     useEffect(() => {

@@ -51,25 +51,7 @@ const MapaSimu = (props) => {
   var cantAMover = contarCamionesAMover(props.dataMapa);
 
   useEffect(() => {
-    // if(props.dataMapa && !props.pausarR ){
-    //   props.setIndex(false);
-    //   console.log('Escena movida siguiente');
-    // }
-    // else {
-    //   console.log('No se puede mover');
-    // }
-
-    // return () => {
-    //   setAnimar(false);
-    // };
   }, [props.dataMapa, props.pausar]);
-
-  // useEffect(() => {
-  //   pasarAnimar();
-  //    return () => {
-
-  //   };
-  // },[])
 
   return (
       <svg
@@ -123,8 +105,7 @@ const MapaSimu = (props) => {
             tamanioCelda = {cellSize}
             moverEscena = {props.setIndex}
             animar = {animar}
-            pasarAnimar = {pasarAnimar}
-            conexion = {props.conexion}/>
+            pasarAnimar = {pasarAnimar}/>
 
         { // Prueba todos los camiones
             props.dataMapa && props.dataMapa.length > 0 && props.dataMapa.map(element => (
