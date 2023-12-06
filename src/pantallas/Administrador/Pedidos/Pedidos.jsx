@@ -1,9 +1,19 @@
-import React, {useState,useEffect,useRef} from 'react';
-import {Form, Button, Dropdown,DropdownButton, Table, InputGroup, FormControl,Overlay,Tooltip} from 'react-bootstrap';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+    Form,
+    Button,
+    Dropdown,
+    DropdownButton,
+    Table,
+    InputGroup,
+    FormControl,
+    Overlay,
+    Tooltip
+} from 'react-bootstrap';
 import "./Pedidos.css";
 import ModalResultado from '../../../Componentes/ModalResultado';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import MyOverlay from "../../../Componentes/MyOverlay";
 
 function Pedidos(props) {
@@ -128,7 +138,7 @@ function Pedidos(props) {
         formatoHoraActual = `${horaActual.getFullYear()}-${(horaActual.getMonth() + 1).toString().padStart(2, '0')}-${horaActual.getDate().toString().padStart(2, '0')}T${horaActual.getHours().toString().padStart(2, '0')}:${horaActual.getMinutes().toString().padStart(2, '0')}:00`;
 
         const newPedidoCopy = {
-            orderId: pedidos.length+1 || 1, // Generado
+            orderId: pedidos.length + 1 || 1, // Generado
             registrationDateTime: formatoHoraActual, // Fecha actual con segundos en "00"
             customerId: `c-${Math.floor(Math.random() * (999 - 10 + 1)) + 10}`, // Generado
             requestedGLP: newPedido.GLPsolicitado,
@@ -192,9 +202,9 @@ function Pedidos(props) {
         }
     };
     const handleUpload = () => {
-        const fileInput  = document.getElementById('fileInput');
+        const fileInput = document.getElementById('fileInput');
 
-        if (fileInput.files.length > 0)  {
+        if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
 
             const formData = new FormData();
@@ -243,64 +253,75 @@ function Pedidos(props) {
             <ModalResultado isOpen={modal.open} mensaje={modal.text} exito={modal.exito}
                             closeModal={() => setModal(e => ({...e, open: false}))}/>
 
-            <h1 className="titulo">Registrar Pedido</h1>
-            <Form className="contenedor-registro-pedido">
-                <Form.Group className="contendedor-texto-input">
-                    <Form.Label className="texto-input">Coordenada del Pedido:</Form.Label>
-                    <MyOverlay target={coordenadaRefX.current} show={tooltipX} placement="right" text="Ingrese un número entre 0 y 50."/>
-                    <Form.Control ref={coordenadaRefX} className="input-small" type="number"
-                                  placeholder="Ingrese la coordenada X" onMouseEnter={() => setTooltipX(true)}
+            <h1 className="titulo-pequeno">Registrar Pedido</h1>
+            <Form className="contenedor-registro-pedido-1">
+                <Form.Group className="contendedor-texto-input-1">
+                    <Form.Label className="texto-input-1">Coordenada del Pedido:</Form.Label>
+                    <MyOverlay target={coordenadaRefX.current} show={tooltipX} placement="left"
+                               text="Ingrese un número entre 0 y 50."/>
+                    <Form.Control ref={coordenadaRefX} className="input-small-1" type="number"
+                                  placeholder="Coordenada X" onMouseEnter={() => setTooltipX(true)}
                                   onMouseLeave={() => setTooltipX(false)}
                                   value={newPedido.coordenadaX}
-                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, coordenadaX: e.target.value }))}/>
-                    <MyOverlay target={coordenadaRefY.current} show={tooltipY} placement="right" text="Ingrese un número entre 0 y 70."/>
-                    <Form.Control ref={coordenadaRefY} className="input-small" type="number"
-                                  placeholder="Ingrese la coordenada Y" onMouseEnter={() => setTooltipY(true)}
+                                  onChange={(e) => setNewPedido((prev) => ({...prev, coordenadaX: e.target.value}))}/>
+                    <MyOverlay target={coordenadaRefY.current} show={tooltipY} placement="left"
+                               text="Ingrese un número entre 0 y 70."/>
+                    <Form.Control ref={coordenadaRefY} className="input-small-1" type="number"
+                                  placeholder="Coordenada Y" onMouseEnter={() => setTooltipY(true)}
                                   onMouseLeave={() => setTooltipY(false)}
                                   value={newPedido.coordenadaY}
-                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, coordenadaY: e.target.value }))}/>
+                                  onChange={(e) => setNewPedido((prev) => ({...prev, coordenadaY: e.target.value}))}/>
                 </Form.Group>
 
-                <Form.Group className="contendedor-texto-input">
-                    <Form.Label className="texto-input">GLP Solicitado:</Form.Label>
-                    <Form.Control className="input" type="number" placeholder="Ingrese la cantidad de GLP"
+                <Form.Group className="contendedor-texto-input-1">
+                    <Form.Label className="texto-input-1">GLP Solicitado:</Form.Label>
+                    <Form.Control className="input-1" type="number" placeholder="Ingrese la cantidad de GLP"
                                   value={newPedido.GLPsolicitado}
-                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, GLPsolicitado: e.target.value }))}/>
+                                  onChange={(e) => setNewPedido((prev) => ({...prev, GLPsolicitado: e.target.value}))}/>
                 </Form.Group>
-                <Form.Group className="contendedor-texto-input">
-                    <Form.Label className="texto-input">Plazo limite de entrega en horas:</Form.Label>
-                    <MyOverlay target={coordenadaRefHL.current} show={tooltipHL} placement="right" text="El plazo mínimo es 4 horas"/>
-                    <Form.Control ref={coordenadaRefHL} className="input" type="number"
-                                  placeholder="Ingrese la cantidad de horas limte de entrega" onMouseEnter={() => setTooltipHL(true)}
+                <Form.Group className="contendedor-texto-input-1">
+                    <Form.Label className="texto-input-1">Plazo limite de entrega en horas:</Form.Label>
+                    <MyOverlay target={coordenadaRefHL.current} show={tooltipHL} placement="left"
+                               text="El plazo mínimo es 4 horas"/>
+                    <Form.Control ref={coordenadaRefHL} className="input-1" type="number"
+                                  placeholder="Ingrese la cantidad de horas limte de entrega"
+                                  onMouseEnter={() => setTooltipHL(true)}
                                   onMouseLeave={() => setTooltipHL(false)}
                                   value={newPedido.limiteHoras}
-                                  onChange={(e) => setNewPedido((prev) => ({ ...prev, limiteHoras: e.target.value }))}/>
-                    <Button className="boton-accion" onClick={agregarPedido}>
+                                  onChange={(e) => setNewPedido((prev) => ({...prev, limiteHoras: e.target.value}))}/>
+
+                </Form.Group>
+                <div className="boton-contenedor">
+                    <Button className="boton-accion-1" onClick={agregarPedido}>
                         Registrar
                     </Button>
-                </Form.Group>
+                </div>
+
             </Form>
 
-            <h1 className="titulo">Subir pedidos</h1>
-            <Form className="contenedor-registro-pedido">
-                <Form.Group className="contendedor-texto-input">
-                    <Form.Label className="texto-input">Ingrese el archivo de pedidos:</Form.Label>
+            <h1 className="titulo-pequeno">Subir pedidos</h1>
+            <Form className="contenedor-registro-pedido-1">
+                <Form.Group className="contendedor-texto-input-1">
+                    <Form.Label className="texto-input-1">Ingrese el archivo de pedidos:</Form.Label>
                     <Form.Group className="input-nombreArchivo">
-                        <Form.Control id="fileInput" className="input" type="file" onChange={handleFileChange} />
+                        <Form.Control id="fileInput" className="input-1" type="file" onChange={handleFileChange}/>
                         <span className="nombre-archivo">
                             {fileSelect ? localStorage.getItem(`fileName_pedidos`) : 'Selecciona un archivo...'}
                         </span>
                     </Form.Group>
-                    <Button className="boton-accion" onClick={handleUpload}>
+
+                </Form.Group>
+                <div className="boton-contenedor">
+                    <Button className="boton-accion-1" onClick={handleUpload}>
                         Guardar
                     </Button>
-                </Form.Group>
+                </div>
             </Form>
 
-            <h1 className="titulo">Pedidos</h1>
+            <h1 className="titulo-pequeno">Pedidos</h1>
 
-            <div className="barra-busqueda-pedidos">
-                <div className="grupo-texto-input">
+            {/*<div className="barra-busqueda-pedidos">
+                <div className="grupo-texto-input-1">
                     <div className="texto-busqueda">Búsqueda por pedido:</div>
                     <InputGroup className="mb-3">
                         <FormControl
@@ -311,7 +332,7 @@ function Pedidos(props) {
                     </InputGroup>
                 </div>
 
-                <div className="grupo-texto-input">
+                <div className="grupo-texto-input-1">
                     <div className="texto-busqueda">Búsqueda por cliente:</div>
                     <InputGroup className="mb-3">
                         <FormControl
@@ -322,7 +343,7 @@ function Pedidos(props) {
                     </InputGroup>
                 </div>
 
-                <div className="grupo-texto-input">
+                <div className="grupo-texto-input-1">
                     <div className="texto-busqueda">Seleccione el estado:</div>
                     <DropdownButton className="dropdown-busqueda" id="dropdown-basic-button" title={filtroOpcion}>
                         <Dropdown.Item onClick={() => setFiltroOpcion('Todos')}>Todos</Dropdown.Item>
@@ -330,9 +351,9 @@ function Pedidos(props) {
                         <Dropdown.Item onClick={() => setFiltroOpcion('En camino')}>En camino</Dropdown.Item>
                     </DropdownButton>
                 </div>
-            </div>
+            </div>*/}
 
-            <div className="tabla-pedidos">
+            <div className="tabla-pedidos-1">
                 <Table striped bordered hover>
                     <thead>
                     <tr>

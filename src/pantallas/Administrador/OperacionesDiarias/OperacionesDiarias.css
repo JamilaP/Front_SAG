@@ -60,6 +60,7 @@
     margin: 0px 10px 5px 10px;
     overflow-y: auto;
     height: 1000px;
+    width: 570px;
 }
 .table-responsive {
     background-color: #DEE2E6;

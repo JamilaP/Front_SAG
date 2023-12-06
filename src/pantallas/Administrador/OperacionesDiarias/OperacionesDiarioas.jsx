@@ -12,6 +12,7 @@ import {PiNotebookFill} from "react-icons/pi";
 import {TbNotebookOff} from "react-icons/tb";
 import Camiones from "../Simulacion/Camiones";
 import PedidosSimulacion from "../Simulacion/PedidosSimulacion";
+import Pedidos from "../Pedidos/Pedidos";
 
 function OperacionesDiarioas(props) {
     const [key, setKey] = useState('pestana2');
@@ -47,20 +48,20 @@ function OperacionesDiarioas(props) {
             <div className="contenedor-mapa-informacion">
                 <div className="contenedor-reporte">
                         <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
-                            <div className="texto">Fecha actual: {formatearFecha(props.dataAnt?.currentDateTime)}</div>
+                            <div className="texto">Fecha actual: {formatearFecha(props.dataSocket[props.indexData]?.currentDateTime)}</div>
                         </div>
                         <div className="grupo-icono-texto">
                             <BiSolidTruck className="icono"></BiSolidTruck>
-                            <div className={`texto ${getColorClass(props.dataAnt?.occupiedTrucksPercentage)}`}>
-                                Porcentaje de flota ocupada: {props.dataAnt?.occupiedTrucksPercentage != null
-                                ? `${(props.dataAnt?.occupiedTrucksPercentage * 100).toFixed(0)}%`
+                            <div className={`texto ${getColorClass(props.dataSocket[props.indexData]?.occupiedTrucksPercentage)}`}>
+                                Porcentaje de flota ocupada: {props.dataSocket[props.indexData]?.occupiedTrucksPercentage != null
+                                ? `${(props.dataSocket[props.indexData]?.occupiedTrucksPercentage * 100).toFixed(0)}%`
                                 : "0%"}
                             </div>
                         </div>
                         <div className="grupo-icono-texto">
                             <PiNotebookFill className="icono"></PiNotebookFill>
                             <div className="texto">Pedidos
-                                atendidos: {props.dataAnt?.fulfilledOrdersNumber ?? "00"}</div>
+                                atendidos: {props.dataSocket[props.indexData]?.fulfilledOrdersNumber ?? "00"}</div>
                         </div>
                 </div>
                 <div className="contenedor-mapa">
@@ -106,6 +107,9 @@ function OperacionesDiarioas(props) {
                                 ) : (
                                     <PedidosSimulacion data={props.dataAnt.orders}/>
                                 )}
+                            </Tab>
+                            <Tab eventKey="pestana1" title="Registro">
+                                <Pedidos/>
                             </Tab>
                         </Tabs>
                     </Container>

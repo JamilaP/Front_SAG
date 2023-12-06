@@ -4,3 +4,108 @@
     width: 90%;
 }
 
+.registroPedidos{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+.titulo{
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0px 10px 0px;
+
+}
+/*ingreso de pedido*/
+.contenedor-registro-pedido{
+    flex-direction: column;
+}
+.contendedor-texto-input{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px;
+}
+.texto-input{
+    width: 300px;
+    text-align: start;
+    margin-left: 35px;
+    margin-top: 5px;
+}
+.input-small{
+    width: 220px;
+    font-size: 15px;
+    margin-right: 10px;
+}
+.input{
+    width: 450px;
+    font-size: 15px;
+}
+.boton-accion,
+.boton-accion:focus,
+.boton-accion:active,
+.boton-accion:hover,
+.boton-accion:visited {
+    background-color: #175C75;
+    color: white;
+    border: none;
+    height: 36px;
+    margin-left: 5px;
+}
+.btn-primary:active {
+    --bs-btn-active-bg: #175c7594;
+}
+.btn-primary:disabled {
+    --bs-btn-disabled-bg: #175C75 !important;
+}
+/*archivo*/
+.nombre-archivo{
+    width: 400px;
+}
+.input-nombreArchivo{
+
+    display: flex;
+    flex-direction: column;
+}
+/*barra-busqueda*/
+.barra-busqueda-pedidos{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.texto-busqueda{
+}
+/*barra dropdown*/
+.dropdown-busqueda{
+    width:180px;
+}
+.dropdown-busqueda .dropdown-menu {
+    background-color: white; /* Cambia el color según tus preferencias */
+}
+
+.dropdown-busqueda .btn{
+    background-color: #175C75;
+    color: white;
+    border: none;
+    width:180px;
+
+}
+
+.dropdown-busqueda .btn:active,
+.dropdown-busqueda .btn:focus,
+.dropdown-busqueda .btn:checked {
+    background-color: #175C75;
+    color: white;
+}
+.dropdown-menu a:active {
+    --bs-dropdown-link-active-bg: #175c7594;
+}
+
+/*tabla*/
+.tabla-pedidos {
+    background-color: #DEE2E6;
+    height: 290px; /* Ajusta la altura máxima según tus necesidades */
+    overflow-y: auto;
+    border-radius: 15px;
+}

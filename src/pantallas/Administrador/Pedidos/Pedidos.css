@@ -1,46 +1,55 @@
 .registroPedidos{
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 100%;
+    align-items: start;
+    margin: 0px;
 }
-.titulo{
+.titulo-pequeno{
     text-align: left;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     margin: 10px 0px 10px 0px;
-
 }
 /*ingreso de pedido*/
-.contenedor-registro-pedido{
+.contenedor-registro-pedido-1{
+    display: flex;
     flex-direction: column;
+    width: 100%;
 }
-.contendedor-texto-input{
+.contendedor-texto-input-1{
     display: flex;
     flex-direction: row;
     align-items: center;
     width: 100%;
     margin-bottom: 5px;
 }
-.texto-input{
-    width: 300px;
+.texto-input-1{
+    min-width: 140px;
+    max-width: 140px;
     text-align: start;
-    margin-left: 35px;
+    margin-left: 25px;
     margin-top: 5px;
 }
-.input-small{
-    width: 220px;
+.input-small-1{
+    width: 175px;
     font-size: 15px;
-    margin-right: 10px;
+    margin-right: 5px;
 }
-.input{
-    width: 450px;
+.input-1{
+    width: 360px;
     font-size: 15px;
 }
-.boton-accion,
-.boton-accion:focus,
-.boton-accion:active,
-.boton-accion:hover,
-.boton-accion:visited {
+.boton-contenedor{
+    text-align: right;
+    margin-right: 20px;
+
+}
+.boton-accion-1,
+.boton-accion-1:focus,
+.boton-accion-1:active,
+.boton-accion-1:hover,
+.boton-accion-1:visited {
     background-color: #175C75;
     color: white;
     border: none;
@@ -97,9 +106,10 @@
 }
 
 /*tabla*/
-.tabla-pedidos {
+.tabla-pedidos-1 {
     background-color: #DEE2E6;
     height: 290px; /* Ajusta la altura máxima según tus necesidades */
     overflow-y: auto;
     border-radius: 15px;
+    font-size: 12px;
 }
