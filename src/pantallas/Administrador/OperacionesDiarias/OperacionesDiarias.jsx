@@ -1,20 +1,15 @@
 import React, {useState} from 'react';
 import {Container, Tab, Tabs} from 'react-bootstrap';
 import Leyenda from "../Simulacion/Leyenda";
-import CamionesOD from "./CamionesOD";
-import CargaDeDatos from "../Simulacion/CargaDeDatos";
-import PedidosOD from "./PedidosOD";
 import "./OperacionesDiarias.css";
 import MapaSimu from "../Simulacion/MapaSimu";
 import {BiSolidCalendarCheck, BiSolidTruck} from "react-icons/bi";
-import {AiFillClockCircle} from "react-icons/ai";
 import {PiNotebookFill} from "react-icons/pi";
-import {TbNotebookOff} from "react-icons/tb";
 import Camiones from "../Simulacion/Camiones";
 import PedidosSimulacion from "../Simulacion/PedidosSimulacion";
 import Pedidos from "../Pedidos/Pedidos";
 
-function OperacionesDiarioas(props) {
+function OperacionesDiarias(props) {
     const [key, setKey] = useState('pestana2');
 
     const getColorClass = (percentage) => {
@@ -119,4 +114,4 @@ function OperacionesDiarioas(props) {
     );
 }
 
-export default OperacionesDiarioas;
+export default OperacionesDiarias;

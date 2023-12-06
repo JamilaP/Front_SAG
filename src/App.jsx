@@ -6,7 +6,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Navbar, Nav, Image} from 'react-bootstrap';
 import ConfiguracionGeneral from './pantallas/Administrador/Configuracion/ConfiguracionGeneral'
-import OperacionesDiarioas from './pantallas/Administrador/OperacionesDiarias/OperacionesDiarioas'
+import OperacionesDiarias from './pantallas/Administrador/OperacionesDiarias/OperacionesDiarias'
 import Pedidos from './pantallas/Administrador/Pedidos/Pedidos'
 import Simulacion from './pantallas/Administrador/Simulacion/Simulacion'
 import {FileProvider} from './Componentes/FileContext';
@@ -194,7 +194,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Navigate to="/administrador/operaciones-diarias" />} />
                         <Route path="/administrador/operaciones-diarias"
-                               element={<OperacionesDiarioas
+                               element={<OperacionesDiarias
                                    dataSocket={dataSocket}
                                    indexData={indexData}
                                    moverEscena={moverEscena}

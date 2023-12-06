@@ -4,24 +4,14 @@ import "./Simulacion.css"
 import PedidosSimulacion from "./PedidosSimulacion";
 import Leyenda from "./Leyenda";
 import Camiones from "./Camiones";
-import CargaDeDatos from "./CargaDeDatos";
-import ReporteSimulacion from "./ReporteSimulacion";
-import {FaPlay, FaPause} from 'react-icons/fa';
-import {HiRefresh} from 'react-icons/hi';
-import {FiRefreshCcw} from 'react-icons/fi';
 import MapaSimu from './MapaSimu';
 import {Client} from '@stomp/stompjs';
 import ModalResultado from '../../../Componentes/ModalResultado';
 import {BiSolidCalendarCheck, BiSolidTruck} from "react-icons/bi";
-import {AiFillClockCircle} from "react-icons/ai";
 import {PiNotebookFill} from "react-icons/pi";
-import CamionesOD from "../OperacionesDiarias/CamionesOD";
-import PedidosOD from "../OperacionesDiarias/PedidosOD";
-import {TbNotebookOff} from "react-icons/tb";
 import ModalColapso from "../../../Componentes/ModalColapso";
 import ModalFinSemanal from "../../../Componentes/ModalFinSemanal";
 import ModalReporte from "../../../Componentes/ModalReporte";
-import modalReporte from "../../../Componentes/ModalReporte";
 
 function Simulacion() {
 
