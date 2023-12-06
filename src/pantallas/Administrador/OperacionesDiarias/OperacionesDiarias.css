@@ -1,8 +1,101 @@
 .OperacionesDiarias{
     display: flex;
 }
-.contenedor-mapa-informacion{
+
+/* reporte + mapa*/
+.contenedor-mapa-informacion {
     display: flex;
     flex-direction: column;
-    flex: 60%;
+    flex: 65%;
 }
+/*REPORTE*/
+.contenedor-reporte{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    max-width: max-content;
+}
+.grupo-icono-texto{
+    display: flex;
+    flex-direction: row;
+    font-size: 13px;
+    margin-left: 5px; /*espacio entre grupos*/
+}
+.grupo-icono-texto .icono{
+    font-size: 20px;
+    margin-right: 3px;
+}
+.grupo-icono-texto .texto{
+    display: flex;
+    align-items: start;
+    margin-left: 3px;
+    min-width: 160px;
+    max-width: 255px;
+}
+
+/*MAPA*/
+.contenedor-mapa{
+
+}
+
+/*leyenda + tabla*/
+.contenedor-informacion {
+    flex: 40%;
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+
+    max-height: 675px;
+}
+
+/*LEYENDA*/
+.contenedor-leyenda{
+    background-color: #DEE2E6;
+    border-radius: 15px;
+    margin: 10px;
+}
+/*TABLA*/
+.tabla-container{
+    border-radius: 15px;
+    margin: 0px 10px 5px 10px;
+    overflow-y: auto;
+    height: 1000px;
+}
+.table-responsive {
+    background-color: #DEE2E6;
+    height: 100%;
+}
+.cuadro-pestanas{
+
+}
+.nav-tabs .nav-link {
+    color: black;
+}
+
+
+.texto.verde{
+    display: flex;
+    align-items: start;
+    margin-left: 3px;
+    color: green;
+    width: 205px;
+}
+
+.texto.naranja {
+    color: #BD9700;
+    width: 205px;
+}
+
+.texto.rojo {
+    color: red;
+    width: 205px;
+}
+
+
+
+
+
+
+
+
+

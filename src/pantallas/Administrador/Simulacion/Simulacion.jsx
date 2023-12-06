@@ -260,10 +260,10 @@ function Simulacion() {
                         <div className="texto">Pedidos
                             atendidos: {dataAnt?.fulfilledOrdersNumber ?? "00"}</div>
                     </div>
-                    <div className="grupo-icono-texto"><TbNotebookOff className="icono"></TbNotebookOff>
+                    {/*<div className="grupo-icono-texto"><TbNotebookOff className="icono"></TbNotebookOff>
                         <div className="texto">Pedidos pendientes en el
                             día: {dataAnt?.pendingOrdersOnTheDay ?? "00"}</div>
-                    </div>
+                    </div>*/}
                 </div>
                 <div className="contenedor-mapa">
                     {/*<h6> { indexData == 0 ? ( 'Esperando al back...'): ( 'Segundo: ' + indexData ) } </h6>*/}

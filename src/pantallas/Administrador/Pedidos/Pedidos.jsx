@@ -348,14 +348,14 @@ function Pedidos(props) {
                     <tbody>
                     {pedidos && pedidos.length > 0 ? (
                         pedidos.map((pedido) => (
-                            <tr key={pedido.order.orderId}>
-                                <td>{pedido.order.orderId}</td>
-                                <td>{pedido.order.customerId}</td>
-                                <td>{`(${pedido.order.location.x},${pedido.order.location.y})`}</td>
-                                <td>{formatearFecha(pedido.order.registrationDateTime)}</td>
-                                <td>{pedido.order.deadlineHours}</td>
-                                <td>{pedido.order.requestedGLP}</td>
-                                <td>{pedido.order.status}</td>
+                            <tr key={pedido.orderId}>
+                                <td>{pedido.orderId}</td>
+                                <td>{pedido.customerId}</td>
+                                <td>{`(${pedido.location.x},${pedido.location.y})`}</td>
+                                <td>{formatearFecha(pedido.registrationDateTime)}</td>
+                                <td>{pedido.deadlineHours}</td>
+                                <td>{pedido.requestedGLP}</td>
+                                <td>{pedido.status}</td>
                             </tr>
                         ))
                     ) : (

@@ -16,6 +16,16 @@ import PedidosSimulacion from "../Simulacion/PedidosSimulacion";
 function OperacionesDiarioas(props) {
     const [key, setKey] = useState('pestana2');
 
+    const getColorClass = (percentage) => {
+        if (percentage >= 0.8 && percentage < 0.9) {
+            return 'naranja';
+        } else if (percentage >= 0.9 && percentage <= 1) {
+            return 'rojo';
+        } else {
+            return 'verde'; // Puedes ajustar esto según tus necesidades, por ejemplo, puedes tener una clase predeterminada.
+        }
+    };
+
     function formatearFecha(fecha) {
         if (!fecha) {
             return '0000-00-00, 00:00:00';
@@ -37,13 +47,20 @@ function OperacionesDiarioas(props) {
             <div className="contenedor-mapa-informacion">
                 <div className="contenedor-reporte">
                         <div className="grupo-icono-texto"><BiSolidCalendarCheck className="icono"></BiSolidCalendarCheck>
-                            <div className="texto">Fecha de las operaciones: {formatearFecha(props.dataAnt?.currentDateTime)}</div>
+                            <div className="texto">Fecha actual: {formatearFecha(props.dataAnt?.currentDateTime)}</div>
                         </div>
-                        <div className="grupo-icono-texto"><BiSolidTruck className="icono"></BiSolidTruck>
-                            <div className="nombre">Porcentaje de flota ocupada: 30%</div>
+                        <div className="grupo-icono-texto">
+                            <BiSolidTruck className="icono"></BiSolidTruck>
+                            <div className={`texto ${getColorClass(props.dataAnt?.occupiedTrucksPercentage)}`}>
+                                Porcentaje de flota ocupada: {props.dataAnt?.occupiedTrucksPercentage != null
+                                ? `${(props.dataAnt?.occupiedTrucksPercentage * 100).toFixed(0)}%`
+                                : "0%"}
+                            </div>
                         </div>
-                        <div className="grupo-icono-texto"><PiNotebookFill className="icono"></PiNotebookFill>
-                            <div className="nombre">Pedidos atendidos en el día: 200</div>
+                        <div className="grupo-icono-texto">
+                            <PiNotebookFill className="icono"></PiNotebookFill>
+                            <div className="texto">Pedidos
+                                atendidos: {props.dataAnt?.fulfilledOrdersNumber ?? "00"}</div>
                         </div>
                 </div>
                 <div className="contenedor-mapa">
