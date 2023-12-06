@@ -23,7 +23,7 @@ function App() {
 
     // const [conexion, setConexion] = useState(null);
     const [dataSocket, setDataSocket] = useState([]);
-    const [duracionEscena, setDuracionEscena] = useState(45000);
+    const [duracionEscena, setDuracionEscena] = useState(60000);
     const [indexData, setIndexData] = useState(0);
     const [pausar, setPausar] = useState(false);
     const [dataAnt, setDataAnt] = useState([]);
