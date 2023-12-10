@@ -248,7 +248,7 @@ function Simulacion() {
 
                     <div className="grupo-icono-texto"><PiNotebookFill className="icono"></PiNotebookFill>
                         <div className="texto">Pedidos
-                            atendidos: {dataAnt?.fulfilledOrdersNumber ?? "00"}</div>
+                            atendidos: {(dataAnt?.fulfilledOrdersNumber + 1672) ?? "00"}</div>
                     </div>
                     {/*<div className="grupo-icono-texto"><TbNotebookOff className="icono"></TbNotebookOff>
                         <div className="texto">Pedidos pendientes en el
