@@ -71,7 +71,7 @@ function ConfiguracionGeneral() {
                 .then(response => {
                     // Manejar la respuesta del servidor si es necesario
                     console.log('Archivo subido con éxito', response);
-
+                    setModal(e => ({ ...e, text: "Archivo subido con exito", exito: true, open: true }));
                 })
                 .catch(error => {
                     // Manejar errores si la carga falla

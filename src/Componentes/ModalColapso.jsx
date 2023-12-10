@@ -60,7 +60,7 @@ const ModalColapso = ({ mensaje = "", isOpen = false, closeModal, exito = true,r
                 <div className={`modal-custom-res ${!isOpen ? "closing" : ""}`} ref={modalRef}>
                     <div className="encabezado">
                         <IoWarning color="#FFCB00" fontSize={"50px"} />
-                        <div className="texto-titulo">Ocurrió el colapso lógistico</div>
+                        <div className="texto-titulo">Ocurrió el colapso logístico</div>
                     </div>
                     <hr></hr>
                     <div className="reporte-data">
